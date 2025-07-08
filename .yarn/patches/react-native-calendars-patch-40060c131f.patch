@@ -1,0 +1,33 @@
+diff --git a/src/expandableCalendar/index.d.ts b/src/expandableCalendar/index.d.ts
+index 760249fe261f6f51f20d74ddf209abbb7a6b222f..adb6f00229e31420a8b2bec7664ad8c32dcd5fda 100644
+--- a/src/expandableCalendar/index.d.ts
++++ b/src/expandableCalendar/index.d.ts
+@@ -38,6 +38,7 @@ export interface ExpandableCalendarProps extends CalendarListProps {
+     knobHeight?: number;
+     knobUnnecessaryHeight?: number;
+     knobStyle?: StyleProp<ViewStyle>;
++    maxDate?: string;
+ }
+ /**
+  * @description: Expandable calendar component
+diff --git a/src/expandableCalendar/index.js b/src/expandableCalendar/index.js
+index c80ec98a77d7322b76b74f6e28dfc42e6840d6af..ec6e6c15c83264279a61afe8dc764163f3660ce2 100644
+--- a/src/expandableCalendar/index.js
++++ b/src/expandableCalendar/index.js
+@@ -49,7 +49,7 @@ const ExpandableCalendar = (props) => {
+     /** CalendarList props */
+     horizontal = true, calendarStyle, theme, style: propsStyle, firstDay = 0, onDayPress, testID, markedDates, 
+     customNewHeader, daysNameContainerStyle, dayNameStyle, dayComponent, renderBookingStatus, basicDayContainerStyle, 
+-    knobHeight, knobStyle, knobUnnecessaryHeight, ...others } = props;
++    knobHeight, knobStyle, knobUnnecessaryHeight, maxDate, ...others } = props;
+     const [screenReaderEnabled, setScreenReaderEnabled] = useState(false);
+     const [selectedDate, setSelectedDate] = useState(
+         {dateString: dayjs().format('YYYY-MM-DD'),
+@@ -213,6 +213,7 @@ const ExpandableCalendar = (props) => {
+                 markedDates={markedDates}
+                 // minDate={`${dayjs().format('YYYY-MM-DD')}`}
+                 // maxDate={`${dayjs().subtract(-14, 'day').format('YYYY-MM-DD')}`}
++                maxDate={maxDate}
+                 customNewHeader = {customNewHeader}
+                 style = {{
+                     paddingLeft: 0,

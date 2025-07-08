@@ -1,0 +1,6 @@
+framework module mj_studio_react_native_naver_map {
+  umbrella header "mj-studio-react-native-naver-map-umbrella.h"
+
+  export *
+  module * { export * }
+}

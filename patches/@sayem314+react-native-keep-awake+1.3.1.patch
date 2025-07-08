@@ -1,0 +1,16 @@
+diff --git a/node_modules/@sayem314/react-native-keep-awake/android/build.gradle b/node_modules/@sayem314/react-native-keep-awake/android/build.gradle
+index 767229f..00d1085 100644
+--- a/node_modules/@sayem314/react-native-keep-awake/android/build.gradle
++++ b/node_modules/@sayem314/react-native-keep-awake/android/build.gradle
+@@ -26,6 +26,11 @@ android {
+       namespace "com.sayem.keepawake"
+     }
+ 
++    buildFeatures {
++        buildConfig = true
++    }
++
++
+     compileSdkVersion safeExtGet('compileSdkVersion', 31)
+ 
+     defaultConfig {

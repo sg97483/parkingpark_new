@@ -1,0 +1,27 @@
+{
+  "recommendations": [
+    "coenraads.bracket-pair-colorizer-2",
+    "esbenp.prettier-vscode",
+    "dbaeumer.vscode-eslint",
+    "lukas-tr.materialdesignicons-intellisense",
+    "diemasmichiels.emulate",
+    "aaron-bond.better-comments",
+    "naumovs.color-highlight",
+    "editorconfig.editorconfig",
+    "lacroixdavid1.vscode-format-context-menu",
+    "naco-siren.gradle-language",
+    "herrmannplatz.npm-dependency-links",
+    "christian-kohler.path-intellisense",
+    "jundat95.react-native-snippet",
+    "tabnine.tabnine-vscode",
+    "wayou.vscode-todo-highlight",
+    "quicktype.quicktype",
+    "chakrounanas.turbo-console-log",
+    "eamodio.gitlens",
+    "msjsdiag.vscode-react-native"
+  ],
+  "unwantedRecommendations": [],
+  "editor.codeActionsOnSave": {
+    "source.addMissingImports": true
+  }
+}

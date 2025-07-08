@@ -1,0 +1,12 @@
+diff --git a/src/calendar/day/period/index.js b/src/calendar/day/period/index.js
+index 8842e2545f6bcd5d564e765f64d17fcb3d759e3a..42a007dce8393317dd5aa61d3f2a647caf75b568 100644
+--- a/src/calendar/day/period/index.js
++++ b/src/calendar/day/period/index.js
+@@ -70,7 +70,6 @@ const PeriodDay = (props) => {
+     }, [marking, state]);
+     const textStyle = useMemo(() => {
+         const textStyle = [style.current.text];
+-        textStyle.push({fontSize: 18})
+         if (state === 'disabled') {
+             textStyle.push(style.current.disabledText);
+         }

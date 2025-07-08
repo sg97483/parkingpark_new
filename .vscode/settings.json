@@ -1,0 +1,17 @@
+{
+  // 기존 Java 설정 유지
+  "java.jdt.ls.java.home": "/usr/local/opt/openjdk@17",
+  "java.configuration.runtimes": [
+    {
+      "name": "JavaSE-17",
+      "path": "/usr/local/opt/openjdk@17",
+      "default": true
+    }
+  ],
+
+  // 🔽 TypeScript + Yarn PnP 관련 설정
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "typescript.enablePromptUseWorkspaceTsdk": true,
+  "javascript.validate.enable": false, // 권장
+  "eslint.validate": ["javascript", "javascriptreact", "typescript", "typescriptreact"]
+}

@@ -1,0 +1,62 @@
+// schemas/parking-schema.ts
+
+// 이 파일의 전체 내용을 아래 코드로 교체하세요.
+
+export const ParkingSchema = {
+  name: 'Parking',
+  primaryKey: 'id',
+  properties: {
+    id: 'int',
+    appVersion: 'double?',
+    category: 'string?',
+    brand: 'string?',
+    themeParking: 'string?',
+    lat: 'double?',
+    lng: 'double?',
+    coslat: 'double?',
+    coslng: 'double?',
+    sinlat: 'double?',
+    sinlng: 'double?',
+    state: 'string?',
+    city: 'string?',
+    garageName: 'string?',
+    addressNew: 'string?',
+    addressOld: 'string?',
+    icon: 'int?',
+    charge: 'int?',
+    chargeOneDay: 'int?',
+    first30: 'int?',
+    creditCardYN: 'string?',
+    satFreeYN: 'string?',
+    sunFreeYN: 'string?',
+    free30YN: 'string?',
+    monthYN: 'string?',
+    ticketPartnerYN: 'string?',
+    parkingIntro: 'string?',
+    onedayTicketCost: 'int?',
+    paylank: 'int?',
+    limitedNumber: 'int?',
+    keyword: 'string?',
+    weekdayYN: 'string?',
+    weekendYN: 'string?',
+    nightYN: 'string?',
+    weekdayTimeYN: 'string?',
+    weekendTimeYN: 'string?',
+    dinnerYN: 'string?',
+    conNightYN: 'string?',
+  },
+};
+
+export const FirebaseUserSchema = {
+  name: 'FirebaseUser',
+  primaryKey: 'uid',
+  properties: {
+    uid: 'string',
+    testdataset: 'int',
+    token: 'string',
+    userid: 'string',
+    usermsg: 'string',
+    usernm: 'string',
+    userphoto: 'string?',
+  },
+};

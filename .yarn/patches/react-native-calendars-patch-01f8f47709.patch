@@ -1,0 +1,65 @@
+diff --git a/src/calendar/day/basic/index.js b/src/calendar/day/basic/index.js
+index 876c59b9a24d7f62e27873c2cd32b6baaf3acbc9..138687c8f361748309976dfeedb8af5af3247492 100644
+--- a/src/calendar/day/basic/index.js
++++ b/src/calendar/day/basic/index.js
+@@ -1,5 +1,5 @@
+ import React, { Fragment, useCallback, useRef } from 'react';
+-import { Text, TouchableOpacity, View } from 'react-native';
++import { Pressable, Text, View } from 'react-native';
+ import { xdateToData } from '../../../interface';
+ import styleConstructor from './style';
+ const BasicDay = (props) => {
+@@ -95,9 +95,9 @@ const BasicDay = (props) => {
+         return (
+             <View>
+                 <View style = {basicDayContainerStyle}>    
+-                    <TouchableOpacity testID={testID} style={[getContainerStyle(), theme.periodStyle]} disabled={shouldDisableTouchEvent()} activeOpacity={activeOpacity} onPress={!shouldDisableTouchEvent() ? _onPress : undefined} onLongPress={!shouldDisableTouchEvent() ? _onLongPress : undefined} accessible accessibilityRole={isDisabled ? undefined : 'button'} accessibilityLabel={accessibilityLabel}>
++                    <Pressable testID={testID} style={[getContainerStyle(), theme.periodStyle]} disabled={shouldDisableTouchEvent()} activeOpacity={activeOpacity} onPress={!shouldDisableTouchEvent() ? _onPress : undefined} onLongPress={!shouldDisableTouchEvent() ? _onLongPress : undefined} accessible accessibilityRole={isDisabled ? undefined : 'button'} accessibilityLabel={accessibilityLabel}>
+                         {renderContent()}
+-                    </TouchableOpacity>
++                    </Pressable>
+                 </View>
+                 {renderBookingStatus(dateData)}
+             </View>
+diff --git a/src/calendar/day/period/index.js b/src/calendar/day/period/index.js
+index 42a007dce8393317dd5aa61d3f2a647caf75b568..bc5135805b8300b01adbe67a1a569fe8e39d9dbe 100644
+--- a/src/calendar/day/period/index.js
++++ b/src/calendar/day/period/index.js
+@@ -1,6 +1,6 @@
+ import PropTypes from 'prop-types';
+ import React, { useCallback, useMemo, useRef } from 'react';
+-import { Text, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
++import { Pressable, Text, TouchableWithoutFeedback, View } from 'react-native';
+ import { xdateToData } from '../../../interface';
+ import Dot from '../dot';
+ import styleConstructor from './style';
+@@ -119,7 +119,7 @@ const PeriodDay = (props) => {
+     const _onLongPress = useCallback(() => {
+         onLongPress?.(dateData);
+     }, [onLongPress]);
+-    const Component = marking ? TouchableWithoutFeedback : TouchableOpacity;
++    const Component = marking ? TouchableWithoutFeedback : Pressable;
+ 
+     const renderStartDate = () => {
+         return (
+diff --git a/src/expandableCalendar/index.js b/src/expandableCalendar/index.js
+index 5fe151352ea530c234bb251b6ba0536bf576b0d1..44f922f4d1fb215d963aaa0ef6c1451712a18d42 100644
+--- a/src/expandableCalendar/index.js
++++ b/src/expandableCalendar/index.js
+@@ -1,6 +1,6 @@
+ import dayjs from "dayjs";
+ import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
+-import { AccessibilityInfo, Animated, PanResponder, ScrollView, TouchableOpacity, View } from 'react-native';
++import { AccessibilityInfo, Animated, PanResponder, Pressable, ScrollView, View } from 'react-native';
+ import XDate from 'xdate';
+ import Calendar from '../calendar';
+ import { page } from '../dateutils';
+@@ -185,7 +185,7 @@ const ExpandableCalendar = (props) => {
+ 
+     const renderKnob = () => {
+         return (<View style={[style.current.knobContainer, {height: knobHeight || KNOB_CONTAINER_HEIGHT}]} pointerEvents={'box-none'}>
+-        <TouchableOpacity style={[style.current.knob, knobStyle]} testID={`${testID}.knob`} onPress={toggleCalendarPosition} hitSlop={knobHitSlop} /* activeOpacity={isOpen ? undefined : 1} *//>
++        <Pressable style={[style.current.knob, knobStyle]} testID={`${testID}.knob`} onPress={toggleCalendarPosition} hitSlop={knobHitSlop} /* activeOpacity={isOpen ? undefined : 1} *//>
+       </View>);
+     };
+ 

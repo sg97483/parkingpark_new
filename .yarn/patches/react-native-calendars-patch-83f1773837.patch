@@ -1,0 +1,98 @@
+diff --git a/src/calendar/day/basic/index.js b/src/calendar/day/basic/index.js
+index dea5d9eacdd2fc898352f4e8d381086a66409383..32e93df4f3a1b03f444eb707e33ef4a2a6444c00 100644
+--- a/src/calendar/day/basic/index.js
++++ b/src/calendar/day/basic/index.js
+@@ -2,14 +2,16 @@ import React, { Fragment, useCallback, useRef } from 'react';
+ import { Pressable, Text, View } from 'react-native';
+ import { xdateToData } from '../../../interface';
+ import styleConstructor from './style';
++import moment from 'moment/moment';
+ const BasicDay = (props) => {
+-    const { theme, date, onPress, onLongPress, markingType, marking, state, disableAllTouchEventsForDisabledDays, disableAllTouchEventsForInactiveDays, accessibilityLabel, children, testID, renderBookingStatus, basicDayContainerStyle } = props;
++    const { theme, date, onPress, onLongPress, markingType, marking, state, disableAllTouchEventsForDisabledDays, disableAllTouchEventsForInactiveDays, accessibilityLabel, children, testID, renderBookingStatus, basicDayContainerStyle, blurPastDay } = props;
+     const style = useRef(styleConstructor(theme));
+     const _marking = marking || {};
+     const isSelected = _marking.selected || state === 'selected';
+     const isDisabled = typeof _marking.disabled !== 'undefined' ? _marking.disabled : state === 'disabled';
+     const isInactive = _marking?.inactive;
+     const isToday = state === 'today';
++    const isPastDay = moment(date, 'YYYY-MM-DD').isBefore(moment().format('YYYY-MM-DD'))
+    
+     const dateData = date ? xdateToData(date) : undefined;
+     const shouldDisableTouchEvent = () => {
+@@ -56,6 +58,8 @@ const BasicDay = (props) => {
+             if (selectedTextColor) {
+                 styles.push({ color: selectedTextColor });
+             }
++        } else if(blurPastDay && isPastDay){
++            styles.push(style.current.disabledText);
+         }
+         else if (isDisabled) {
+             styles.push(style.current.disabledText);
+diff --git a/src/calendar/index.d.ts b/src/calendar/index.d.ts
+index b9435f2889e88795164f31d9e55455afd467b05e..c187707a409c8cc8abb2d702889cacef1f47a560 100644
+--- a/src/calendar/index.d.ts
++++ b/src/calendar/index.d.ts
+@@ -58,6 +58,7 @@ export interface CalendarProps extends CalendarHeaderProps, DayProps {
+     getHeaderLayout?: (layout: LayoutRectangle) => void;
+     isExpanded?: boolean;
+     selectedDate?: DateDate;
++    blurPastDay?: boolean;
+ }
+ /**
+  * @description: Calendar component
+diff --git a/src/calendar/index.js b/src/calendar/index.js
+index 01156a9107e1727098c35a7f58112eec660032a5..8db12593e227c0299dc257324413e19aecb1373f 100644
+--- a/src/calendar/index.js
++++ b/src/calendar/index.js
+@@ -27,7 +27,7 @@ const Calendar = (props) => {
+         firstDay, showSixWeeks, displayLoadingIndicator, customHeader, headerStyle, accessibilityElementsHidden,
+         importantForAccessibility, testID, style: propsStyle, customNewHeader, renderBookingStatus, 
+         basicDayContainerStyle, daysNameContainerStyle, dayNameStyle, onGetLayout, onGetFirstWeekHeight, 
+-        getHeaderLayout, isExpanded, selectedDate} = props;
++        getHeaderLayout, isExpanded, selectedDate, blurPastDay} = props;
+     const [currentMonth, setCurrentMonth] = useState(current || initialDate ? parseDate(current || initialDate) : new XDate());
+     const [calendarLayoutInfo, setCalendarLayoutInfo] = useState()
+     const [weeksHeight, setWeeksHeight] = useState([]);
+@@ -127,7 +127,7 @@ const Calendar = (props) => {
+         const dateString = toMarkingFormat(day);
+         const isControlled = isEmpty(props.context);
+         return (<View style={style.current.dayContainer} key={id}>
+-        <Day {...dayProps} testID={`${testID}.day_${dateString}`} date={dateString} state={getState(day, currentMonth, props, isControlled)} marking={markedDates?.[dateString]} onPress={_onDayPress} onLongPress={onLongPressDay} basicDayContainerStyle = {basicDayContainerStyle} renderBookingStatus = {renderBookingStatus}/>
++        <Day {...dayProps} blurPastDay={blurPastDay} testID={`${testID}.day_${dateString}`} date={dateString} state={getState(day, currentMonth, props, isControlled)} marking={markedDates?.[dateString]} onPress={_onDayPress} onLongPress={onLongPressDay} basicDayContainerStyle = {basicDayContainerStyle} renderBookingStatus = {renderBookingStatus}/>
+       </View>);
+     };
+ 
+diff --git a/src/expandableCalendar/index.d.ts b/src/expandableCalendar/index.d.ts
+index adb6f00229e31420a8b2bec7664ad8c32dcd5fda..c637616dfcd202756471f94ee6dd87b953dcaaa4 100644
+--- a/src/expandableCalendar/index.d.ts
++++ b/src/expandableCalendar/index.d.ts
+@@ -39,6 +39,7 @@ export interface ExpandableCalendarProps extends CalendarListProps {
+     knobUnnecessaryHeight?: number;
+     knobStyle?: StyleProp<ViewStyle>;
+     maxDate?: string;
++    blurPastDay?: boolean;
+ }
+ /**
+  * @description: Expandable calendar component
+diff --git a/src/expandableCalendar/index.js b/src/expandableCalendar/index.js
+index ec6e6c15c83264279a61afe8dc764163f3660ce2..4e5257e94412ac3bad55f095c578308d634c07fe 100644
+--- a/src/expandableCalendar/index.js
++++ b/src/expandableCalendar/index.js
+@@ -49,7 +49,7 @@ const ExpandableCalendar = (props) => {
+     /** CalendarList props */
+     horizontal = true, calendarStyle, theme, style: propsStyle, firstDay = 0, onDayPress, testID, markedDates, 
+     customNewHeader, daysNameContainerStyle, dayNameStyle, dayComponent, renderBookingStatus, basicDayContainerStyle, 
+-    knobHeight, knobStyle, knobUnnecessaryHeight, maxDate, ...others } = props;
++    knobHeight, knobStyle, knobUnnecessaryHeight, maxDate, blurPastDay, ...others } = props;
+     const [screenReaderEnabled, setScreenReaderEnabled] = useState(false);
+     const [selectedDate, setSelectedDate] = useState(
+         {dateString: dayjs().format('YYYY-MM-DD'),
+@@ -235,6 +235,7 @@ const ExpandableCalendar = (props) => {
+                 }}
+                 isExpanded = {isOpen}
+                 selectedDate = {selectedDate}
++                blurPastDay={blurPastDay}
+                 />
+              </ScrollView>
+         )

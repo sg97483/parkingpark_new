@@ -1,0 +1,38 @@
+pluginManagement {
+    repositories {
+        google()
+        mavenCentral()
+        gradlePluginPortal()
+    }
+}
+
+dependencyResolutionManagement {
+    // [중요] 프로젝트 내 build.gradle에서 repositories를 사용하지 못하게 설정
+    repositoriesMode.set(RepositoriesMode.PREFER_SETTINGS)      // <-- 이 줄을 추가합니다.
+    repositories {
+        google()
+        mavenCentral()
+        maven { url 'https://www.jitpack.io' }
+        maven { url 'https://repository.map.naver.com/archive/maven' }
+        maven { url 'https://devrepo.kakao.com/nexus/content/repositories/public/' }
+        maven { url 'https://repository.tnkad.net:8443/repository/public/' }
+        maven { url "$rootDir/../node_modules/react-native/android" }
+        maven { url "$rootDir/../node_modules/react-native/gradle-plugin" }
+        maven { url "$rootDir/../node_modules/jsc-android/dist" }
+    }
+}
+
+rootProject.name = 'ParkingPark'
+
+// React Native native_modules 설정
+apply from: file("../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesSettingsGradle(settings)
+
+// include ':app' 등 필요한 모듈 추가
+include ':app'
+
+// 커스텀 모듈 및 외부 패키지 연동 (프로젝트 상황에 맞게 추가/수정)
+include(":react-native-bootsplash")
+project(":react-native-bootsplash").projectDir = new File(rootProject.projectDir, "../node_modules/react-native-bootsplash/android")
+
+include ':@invertase_react-native-apple-authentication'
+project(':@invertase_react-native-apple-authentication').projectDir = new File(rootProject.projectDir, '../node_modules/@invertase/react-native-apple-authentication/android')

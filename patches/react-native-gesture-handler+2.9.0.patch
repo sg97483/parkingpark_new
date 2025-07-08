@@ -1,0 +1,24 @@
+diff --git a/node_modules/react-native-gesture-handler/android/build.gradle b/node_modules/react-native-gesture-handler/android/build.gradle
+index 20f41ea..8801d07 100644
+--- a/node_modules/react-native-gesture-handler/android/build.gradle
++++ b/node_modules/react-native-gesture-handler/android/build.gradle
+@@ -131,6 +131,7 @@ repositories {
+ }
+ 
+ android {
++    namespace "com.swmansion.gesturehandler"
+     compileSdkVersion safeExtGet("compileSdkVersion", 28)
+ 
+     // Used to override the NDK path/version on internal CI or by allowing
+@@ -148,6 +149,11 @@ android {
+         }
+     }
+    
++    buildFeatures {
++    buildConfig true
++    }
++
++
+     defaultConfig {
+         minSdkVersion safeExtGet('minSdkVersion', 16)
+         targetSdkVersion safeExtGet('targetSdkVersion', 28)

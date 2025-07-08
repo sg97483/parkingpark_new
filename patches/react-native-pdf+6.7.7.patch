@@ -1,0 +1,15 @@
+diff --git a/node_modules/react-native-pdf/android/build.gradle b/node_modules/react-native-pdf/android/build.gradle
+index 3dfe1dc..e13ff72 100644
+--- a/node_modules/react-native-pdf/android/build.gradle
++++ b/node_modules/react-native-pdf/android/build.gradle
+@@ -92,6 +92,10 @@ android {
+         buildConfigField("boolean", "IS_NEW_ARCHITECTURE_ENABLED", isNewArchitectureEnabled().toString())
+     }
+ 
++    buildFeatures {
++        buildConfig true
++    }
++
+     sourceSets.main {
+         java {
+             if (!isNewArchitectureEnabled()) {

@@ -1,0 +1,62 @@
+diff --git a/node_modules/react-native-dash/Dash.js b/node_modules/react-native-dash/Dash.js
+index 32ff1ec..d96d597 100644
+--- a/node_modules/react-native-dash/Dash.js
++++ b/node_modules/react-native-dash/Dash.js
+@@ -6,7 +6,8 @@
+ 
+ import React from 'react'
+ import PropTypes from 'prop-types'
+-import { View, StyleSheet, ViewPropTypes } from 'react-native'
++import { View, StyleSheet } from 'react-native'
++import { ViewPropTypes } from 'deprecated-react-native-prop-types'
+ import MeasureMeHOC from 'react-native-measureme'
+ import { getDashStyle, isStyleRow } from '../util'
+ 
+@@ -43,13 +44,13 @@ const styles = StyleSheet.create({
+ })
+ 
+ Dash.propTypes = {
+-	style: ViewPropTypes.style,
++	style: PropTypes.any,
+ 	dashGap: PropTypes.number.isRequired,
+ 	dashLength: PropTypes.number.isRequired,
+ 	dashThickness: PropTypes.number.isRequired,
+ 	dashColor: PropTypes.string,
+-	dashStyle: ViewPropTypes.style,
+-}
++	dashStyle: PropTypes.any,
++  }  
+ 
+ Dash.defaultProps = {
+ 	dashGap: 2,
+diff --git a/node_modules/react-native-dash/dist/.index.js.swo b/node_modules/react-native-dash/dist/.index.js.swo
+new file mode 100644
+index 0000000..910ddb7
+Binary files /dev/null and b/node_modules/react-native-dash/dist/.index.js.swo differ
+diff --git a/node_modules/react-native-dash/dist/index.js b/node_modules/react-native-dash/dist/index.js
+index 4034e31..6e27d33 100644
+--- a/node_modules/react-native-dash/dist/index.js
++++ b/node_modules/react-native-dash/dist/index.js
+@@ -13,6 +13,7 @@ var _propTypes = require('prop-types');
+ var _propTypes2 = _interopRequireDefault(_propTypes);
+ 
+ var _reactNative = require('react-native');
++var _deprecatedPropTypes = require('deprecated-react-native-prop-types');
+ 
+ var _reactNativeMeasureme = require('react-native-measureme');
+ 
+@@ -54,12 +55,12 @@ var styles = _reactNative.StyleSheet.create({
+ });
+ 
+ Dash.propTypes = {
+-	style: _reactNative.ViewPropTypes.style,
++	style: _deprecatedPropTypes.ViewPropTypes.style, // 수정
+ 	dashGap: _propTypes2.default.number.isRequired,
+ 	dashLength: _propTypes2.default.number.isRequired,
+ 	dashThickness: _propTypes2.default.number.isRequired,
+ 	dashColor: _propTypes2.default.string,
+-	dashStyle: _reactNative.ViewPropTypes.style
++	dashStyle: _deprecatedPropTypes.ViewPropTypes.style // 수정
+ };
+ 
+ Dash.defaultProps = {

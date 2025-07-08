@@ -1,0 +1,26 @@
+diff --git a/dist/react-async-component.js b/dist/react-async-component.js
+index c4886a60dde8cf29f0f06eae63be767f6f336011..a3f71b67bf94a91576b81870b5a3858b244611d9 100644
+--- a/dist/react-async-component.js
++++ b/dist/react-async-component.js
+@@ -126,8 +126,8 @@ var AsyncComponentProvider = function (_Component) {
+   }
+ 
+   createClass(AsyncComponentProvider, [{
+-    key: 'componentWillMount',
+-    value: function componentWillMount() {
++    key: 'UNSAFE_componentWillMount',
++    value: function UNSAFE_componentWillMount() {
+       this.asyncContext = this.props.asyncContext || createAsyncContext();
+       this.rehydrateState = this.props.rehydrateState;
+     }
+@@ -269,8 +269,8 @@ function asyncComponent(config) {
+         };
+       }
+     }, {
+-      key: 'componentWillMount',
+-      value: function componentWillMount() {
++      key: 'UNSAFE_componentWillMount',
++      value: function UNSAFE_componentWillMount() {
+         if (this.context.asyncComponents != null) {
+           state.asyncComponents = this.context.asyncComponents;
+           state.asyncComponentsAncestor = this.context.asyncComponentsAncestor;

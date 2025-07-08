@@ -1,0 +1,16 @@
+diff --git a/node_modules/react-native-vector-icons/android/build.gradle b/node_modules/react-native-vector-icons/android/build.gradle
+index 3e615e9..93fbd22 100644
+--- a/node_modules/react-native-vector-icons/android/build.gradle
++++ b/node_modules/react-native-vector-icons/android/build.gradle
+@@ -29,6 +29,11 @@ android {
+         targetSdkVersion safeExtGet('targetSdkVersion', 31)
+         buildConfigField("boolean", "IS_NEW_ARCHITECTURE_ENABLED", isNewArchitectureEnabled().toString())
+     }
++
++    buildFeatures {
++        buildConfig true
++    }
++    
+     sourceSets {
+         main {
+             if (isNewArchitectureEnabled()) {

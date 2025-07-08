@@ -1,0 +1,13 @@
+diff --git a/src/expandableCalendar/style.js b/src/expandableCalendar/style.js
+index b014a6cebc3d3dcd2090c9032db01a82dac5e8c0..8ff72599c8f907051922300509b187cf04e40eed 100644
+--- a/src/expandableCalendar/style.js
++++ b/src/expandableCalendar/style.js
+@@ -34,7 +34,7 @@ export default function styleConstructor(theme = {}) {
+         knobContainer: {
+             height: KNOB_CONTAINER_HEIGHT,
+             alignItems: 'center',
+-            justifyContent: 'center',
++            justifyContent: 'flex-end',
+             backgroundColor: appStyle.calendarBackground,
+             borderBottomRightRadius: 16,
+             borderBottomLeftRadius: 16,

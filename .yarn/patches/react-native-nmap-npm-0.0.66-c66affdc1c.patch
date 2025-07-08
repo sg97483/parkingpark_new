@@ -1,0 +1,250 @@
+diff --git a/ios/reactNativeNMap/RCTConvert+NMFMapView.m b/ios/reactNativeNMap/RCTConvert+NMFMapView.m
+index 802de2f89bc01268b0ed6cc41b3f2a509a7ae631..3edf75fa1d2f8c64b33118a941c52defefa43536 100644
+--- a/ios/reactNativeNMap/RCTConvert+NMFMapView.m
++++ b/ios/reactNativeNMap/RCTConvert+NMFMapView.m
+@@ -6,9 +6,9 @@
+ //
+ 
+ #import <NMapsMap/NMFCameraUpdate.h>
+-#import <NMapsMap/NMGLatLng.h>
++#import <NMapsGeometry/NMGLatLng.h>
+ #import <NMapsMap/NMFCameraPosition.h>
+-#import <NMapsMap/NMGLatLngBounds.h>
++#import <NMapsGeometry/NMGLatLngBounds.h>
+ #import <NMapsMap/NMFOverlay.h>
+ 
+ #import "RCTConvert+NMFMapView.h"
+diff --git a/ios/reactNativeNMap/RNNaverMapCircleOverlay.h b/ios/reactNativeNMap/RNNaverMapCircleOverlay.h
+index d4aa99fdaa2dbc3586a81c4eabc887a5a345590b..00ac090abeda13d4400faa4216e51378818625c6 100644
+--- a/ios/reactNativeNMap/RNNaverMapCircleOverlay.h
++++ b/ios/reactNativeNMap/RNNaverMapCircleOverlay.h
+@@ -7,7 +7,7 @@
+ 
+ #import <React/RCTBridge.h>
+ #import <React/RCTComponent.h>
+-#import <NMapsMap/NMGLatLng.h>
++#import <NMapsGeometry/NMGLatLng.h>
+ #import <NMapsMap/NMFCircleOverlay.h>
+ 
+ #import "RCTConvert+NMFMapView.h"
+diff --git a/ios/reactNativeNMap/RNNaverMapCircleOverlay.m b/ios/reactNativeNMap/RNNaverMapCircleOverlay.m
+index 123ea0c7e37cefd18184d3e75767e1ad690d69fb..b715f2c1969e8e9a8a741ca3cc3e3a850dbaed9b 100644
+--- a/ios/reactNativeNMap/RNNaverMapCircleOverlay.m
++++ b/ios/reactNativeNMap/RNNaverMapCircleOverlay.m
+@@ -10,7 +10,7 @@
+ #import <React/RCTBridge.h>
+ #import <React/RCTUtils.h>
+ #import <NMapsMap/NMFNaverMapView.h>
+-#import <NMapsMap/NMGLatLng.h>
++#import <NMapsGeometry/NMGLatLng.h>
+ #import <NMapsMap/NMFCircleOverlay.h>
+ 
+ #import "RCTConvert+NMFMapView.h"
+diff --git a/ios/reactNativeNMap/RNNaverMapCircleOverlayManager.m b/ios/reactNativeNMap/RNNaverMapCircleOverlayManager.m
+index 15964670d109e4676f3c0197830fabc62fad590f..209c815dde545e97334ead385552a854eb0e5fc0 100644
+--- a/ios/reactNativeNMap/RNNaverMapCircleOverlayManager.m
++++ b/ios/reactNativeNMap/RNNaverMapCircleOverlayManager.m
+@@ -8,7 +8,7 @@
+ #import "RNNaverMapCircleOverlayManager.h"
+ #import "RNNaverMapCircleOverlay.h"
+ #import <React/RCTUIManager.h>
+-#import <NMapsMap/NMGLatLng.h>
++#import <NMapsGeometry/NMGLatLng.h>
+ 
+ #import "RCTConvert+NMFMapView.h"
+ 
+diff --git a/ios/reactNativeNMap/RNNaverMapMarker.h b/ios/reactNativeNMap/RNNaverMapMarker.h
+index 2634f3cc8c8642ddc575da9ceb6e582cdf7bba76..f8eea65640eb7233dfb71eb81135bee7fbc67799 100644
+--- a/ios/reactNativeNMap/RNNaverMapMarker.h
++++ b/ios/reactNativeNMap/RNNaverMapMarker.h
+@@ -7,7 +7,7 @@
+ 
+ #import <React/RCTBridge.h>
+ #import <React/RCTComponent.h>
+-#import <NMapsMap/NMGLatLng.h>
++#import <NMapsGeometry/NMGLatLng.h>
+ #import <NMapsMap/NMFMarker.h>
+ 
+ #import "RCTConvert+NMFMapView.h"
+diff --git a/ios/reactNativeNMap/RNNaverMapMarker.m b/ios/reactNativeNMap/RNNaverMapMarker.m
+index 2e953e040bb0bd10d39d8ab022a3c1b85d3be5c4..6bb3e82cd6fa563e5927616a1f31a4a20a2c4b8d 100644
+--- a/ios/reactNativeNMap/RNNaverMapMarker.m
++++ b/ios/reactNativeNMap/RNNaverMapMarker.m
+@@ -11,7 +11,7 @@
+ #import <React/RCTImageLoader.h>
+ #import <React/RCTUtils.h>
+ #import <NMapsMap/NMFNaverMapView.h>
+-#import <NMapsMap/NMGLatLng.h>
++#import <NMapsGeometry/NMGLatLng.h>
+ #import <NMapsMap/NMFMarker.h>
+ #import <NMapsMap/NMFOverlayImage.h>
+ 
+diff --git a/ios/reactNativeNMap/RNNaverMapMarkerManager.m b/ios/reactNativeNMap/RNNaverMapMarkerManager.m
+index 4d76d79dedf57616778d26bb1177a5bb600f1dc4..0df95cddb29188aeaf335f217e527694855602f5 100644
+--- a/ios/reactNativeNMap/RNNaverMapMarkerManager.m
++++ b/ios/reactNativeNMap/RNNaverMapMarkerManager.m
+@@ -8,7 +8,7 @@
+ #import "RNNaverMapMarkerManager.h"
+ #import "RNNaverMapMarker.h"
+ #import <React/RCTUIManager.h>
+-#import <NMapsMap/NMGLatLng.h>
++#import <NMapsGeometry/NMGLatLng.h>
+ #import <NMapsMap/NMFCameraCommon.h>
+ 
+ #import "RCTConvert+NMFMapView.h"
+diff --git a/ios/reactNativeNMap/RNNaverMapPathOverlay.h b/ios/reactNativeNMap/RNNaverMapPathOverlay.h
+index 943a2e5283d3abde9af3d6dcc79353f5ead57c1a..410d141780338d64db7ca64fb9f015430e94f03a 100644
+--- a/ios/reactNativeNMap/RNNaverMapPathOverlay.h
++++ b/ios/reactNativeNMap/RNNaverMapPathOverlay.h
+@@ -7,7 +7,7 @@
+ 
+ #import <React/RCTBridge.h>
+ #import <React/RCTComponent.h>
+-#import <NMapsMap/NMGLatLng.h>
++#import <NMapsGeometry/NMGLatLng.h>
+ #import <NMapsMap/NMFPath.h>
+ 
+ #import "RCTConvert+NMFMapView.h"
+diff --git a/ios/reactNativeNMap/RNNaverMapPathOverlay.m b/ios/reactNativeNMap/RNNaverMapPathOverlay.m
+index 13b5bc2e7c78b8ec45741bd6eff994c571541a5c..c539d09451af88196f86b1ecb20122200ede1374 100644
+--- a/ios/reactNativeNMap/RNNaverMapPathOverlay.m
++++ b/ios/reactNativeNMap/RNNaverMapPathOverlay.m
+@@ -10,7 +10,7 @@
+ #import <React/RCTImageLoader.h>
+ #import <React/RCTUtils.h>
+ #import <NMapsMap/NMFNaverMapView.h>
+-#import <NMapsMap/NMGLatLng.h>
++#import <NMapsGeometry/NMGLatLng.h>
+ #import <NMapsMap/NMFPath.h>
+ #import <NMapsMap/NMFOverlayImage.h>
+ 
+diff --git a/ios/reactNativeNMap/RNNaverMapPathOverlayManager.m b/ios/reactNativeNMap/RNNaverMapPathOverlayManager.m
+index e15da954f1ed524e8907fdf40709fca2317f1453..9beae95bac249ed1f87e99755987668cff2ec1af 100644
+--- a/ios/reactNativeNMap/RNNaverMapPathOverlayManager.m
++++ b/ios/reactNativeNMap/RNNaverMapPathOverlayManager.m
+@@ -8,7 +8,7 @@
+ #import "RNNaverMapPathOverlayManager.h"
+ #import "RNNaverMapPathOverlay.h"
+ #import <React/RCTUIManager.h>
+-#import <NMapsMap/NMGLatLng.h>
++#import <NMapsGeometry/NMGLatLng.h>
+ 
+ #import "RCTConvert+NMFMapView.h"
+ 
+diff --git a/ios/reactNativeNMap/RNNaverMapPolygonOverlay.h b/ios/reactNativeNMap/RNNaverMapPolygonOverlay.h
+index bd5b9fd24f6a90e6618eda0816b9311a402ae291..54b6dfe22091d2e82be0581e2779ce6f1a86f0bc 100644
+--- a/ios/reactNativeNMap/RNNaverMapPolygonOverlay.h
++++ b/ios/reactNativeNMap/RNNaverMapPolygonOverlay.h
+@@ -8,7 +8,7 @@
+ 
+ #import <React/RCTBridge.h>
+ #import <React/RCTComponent.h>
+-#import <NMapsMap/NMGLatLng.h>
++#import <NMapsGeometry/NMGLatLng.h>
+ #import <NMapsMap/NMFPolygonOverlay.h>
+ 
+ #import "RCTConvert+NMFMapView.h"
+diff --git a/ios/reactNativeNMap/RNNaverMapPolygonOverlay.m b/ios/reactNativeNMap/RNNaverMapPolygonOverlay.m
+index 326bacf824fddf9c465ba50459b06de0c02ecdac..c43be8d942f9c139ef805476ee0ba0118e6a8c48 100644
+--- a/ios/reactNativeNMap/RNNaverMapPolygonOverlay.m
++++ b/ios/reactNativeNMap/RNNaverMapPolygonOverlay.m
+@@ -12,7 +12,7 @@
+ #import <React/RCTImageLoader.h>
+ #import <React/RCTUtils.h>
+ #import <NMapsMap/NMFNaverMapView.h>
+-#import <NMapsMap/NMGLatLng.h>
++#import <NMapsGeometry/NMGLatLng.h>
+ #import <NMapsMap/NMFPolygonOverlay.h>
+ 
+ #import "RCTConvert+NMFMapView.h"
+diff --git a/ios/reactNativeNMap/RNNaverMapPolygonOverlayManager.m b/ios/reactNativeNMap/RNNaverMapPolygonOverlayManager.m
+index 27132cd8ccb2fe2a2a10b112a55667d0590d611d..f2296fc1c621aa50b1ba465b74ae6b77aab7e018 100644
+--- a/ios/reactNativeNMap/RNNaverMapPolygonOverlayManager.m
++++ b/ios/reactNativeNMap/RNNaverMapPolygonOverlayManager.m
+@@ -9,7 +9,7 @@
+ #import "RNNaverMapPolygonOverlayManager.h"
+ #import "RNNaverMapPolygonOverlay.h"
+ #import <React/RCTUIManager.h>
+-#import <NMapsMap/NMGLatLng.h>
++#import <NMapsGeometry/NMGLatLng.h>
+ 
+ #import "RCTConvert+NMFMapView.h"
+ 
+diff --git a/ios/reactNativeNMap/RNNaverMapPolylineOverlay.h b/ios/reactNativeNMap/RNNaverMapPolylineOverlay.h
+index 9aa00ef79f2be8f130df53347e8e66dc5c4dd3af..0a0cb58a2aa0c224b18ba3035ace27dc49ab182d 100644
+--- a/ios/reactNativeNMap/RNNaverMapPolylineOverlay.h
++++ b/ios/reactNativeNMap/RNNaverMapPolylineOverlay.h
+@@ -7,7 +7,7 @@
+ 
+ #import <React/RCTBridge.h>
+ #import <React/RCTComponent.h>
+-#import <NMapsMap/NMGLatLng.h>
++#import <NMapsGeometry/NMGLatLng.h>
+ #import <NMapsMap/NMFPolylineOverlay.h>
+ 
+ #import "RCTConvert+NMFMapView.h"
+diff --git a/ios/reactNativeNMap/RNNaverMapPolylineOverlay.m b/ios/reactNativeNMap/RNNaverMapPolylineOverlay.m
+index 2fe9d8fc31811875ed374df9c65fdd4bc9bb0d5e..d2701ff76cb89276bf015f0064e80e5991505959 100644
+--- a/ios/reactNativeNMap/RNNaverMapPolylineOverlay.m
++++ b/ios/reactNativeNMap/RNNaverMapPolylineOverlay.m
+@@ -10,7 +10,7 @@
+ #import <React/RCTImageLoader.h>
+ #import <React/RCTUtils.h>
+ #import <NMapsMap/NMFNaverMapView.h>
+-#import <NMapsMap/NMGLatLng.h>
++#import <NMapsGeometry/NMGLatLng.h>
+ #import <NMapsMap/NMFPolylineOverlay.h>
+ 
+ #import "RCTConvert+NMFMapView.h"
+diff --git a/ios/reactNativeNMap/RNNaverMapPolylineOverlayManager.m b/ios/reactNativeNMap/RNNaverMapPolylineOverlayManager.m
+index ff0796ef71fb90c967c9c690f2ea58d55b9dc8ae..842c1313cc400ada553d9feda4e622f216c09f0a 100644
+--- a/ios/reactNativeNMap/RNNaverMapPolylineOverlayManager.m
++++ b/ios/reactNativeNMap/RNNaverMapPolylineOverlayManager.m
+@@ -8,7 +8,7 @@
+ #import "RNNaverMapPolylineOverlayManager.h"
+ #import "RNNaverMapPolylineOverlay.h"
+ #import <React/RCTUIManager.h>
+-#import <NMapsMap/NMGLatLng.h>
++#import <NMapsGeometry/NMGLatLng.h>
+ 
+ #import "RCTConvert+NMFMapView.h"
+ 
+diff --git a/ios/reactNativeNMap/RNNaverMapView.h b/ios/reactNativeNMap/RNNaverMapView.h
+index 82c3cf34bcff1e3e1cadc0730a5de4aa676362bc..49eb45d26ebdceef0638268de1b78f40530824be 100644
+--- a/ios/reactNativeNMap/RNNaverMapView.h
++++ b/ios/reactNativeNMap/RNNaverMapView.h
+@@ -10,7 +10,7 @@
+ #import <React/RCTBridge.h>
+ 
+ #import <NMapsMap/NMFNaverMapView.h>
+-#import <NMapsMap/NMGLatLng.h>
++#import <NMapsGeometry/NMGLatLng.h>
+ #import <NMapsMap/NMFMarker.h>
+ #import <NMapsMap/NMFCameraUpdate.h>
+ #import <NMapsMap/NMFMapViewDelegate.h>
+diff --git a/ios/reactNativeNMap/RNNaverMapView.m b/ios/reactNativeNMap/RNNaverMapView.m
+index b1545af9d57f6040c522a77f7c1d1793681bdfea..9671b0ac18112d769e6c7b2334bcdee071fd87d7 100644
+--- a/ios/reactNativeNMap/RNNaverMapView.m
++++ b/ios/reactNativeNMap/RNNaverMapView.m
+@@ -11,7 +11,7 @@
+ #import <React/RCTBridge.h>
+ #import <React/UIView+React.h>
+ 
+-#import <NMapsMap/NMGLatLng.h>
++#import <NMapsGeometry/NMGLatLng.h>
+ #import <NMapsMap/NMFMarker.h>
+ #import <NMapsMap/NMFCameraUpdate.h>
+ #import <NMapsMap/NMFCameraPosition.h>
+diff --git a/ios/reactNativeNMap/RNNaverMapViewManager.m b/ios/reactNativeNMap/RNNaverMapViewManager.m
+index 920141012a92d918b30bd40eaf98552977555f11..5f9eebce0d6c3e1152da126bdac9c19e34933168 100644
+--- a/ios/reactNativeNMap/RNNaverMapViewManager.m
++++ b/ios/reactNativeNMap/RNNaverMapViewManager.m
+@@ -12,7 +12,7 @@
+ #import <NMapsMap/NMFNaverMapView.h>
+ #import <NMapsMap/NMFCameraUpdate.h>
+ #import <NMapsMap/NMFCameraPosition.h>
+-#import <NMapsMap/NMGLatLng.h>
++#import <NMapsGeometry/NMGLatLng.h>
+ 
+ #import "RCTConvert+NMFMapView.h"
+ #import "RNNaverMapView.h"

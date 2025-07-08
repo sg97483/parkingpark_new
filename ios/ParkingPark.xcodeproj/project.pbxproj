@@ -1,0 +1,1177 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 70;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		00E356F31AD99517003FC87E /* ParkingParkTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* ParkingParkTests.m */; };
+		13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
+		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
+		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
+		3F51EFBB05824F01ADE5C2B4 /* Pretendard-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C3D589E7457F477D889C48A4 /* Pretendard-SemiBold.ttf */; };
+		431672B497484DF2B0789FCD /* NanumSquareRoundR.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E74902F714684172897AE87C /* NanumSquareRoundR.ttf */; };
+		61E7928899C1456F88A0CF08 /* Pretendard-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D9DA3817B7B74F208D07147D /* Pretendard-Medium.ttf */; };
+		6ACB2B78D5D84ECEB7345722 /* Pretendard-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4BA6556CD77A47CFB2D4190E /* Pretendard-Light.ttf */; };
+		7041829043BD4ED2AF73D8A9 /* NanumSquareRoundL.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 410564FBAFF14DC49FC3BF38 /* NanumSquareRoundL.ttf */; };
+		9BDB2DC9FA029C361E5FCFE3 /* Pods_ParkingPark.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BC484B6E47C3565D990194DC /* Pods_ParkingPark.framework */; };
+		A6D2DD8F186E439BBD501E6D /* NanumSquareRoundEB.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E28DC673E494446D9972C7D2 /* NanumSquareRoundEB.ttf */; };
+		B6A9017A346C590A0EBB377B /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = E5FB9BE33D5E125FB33AA6B6 /* PrivacyInfo.xcprivacy */; };
+		BEADB4D429C41937006742D2 /* code_region.csv in Resources */ = {isa = PBXBuildFile; fileRef = BEADB4D329C41937006742D2 /* code_region.csv */; };
+		C5F3A6F3A6D59CBDD4926671 /* Pods_ParkingPark_ParkingParkTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0AB9C64049DC501E104D0E9 /* Pods_ParkingPark_ParkingParkTests.framework */; };
+		C8C32DE9D678411D9609B934 /* Pretendard-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0DFFDB16D3054D93AEED2D32 /* Pretendard-Bold.ttf */; };
+		CEAF6D672B0F461700AC08B7 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = CEAF6D662B0F461700AC08B7 /* GoogleService-Info.plist */; };
+		F421FA02CF5C4F48BA7079BD /* Pretendard-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2BE834C6C87E4A9CB2D404B8 /* Pretendard-Regular.ttf */; };
+		F54859BE3C5D4D15B5331C02 /* NanumSquareRoundB.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7B5537CE663C446DA1686D9F /* NanumSquareRoundB.ttf */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		00E356F41AD99517003FC87E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 83CBB9F71A601CBA00E9B192 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 13B07F861A680F5B00A75B9A;
+			remoteInfo = ParkingPark;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		00E356EE1AD99517003FC87E /* ParkingParkTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ParkingParkTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		00E356F21AD99517003FC87E /* ParkingParkTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ParkingParkTests.m; sourceTree = "<group>"; };
+		0DFFDB16D3054D93AEED2D32 /* Pretendard-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Pretendard-Bold.ttf"; path = "../src/assets/fonts/Pretendard-Bold.ttf"; sourceTree = "<group>"; };
+		13B07F961A680F5B00A75B9A /* ParkingPark.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ParkingPark.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = ParkingPark/AppDelegate.h; sourceTree = "<group>"; };
+		13B07FB01A68108700A75B9A /* AppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = AppDelegate.mm; path = ParkingPark/AppDelegate.mm; sourceTree = "<group>"; };
+		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = ParkingPark/Images.xcassets; sourceTree = "<group>"; };
+		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = ParkingPark/Info.plist; sourceTree = "<group>"; };
+		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = ParkingPark/main.m; sourceTree = "<group>"; };
+		2A3DB46B618D34FD84463A0A /* Pods-ParkingPark.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ParkingPark.debug.xcconfig"; path = "Target Support Files/Pods-ParkingPark/Pods-ParkingPark.debug.xcconfig"; sourceTree = "<group>"; };
+		2BE834C6C87E4A9CB2D404B8 /* Pretendard-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Pretendard-Regular.ttf"; path = "../src/assets/fonts/Pretendard-Regular.ttf"; sourceTree = "<group>"; };
+		410564FBAFF14DC49FC3BF38 /* NanumSquareRoundL.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = NanumSquareRoundL.ttf; path = ../src/assets/fonts/NanumSquareRoundL.ttf; sourceTree = "<group>"; };
+		4BA6556CD77A47CFB2D4190E /* Pretendard-Light.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Pretendard-Light.ttf"; path = "../src/assets/fonts/Pretendard-Light.ttf"; sourceTree = "<group>"; };
+		7A0632255A264C0DF11EFAD4 /* Pods-ParkingPark-ParkingParkTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ParkingPark-ParkingParkTests.release.xcconfig"; path = "Target Support Files/Pods-ParkingPark-ParkingParkTests/Pods-ParkingPark-ParkingParkTests.release.xcconfig"; sourceTree = "<group>"; };
+		7B5537CE663C446DA1686D9F /* NanumSquareRoundB.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = NanumSquareRoundB.ttf; path = ../src/assets/fonts/NanumSquareRoundB.ttf; sourceTree = "<group>"; };
+		BC484B6E47C3565D990194DC /* Pods_ParkingPark.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ParkingPark.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		BEADB4D329C41937006742D2 /* code_region.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = code_region.csv; path = ../src/assets/code_region.csv; sourceTree = "<group>"; };
+		C3D589E7457F477D889C48A4 /* Pretendard-SemiBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Pretendard-SemiBold.ttf"; path = "../src/assets/fonts/Pretendard-SemiBold.ttf"; sourceTree = "<group>"; };
+		CE455F912BA436A200A5FE2C /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		CEAF6D662B0F461700AC08B7 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		D0AB9C64049DC501E104D0E9 /* Pods_ParkingPark_ParkingParkTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ParkingPark_ParkingParkTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		D64794484FBB7E4E86599299 /* Pods-ParkingPark.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ParkingPark.release.xcconfig"; path = "Target Support Files/Pods-ParkingPark/Pods-ParkingPark.release.xcconfig"; sourceTree = "<group>"; };
+		D9DA3817B7B74F208D07147D /* Pretendard-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Pretendard-Medium.ttf"; path = "../src/assets/fonts/Pretendard-Medium.ttf"; sourceTree = "<group>"; };
+		DD52128829C963540084B7B4 /* ParkingPark.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = ParkingPark.entitlements; path = ParkingPark/ParkingPark.entitlements; sourceTree = "<group>"; };
+		E28DC673E494446D9972C7D2 /* NanumSquareRoundEB.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = NanumSquareRoundEB.ttf; path = ../src/assets/fonts/NanumSquareRoundEB.ttf; sourceTree = "<group>"; };
+		E5FB9BE33D5E125FB33AA6B6 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xml; name = PrivacyInfo.xcprivacy; path = ParkingPark/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		E74902F714684172897AE87C /* NanumSquareRoundR.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = NanumSquareRoundR.ttf; path = ../src/assets/fonts/NanumSquareRoundR.ttf; sourceTree = "<group>"; };
+		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
+		F8AE6264F58CAD629D89FF92 /* Pods-ParkingPark-ParkingParkTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ParkingPark-ParkingParkTests.debug.xcconfig"; path = "Target Support Files/Pods-ParkingPark-ParkingParkTests/Pods-ParkingPark-ParkingParkTests.debug.xcconfig"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		040BFE872DE60D8C00322621 /* Base.lproj */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Base.lproj; sourceTree = "<group>"; };
+/* End PBXFileSystemSynchronizedRootGroup section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		00E356EB1AD99517003FC87E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C5F3A6F3A6D59CBDD4926671 /* Pods_ParkingPark_ParkingParkTests.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		13B07F8C1A680F5B00A75B9A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9BDB2DC9FA029C361E5FCFE3 /* Pods_ParkingPark.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		00E356EF1AD99517003FC87E /* ParkingParkTests */ = {
+			isa = PBXGroup;
+			children = (
+				00E356F21AD99517003FC87E /* ParkingParkTests.m */,
+				00E356F01AD99517003FC87E /* Supporting Files */,
+			);
+			path = ParkingParkTests;
+			sourceTree = "<group>";
+		};
+		00E356F01AD99517003FC87E /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				00E356F11AD99517003FC87E /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		13B07FAE1A68108700A75B9A /* ParkingPark */ = {
+			isa = PBXGroup;
+			children = (
+				040BFE872DE60D8C00322621 /* Base.lproj */,
+				CE455F912BA436A200A5FE2C /* PrivacyInfo.xcprivacy */,
+				DD52128829C963540084B7B4 /* ParkingPark.entitlements */,
+				BEADB4D329C41937006742D2 /* code_region.csv */,
+				CEAF6D662B0F461700AC08B7 /* GoogleService-Info.plist */,
+				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
+				13B07FB01A68108700A75B9A /* AppDelegate.mm */,
+				13B07FB51A68108700A75B9A /* Images.xcassets */,
+				13B07FB61A68108700A75B9A /* Info.plist */,
+				13B07FB71A68108700A75B9A /* main.m */,
+				E5FB9BE33D5E125FB33AA6B6 /* PrivacyInfo.xcprivacy */,
+			);
+			name = ParkingPark;
+			sourceTree = "<group>";
+		};
+		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
+				BC484B6E47C3565D990194DC /* Pods_ParkingPark.framework */,
+				D0AB9C64049DC501E104D0E9 /* Pods_ParkingPark_ParkingParkTests.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Libraries;
+			sourceTree = "<group>";
+		};
+		83CBB9F61A601CBA00E9B192 = {
+			isa = PBXGroup;
+			children = (
+				13B07FAE1A68108700A75B9A /* ParkingPark */,
+				832341AE1AAA6A7D00B99B32 /* Libraries */,
+				00E356EF1AD99517003FC87E /* ParkingParkTests */,
+				83CBBA001A601CBA00E9B192 /* Products */,
+				2D16E6871FA4F8E400B85C8A /* Frameworks */,
+				BBD78D7AC51CEA395F1C20DB /* Pods */,
+				92B4749C863D43768C84B315 /* Resources */,
+			);
+			indentWidth = 2;
+			sourceTree = "<group>";
+			tabWidth = 2;
+			usesTabs = 0;
+		};
+		83CBBA001A601CBA00E9B192 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				13B07F961A680F5B00A75B9A /* ParkingPark.app */,
+				00E356EE1AD99517003FC87E /* ParkingParkTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		92B4749C863D43768C84B315 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				7B5537CE663C446DA1686D9F /* NanumSquareRoundB.ttf */,
+				E28DC673E494446D9972C7D2 /* NanumSquareRoundEB.ttf */,
+				410564FBAFF14DC49FC3BF38 /* NanumSquareRoundL.ttf */,
+				E74902F714684172897AE87C /* NanumSquareRoundR.ttf */,
+				0DFFDB16D3054D93AEED2D32 /* Pretendard-Bold.ttf */,
+				4BA6556CD77A47CFB2D4190E /* Pretendard-Light.ttf */,
+				D9DA3817B7B74F208D07147D /* Pretendard-Medium.ttf */,
+				2BE834C6C87E4A9CB2D404B8 /* Pretendard-Regular.ttf */,
+				C3D589E7457F477D889C48A4 /* Pretendard-SemiBold.ttf */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		BBD78D7AC51CEA395F1C20DB /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				2A3DB46B618D34FD84463A0A /* Pods-ParkingPark.debug.xcconfig */,
+				D64794484FBB7E4E86599299 /* Pods-ParkingPark.release.xcconfig */,
+				F8AE6264F58CAD629D89FF92 /* Pods-ParkingPark-ParkingParkTests.debug.xcconfig */,
+				7A0632255A264C0DF11EFAD4 /* Pods-ParkingPark-ParkingParkTests.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		00E356ED1AD99517003FC87E /* ParkingParkTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "ParkingParkTests" */;
+			buildPhases = (
+				437B50A4F0581071310A474D /* [CP] Check Pods Manifest.lock */,
+				00E356EA1AD99517003FC87E /* Sources */,
+				00E356EB1AD99517003FC87E /* Frameworks */,
+				00E356EC1AD99517003FC87E /* Resources */,
+				19C21B17011682085FE51EF5 /* [CP] Embed Pods Frameworks */,
+				BC56A42E8B24DA373DAF86CF /* [CP] Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				00E356F51AD99517003FC87E /* PBXTargetDependency */,
+			);
+			name = ParkingParkTests;
+			productName = ParkingParkTests;
+			productReference = 00E356EE1AD99517003FC87E /* ParkingParkTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		13B07F861A680F5B00A75B9A /* ParkingPark */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "ParkingPark" */;
+			buildPhases = (
+				600775AC7012FB665413ADEB /* [CP] Check Pods Manifest.lock */,
+				FD10A7F022414F080027D42C /* Start Packager */,
+				13B07F871A680F5B00A75B9A /* Sources */,
+				13B07F8C1A680F5B00A75B9A /* Frameworks */,
+				13B07F8E1A680F5B00A75B9A /* Resources */,
+				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
+				44DA2968EF810409B4F44650 /* [CP] Embed Pods Frameworks */,
+				C29D54F61C3CFC322C7B3E74 /* [CP-User] [RNFB] Core Configuration */,
+				5EF5F066858E24FE8E3C2912 /* [CP] Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				040BFE872DE60D8C00322621 /* Base.lproj */,
+			);
+			name = ParkingPark;
+			productName = ParkingPark;
+			productReference = 13B07F961A680F5B00A75B9A /* ParkingPark.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		83CBB9F71A601CBA00E9B192 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 1210;
+				TargetAttributes = {
+					00E356ED1AD99517003FC87E = {
+						CreatedOnToolsVersion = 6.2;
+						TestTargetID = 13B07F861A680F5B00A75B9A;
+					};
+					13B07F861A680F5B00A75B9A = {
+						LastSwiftMigration = 1120;
+					};
+				};
+			};
+			buildConfigurationList = 83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "ParkingPark" */;
+			compatibilityVersion = "Xcode 12.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 83CBB9F61A601CBA00E9B192;
+			productRefGroup = 83CBBA001A601CBA00E9B192 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				13B07F861A680F5B00A75B9A /* ParkingPark */,
+				00E356ED1AD99517003FC87E /* ParkingParkTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		00E356EC1AD99517003FC87E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		13B07F8E1A680F5B00A75B9A /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CEAF6D672B0F461700AC08B7 /* GoogleService-Info.plist in Resources */,
+				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
+				F54859BE3C5D4D15B5331C02 /* NanumSquareRoundB.ttf in Resources */,
+				A6D2DD8F186E439BBD501E6D /* NanumSquareRoundEB.ttf in Resources */,
+				7041829043BD4ED2AF73D8A9 /* NanumSquareRoundL.ttf in Resources */,
+				431672B497484DF2B0789FCD /* NanumSquareRoundR.ttf in Resources */,
+				BEADB4D429C41937006742D2 /* code_region.csv in Resources */,
+				C8C32DE9D678411D9609B934 /* Pretendard-Bold.ttf in Resources */,
+				6ACB2B78D5D84ECEB7345722 /* Pretendard-Light.ttf in Resources */,
+				61E7928899C1456F88A0CF08 /* Pretendard-Medium.ttf in Resources */,
+				F421FA02CF5C4F48BA7079BD /* Pretendard-Regular.ttf in Resources */,
+				3F51EFBB05824F01ADE5C2B4 /* Pretendard-SemiBold.ttf in Resources */,
+				B6A9017A346C590A0EBB377B /* PrivacyInfo.xcprivacy in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/.xcode.env.local",
+				"$(SRCROOT)/.xcode.env",
+			);
+			name = "Bundle React Native code and images";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "set -e\n\nWITH_ENVIRONMENT=\"../node_modules/react-native/scripts/xcode/with-environment.sh\"\nREACT_NATIVE_XCODE=\"../node_modules/react-native/scripts/react-native-xcode.sh\"\n\n/bin/sh -c \"$WITH_ENVIRONMENT $REACT_NATIVE_XCODE\"\n";
+		};
+		19C21B17011682085FE51EF5 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ParkingPark-ParkingParkTests/Pods-ParkingPark-ParkingParkTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ParkingPark-ParkingParkTests/Pods-ParkingPark-ParkingParkTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ParkingPark-ParkingParkTests/Pods-ParkingPark-ParkingParkTests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		437B50A4F0581071310A474D /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-ParkingPark-ParkingParkTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		44DA2968EF810409B4F44650 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ParkingPark/Pods-ParkingPark-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ParkingPark/Pods-ParkingPark-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ParkingPark/Pods-ParkingPark-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		5EF5F066858E24FE8E3C2912 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ParkingPark/Pods-ParkingPark-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ParkingPark/Pods-ParkingPark-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ParkingPark/Pods-ParkingPark-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		600775AC7012FB665413ADEB /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-ParkingPark-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		BC56A42E8B24DA373DAF86CF /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ParkingPark-ParkingParkTests/Pods-ParkingPark-ParkingParkTests-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ParkingPark-ParkingParkTests/Pods-ParkingPark-ParkingParkTests-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ParkingPark-ParkingParkTests/Pods-ParkingPark-ParkingParkTests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		C29D54F61C3CFC322C7B3E74 /* [CP-User] [RNFB] Core Configuration */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)",
+			);
+			name = "[CP-User] [RNFB] Core Configuration";
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "#!/usr/bin/env bash\n#\n# Copyright (c) 2016-present Invertase Limited & Contributors\n#\n# Licensed under the Apache License, Version 2.0 (the \"License\");\n# you may not use this library except in compliance with the License.\n# You may obtain a copy of the License at\n#\n#   http://www.apache.org/licenses/LICENSE-2.0\n#\n# Unless required by applicable law or agreed to in writing, software\n# distributed under the License is distributed on an \"AS IS\" BASIS,\n# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n# See the License for the specific language governing permissions and\n# limitations under the License.\n#\n\n##########################################################################\n##########################################################################\n#\n#  NOTE THAT IF YOU CHANGE THIS FILE YOU MUST RUN pod install AFTERWARDS\n#\n#  This file is installed as an Xcode build script in the project file\n#  by cocoapods, and you will not see your changes until you pod install\n#\n##########################################################################\n##########################################################################\n\nset -e\n\n_MAX_LOOKUPS=2;\n_SEARCH_RESULT=''\n_RN_ROOT_EXISTS=''\n_CURRENT_LOOKUPS=1\n_JSON_ROOT=\"'react-native'\"\n_JSON_FILE_NAME='firebase.json'\n_JSON_OUTPUT_BASE64='e30=' # { }\n_CURRENT_SEARCH_DIR=${PROJECT_DIR}\n_PLIST_BUDDY=/usr/libexec/PlistBuddy\n_TARGET_PLIST=\"${BUILT_PRODUCTS_DIR}/${INFOPLIST_PATH}\"\n_DSYM_PLIST=\"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Info.plist\"\n\n# plist arrays\n_PLIST_ENTRY_KEYS=()\n_PLIST_ENTRY_TYPES=()\n_PLIST_ENTRY_VALUES=()\n\nfunction setPlistValue {\n  echo \"info:      setting plist entry '$1' of type '$2' in file '$4'\"\n  ${_PLIST_BUDDY} -c \"Add :$1 $2 '$3'\" $4 || echo \"info:      '$1' already exists\"\n}\n\nfunction getFirebaseJsonKeyValue () {\n  if [[ ${_RN_ROOT_EXISTS} ]]; then\n    ruby -Ku -e \"require 'rubygems';require 'json'; output=JSON.parse('$1'); puts output[$_JSON_ROOT]['$2']\"\n  else\n    echo \"\"\n  fi;\n}\n\nfunction jsonBoolToYesNo () {\n  if [[ $1 == \"false\" ]]; then\n    echo \"NO\"\n  elif [[ $1 == \"true\" ]]; then\n    echo \"YES\"\n  else echo \"NO\"\n  fi\n}\n\necho \"info: -> RNFB build script started\"\necho \"info: 1) Locating ${_JSON_FILE_NAME} file:\"\n\nif [[ -z ${_CURRENT_SEARCH_DIR} ]]; then\n  _CURRENT_SEARCH_DIR=$(pwd)\nfi;\n\nwhile true; do\n  _CURRENT_SEARCH_DIR=$(dirname \"$_CURRENT_SEARCH_DIR\")\n  if [[ \"$_CURRENT_SEARCH_DIR\" == \"/\" ]] || [[ ${_CURRENT_LOOKUPS} -gt ${_MAX_LOOKUPS} ]]; then break; fi;\n  echo \"info:      ($_CURRENT_LOOKUPS of $_MAX_LOOKUPS) Searching in '$_CURRENT_SEARCH_DIR' for a ${_JSON_FILE_NAME} file.\"\n  _SEARCH_RESULT=$(find \"$_CURRENT_SEARCH_DIR\" -maxdepth 2 -name ${_JSON_FILE_NAME} -print | /usr/bin/head -n 1)\n  if [[ ${_SEARCH_RESULT} ]]; then\n    echo \"info:      ${_JSON_FILE_NAME} found at $_SEARCH_RESULT\"\n    break;\n  fi;\n  _CURRENT_LOOKUPS=$((_CURRENT_LOOKUPS+1))\ndone\n\nif [[ ${_SEARCH_RESULT} ]]; then\n  _JSON_OUTPUT_RAW=$(cat \"${_SEARCH_RESULT}\")\n  _RN_ROOT_EXISTS=$(ruby -Ku -e \"require 'rubygems';require 'json'; output=JSON.parse('$_JSON_OUTPUT_RAW'); puts output[$_JSON_ROOT]\" || echo '')\n\n  if [[ ${_RN_ROOT_EXISTS} ]]; then\n    if ! python3 --version >/dev/null 2>&1; then echo \"python3 not found, firebase.json file processing error.\" && exit 1; fi\n    _JSON_OUTPUT_BASE64=$(python3 -c 'import json,sys,base64;print(base64.b64encode(bytes(json.dumps(json.loads(open('\"'${_SEARCH_RESULT}'\"', '\"'rb'\"').read())['${_JSON_ROOT}']), '\"'utf-8'\"')).decode())' || echo \"e30=\")\n  fi\n\n  _PLIST_ENTRY_KEYS+=(\"firebase_json_raw\")\n  _PLIST_ENTRY_TYPES+=(\"string\")\n  _PLIST_ENTRY_VALUES+=(\"$_JSON_OUTPUT_BASE64\")\n\n  # config.app_data_collection_default_enabled\n  _APP_DATA_COLLECTION_ENABLED=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"app_data_collection_default_enabled\")\n  if [[ $_APP_DATA_COLLECTION_ENABLED ]]; then\n    _PLIST_ENTRY_KEYS+=(\"FirebaseDataCollectionDefaultEnabled\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_APP_DATA_COLLECTION_ENABLED\")\")\n  fi\n\n  # config.analytics_auto_collection_enabled\n  _ANALYTICS_AUTO_COLLECTION=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"analytics_auto_collection_enabled\")\n  if [[ $_ANALYTICS_AUTO_COLLECTION ]]; then\n    _PLIST_ENTRY_KEYS+=(\"FIREBASE_ANALYTICS_COLLECTION_ENABLED\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_ANALYTICS_AUTO_COLLECTION\")\")\n  fi\n\n  # config.analytics_collection_deactivated\n  _ANALYTICS_DEACTIVATED=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"analytics_collection_deactivated\")\n  if [[ $_ANALYTICS_DEACTIVATED ]]; then\n    _PLIST_ENTRY_KEYS+=(\"FIREBASE_ANALYTICS_COLLECTION_DEACTIVATED\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_ANALYTICS_DEACTIVATED\")\")\n  fi\n\n  # config.analytics_idfv_collection_enabled\n  _ANALYTICS_IDFV_COLLECTION=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"analytics_idfv_collection_enabled\")\n  if [[ $_ANALYTICS_IDFV_COLLECTION ]]; then\n    _PLIST_ENTRY_KEYS+=(\"GOOGLE_ANALYTICS_IDFV_COLLECTION_ENABLED\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_ANALYTICS_IDFV_COLLECTION\")\")\n  fi\n\n  # config.analytics_default_allow_analytics_storage\n  _ANALYTICS_STORAGE=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"analytics_default_allow_analytics_storage\")\n  if [[ $_ANALYTICS_STORAGE ]]; then\n    _PLIST_ENTRY_KEYS+=(\"GOOGLE_ANALYTICS_DEFAULT_ALLOW_ANALYTICS_STORAGE\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_ANALYTICS_STORAGE\")\")\n  fi\n\n  # config.analytics_default_allow_ad_storage\n  _ANALYTICS_AD_STORAGE=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"analytics_default_allow_ad_storage\")\n  if [[ $_ANALYTICS_AD_STORAGE ]]; then\n    _PLIST_ENTRY_KEYS+=(\"GOOGLE_ANALYTICS_DEFAULT_ALLOW_AD_STORAGE\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_ANALYTICS_AD_STORAGE\")\")\n  fi\n\n  # config.analytics_default_allow_ad_user_data\n  _ANALYTICS_AD_USER_DATA=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"analytics_default_allow_ad_user_data\")\n  if [[ $_ANALYTICS_AD_USER_DATA ]]; then\n    _PLIST_ENTRY_KEYS+=(\"GOOGLE_ANALYTICS_DEFAULT_ALLOW_AD_USER_DATA\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_ANALYTICS_AD_USER_DATA\")\")\n  fi\n\n  # config.analytics_default_allow_ad_personalization_signals\n  _ANALYTICS_PERSONALIZATION=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"analytics_default_allow_ad_personalization_signals\")\n  if [[ $_ANALYTICS_PERSONALIZATION ]]; then\n    _PLIST_ENTRY_KEYS+=(\"GOOGLE_ANALYTICS_DEFAULT_ALLOW_AD_PERSONALIZATION_SIGNALS\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_ANALYTICS_PERSONALIZATION\")\")\n  fi\n\n  # config.analytics_registration_with_ad_network_enabled\n  _ANALYTICS_REGISTRATION_WITH_AD_NETWORK=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"google_analytics_registration_with_ad_network_enabled\")\n  if [[ $_ANALYTICS_REGISTRATION_WITH_AD_NETWORK ]]; then\n    _PLIST_ENTRY_KEYS+=(\"GOOGLE_ANALYTICS_REGISTRATION_WITH_AD_NETWORK_ENABLED\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_ANALYTICS_REGISTRATION_WITH_AD_NETWORK\")\")\n  fi\n\n  # config.google_analytics_automatic_screen_reporting_enabled\n  _ANALYTICS_AUTO_SCREEN_REPORTING=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"google_analytics_automatic_screen_reporting_enabled\")\n  if [[ $_ANALYTICS_AUTO_SCREEN_REPORTING ]]; then\n    _PLIST_ENTRY_KEYS+=(\"FirebaseAutomaticScreenReportingEnabled\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_ANALYTICS_AUTO_SCREEN_REPORTING\")\")\n  fi\n\n  # config.perf_auto_collection_enabled\n  _PERF_AUTO_COLLECTION=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"perf_auto_collection_enabled\")\n  if [[ $_PERF_AUTO_COLLECTION ]]; then\n    _PLIST_ENTRY_KEYS+=(\"firebase_performance_collection_enabled\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_PERF_AUTO_COLLECTION\")\")\n  fi\n\n  # config.perf_collection_deactivated\n  _PERF_DEACTIVATED=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"perf_collection_deactivated\")\n  if [[ $_PERF_DEACTIVATED ]]; then\n    _PLIST_ENTRY_KEYS+=(\"firebase_performance_collection_deactivated\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_PERF_DEACTIVATED\")\")\n  fi\n\n  # config.messaging_auto_init_enabled\n  _MESSAGING_AUTO_INIT=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"messaging_auto_init_enabled\")\n  if [[ $_MESSAGING_AUTO_INIT ]]; then\n    _PLIST_ENTRY_KEYS+=(\"FirebaseMessagingAutoInitEnabled\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_MESSAGING_AUTO_INIT\")\")\n  fi\n\n  # config.in_app_messaging_auto_colllection_enabled\n  _FIAM_AUTO_INIT=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"in_app_messaging_auto_collection_enabled\")\n  if [[ $_FIAM_AUTO_INIT ]]; then\n    _PLIST_ENTRY_KEYS+=(\"FirebaseInAppMessagingAutomaticDataCollectionEnabled\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_FIAM_AUTO_INIT\")\")\n  fi\n\n  # config.app_check_token_auto_refresh\n  _APP_CHECK_TOKEN_AUTO_REFRESH=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"app_check_token_auto_refresh\")\n  if [[ $_APP_CHECK_TOKEN_AUTO_REFRESH ]]; then\n    _PLIST_ENTRY_KEYS+=(\"FirebaseAppCheckTokenAutoRefreshEnabled\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"$(jsonBoolToYesNo \"$_APP_CHECK_TOKEN_AUTO_REFRESH\")\")\n  fi\n\n  # config.crashlytics_disable_auto_disabler - undocumented for now - mainly for debugging, document if becomes useful\n  _CRASHLYTICS_AUTO_DISABLE_ENABLED=$(getFirebaseJsonKeyValue \"$_JSON_OUTPUT_RAW\" \"crashlytics_disable_auto_disabler\")\n  if [[ $_CRASHLYTICS_AUTO_DISABLE_ENABLED == \"true\" ]]; then\n    echo \"Disabled Crashlytics auto disabler.\" # do nothing\n  else\n    _PLIST_ENTRY_KEYS+=(\"FirebaseCrashlyticsCollectionEnabled\")\n    _PLIST_ENTRY_TYPES+=(\"bool\")\n    _PLIST_ENTRY_VALUES+=(\"NO\")\n  fi\nelse\n  _PLIST_ENTRY_KEYS+=(\"firebase_json_raw\")\n  _PLIST_ENTRY_TYPES+=(\"string\")\n  _PLIST_ENTRY_VALUES+=(\"$_JSON_OUTPUT_BASE64\")\n  echo \"warning:   A firebase.json file was not found, whilst this file is optional it is recommended to include it to configure firebase services in React Native Firebase.\"\nfi;\n\necho \"info: 2) Injecting Info.plist entries: \"\n\n# Log out the keys we're adding\nfor i in \"${!_PLIST_ENTRY_KEYS[@]}\"; do\n  echo \"    ->  $i) ${_PLIST_ENTRY_KEYS[$i]}\" \"${_PLIST_ENTRY_TYPES[$i]}\" \"${_PLIST_ENTRY_VALUES[$i]}\"\ndone\n\nfor plist in \"${_TARGET_PLIST}\" \"${_DSYM_PLIST}\" ; do\n  if [[ -f \"${plist}\" ]]; then\n\n    # paths with spaces break the call to setPlistValue. temporarily modify\n    # the shell internal field separator variable (IFS), which normally\n    # includes spaces, to consist only of line breaks\n    oldifs=$IFS\n    IFS=\"\n\"\n\n    for i in \"${!_PLIST_ENTRY_KEYS[@]}\"; do\n      setPlistValue \"${_PLIST_ENTRY_KEYS[$i]}\" \"${_PLIST_ENTRY_TYPES[$i]}\" \"${_PLIST_ENTRY_VALUES[$i]}\" \"${plist}\"\n    done\n\n    # restore the original internal field separator value\n    IFS=$oldifs\n  else\n    echo \"warning:   A Info.plist build output file was not found (${plist})\"\n  fi\ndone\n\necho \"info: <- RNFB build script finished\"\n";
+		};
+		FD10A7F022414F080027D42C /* Start Packager */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Start Packager";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "export RCT_METRO_PORT=\"${RCT_METRO_PORT:=8081}\"\necho \"export RCT_METRO_PORT=${RCT_METRO_PORT}\" > \"${SRCROOT}/../node_modules/react-native/scripts/.packager.env\"\nif [ -z \"${RCT_NO_LAUNCH_PACKAGER+xxx}\" ] ; then\n  if nc -w 5 -z localhost ${RCT_METRO_PORT} ; then\n    if ! curl -s \"http://localhost:${RCT_METRO_PORT}/status\" | grep -q \"packager-status:running\" ; then\n      echo \"Port ${RCT_METRO_PORT} already in use, packager is either not running or not running correctly\"\n      exit 2\n    fi\n  else\n    open \"$SRCROOT/../node_modules/react-native/scripts/launchPackager.command\" || echo \"Can't start packager automatically\"\n  fi\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		00E356EA1AD99517003FC87E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				00E356F31AD99517003FC87E /* ParkingParkTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		13B07F871A680F5B00A75B9A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */,
+				13B07FC11A68108700A75B9A /* main.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		00E356F51AD99517003FC87E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 13B07F861A680F5B00A75B9A /* ParkingPark */;
+			targetProxy = 00E356F41AD99517003FC87E /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		00E356F61AD99517003FC87E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = F8AE6264F58CAD629D89FF92 /* Pods-ParkingPark-ParkingParkTests.debug.xcconfig */;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = ParkingParkTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.4;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"-lc++",
+					"$(inherited)",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = kr.wisemobile.parking;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ParkingPark.app/ParkingPark";
+			};
+			name = Debug;
+		};
+		00E356F71AD99517003FC87E /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 7A0632255A264C0DF11EFAD4 /* Pods-ParkingPark-ParkingParkTests.release.xcconfig */;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				INFOPLIST_FILE = ParkingParkTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.4;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"-lc++",
+					"$(inherited)",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = kr.wisemobile.parking;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ParkingPark.app/ParkingPark";
+			};
+			name = Release;
+		};
+		13B07F941A680F5B00A75B9A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2A3DB46B618D34FD84463A0A /* Pods-ParkingPark.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = ParkingPark/ParkingPark.entitlements;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = YFA45PYNGX;
+				ENABLE_BITCODE = NO;
+				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/Alamofire/Alamofire.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/AppAuth/AppAuth.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/BVLinearGradient/BVLinearGradient.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/BoringSSL-GRPC/openssl_grpc.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/DoubleConversion/DoubleConversion.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/FirebaseAppCheckInterop/FirebaseAppCheckInterop.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/FirebaseAuth/FirebaseAuth.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/FirebaseAuthInterop/FirebaseAuthInterop.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/FirebaseCore/FirebaseCore.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/FirebaseCoreExtension/FirebaseCoreExtension.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/FirebaseCoreInternal/FirebaseCoreInternal.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/FirebaseDynamicLinks/FirebaseDynamicLinks.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/FirebaseFirestore/FirebaseFirestore.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/FirebaseFirestoreInternal/FirebaseFirestoreInternal.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/FirebaseInstallations/FirebaseInstallations.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/FirebaseMessaging/FirebaseMessaging.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/FirebaseSharedSwift/FirebaseSharedSwift.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/FirebaseStorage/FirebaseStorage.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/GTMAppAuth/GTMAppAuth.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/GTMSessionFetcher/GTMSessionFetcher.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/GoogleDataTransport/GoogleDataTransport.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/GoogleSignIn/GoogleSignIn.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/GoogleUtilities/GoogleUtilities.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/KakaoSDKAuth/KakaoSDKAuth.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/KakaoSDKCommon/KakaoSDKCommon.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/KakaoSDKShare/KakaoSDKShare.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/KakaoSDKTemplate/KakaoSDKTemplate.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/KakaoSDKUser/KakaoSDKUser.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/PromisesObjC/FBLPromises.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/RCT-Folly/folly.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/RCTDeprecation/RCTDeprecation.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/RCTTypeSafety/RCTTypeSafety.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/RNAppleAuthentication/RNAppleAuthentication.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/RNBootSplash/RNBootSplash.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/RNCAsyncStorage/RNCAsyncStorage.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/RNDeviceInfo/RNDeviceInfo.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/RNFBApp/RNFBApp.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/RNFBAuth/RNFBAuth.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/RNFBDynamicLinks/RNFBDynamicLinks.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/RNFBFirestore/RNFBFirestore.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/RNFBMessaging/RNFBMessaging.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/RNFBStorage/RNFBStorage.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/RNFS/RNFS.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/RNFastImage/RNFastImage.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/RNFlashList/RNFlashList.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/RNGestureHandler/RNGestureHandler.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/RNGoogleSignin/RNGoogleSignin.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/RNNaverLogin/RNNaverLogin.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/RNNotifee/RNNotifee.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/RNPermissions/RNPermissions.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/RNReanimated/RNReanimated.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/RNSVG/RNSVG.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/RNScreens/RNScreens.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/RNShare/RNShare.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/RNVectorIcons/RNVectorIcons.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-Codegen/React_Codegen.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-Core/React.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-CoreModules/CoreModules.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-Fabric/React_Fabric.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-FabricImage/React_FabricImage.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-ImageManager/React_ImageManager.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-Mapbuffer/React_Mapbuffer.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-NativeModulesApple/React_NativeModulesApple.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-RCTAnimation/RCTAnimation.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-RCTAppDelegate/React_RCTAppDelegate.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-RCTBlob/RCTBlob.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-RCTFabric/RCTFabric.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-RCTImage/RCTImage.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-RCTLinking/RCTLinking.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-RCTNetwork/RCTNetwork.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-RCTSettings/RCTSettings.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-RCTText/RCTText.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-RCTVibration/RCTVibration.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-RuntimeApple/React_RuntimeApple.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-RuntimeCore/React_RuntimeCore.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-cxxreact/cxxreact.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-debug/React_debug.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-featureflags/React_featureflags.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-graphics/React_graphics.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-jsc/React_jsc.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-jserrorhandler/React_jserrorhandler.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-jsi/jsi.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-jsiexecutor/jsireact.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-jsinspector/jsinspector_modern.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-logger/logger.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-nativeconfig/React_nativeconfig.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-perflogger/reactperflogger.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-rendererdebug/React_rendererdebug.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-runtimescheduler/React_runtimescheduler.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-utils/React_utils.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/ReactCommon/ReactCommon.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/RealmJS/RealmJS.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/RecaptchaInterop/RecaptchaInterop.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/SDWebImage/SDWebImage.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/SDWebImageWebPCoder/SDWebImageWebPCoder.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/SocketRocket/SocketRocket.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/Yoga/yoga.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/abseil/absl.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/fmt/fmt.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/gRPC-C++/grpcpp.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/gRPC-Core/grpc.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/glog/glog.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/kakao-login/kakao_login.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/leveldb-library/leveldb.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/libwebp/libwebp.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/mj-studio-react-native-naver-map/mj_studio_react_native_naver_map.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/nanopb/nanopb.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/react-native-blob-util/react_native_blob_util.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/react-native-config/react_native_config.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/react-native-date-picker/react_native_date_picker.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/react-native-geolocation-service/react_native_geolocation_service.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/react-native-geolocation/react_native_geolocation.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/react-native-image-picker/react_native_image_picker.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/react-native-kakao-share-link/react_native_kakao_share_link.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/react-native-keep-awake/react_native_keep_awake.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/react-native-mail/react_native_mail.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/react-native-netinfo/react_native_netinfo.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/react-native-orientation-locker/react_native_orientation_locker.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/react-native-pager-view/react_native_pager_view.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/react-native-pdf/react_native_pdf.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/react-native-safe-area-context/react_native_safe_area_context.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/react-native-sms/react_native_sms.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/react-native-video/react_native_video.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/react-native-webview/react_native_webview.framework/Headers\"",
+					"\"${PODS_ROOT}/Headers/Public\"",
+					"\"${PODS_ROOT}/Headers/Public/FBLazyVector\"",
+					"\"${PODS_ROOT}/Headers/Public/Firebase\"",
+					"\"${PODS_ROOT}/Headers/Public/RCTRequired\"",
+					"\"${PODS_ROOT}/Headers/Public/React-callinvoker\"",
+					"\"${PODS_ROOT}/Headers/Public/React-runtimeexecutor\"",
+					"\"${PODS_XCFRAMEWORKS_BUILD_DIR}/RealmJS/Headers\"",
+					"\"$(PODS_ROOT)/DoubleConversion\"",
+					"$(inherited)",
+					"${PODS_ROOT}/Firebase/CoreOnly/Sources",
+					"\"$(PODS_ROOT)/boost\"",
+					"\"$(PODS_ROOT)/boost\"",
+					"\"$(PODS_ROOT)/boost-for-react-native\"",
+					"\"$(PODS_ROOT)/glog\"",
+					"\"$(PODS_ROOT)/RCT-Folly\"",
+					"\"$(PODS_ROOT)/Headers/Public/React-hermes\"",
+					"\"$(PODS_ROOT)/Headers/Public/hermes-engine\"",
+					"\"$(PODS_ROOT)/../../node_modules/react-native/ReactCommon\"",
+					"\"$(PODS_ROOT)/Headers/Private/React-Core\"",
+					"\"$(PODS_ROOT)/../node_modules/react-native/Libraries/AppDelegate\"",
+				);
+				INFOPLIST_FILE = ParkingPark/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "파킹박 [Debug]";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.navigation";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.4;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 3.3.3;
+				OTHER_CFLAGS = (
+					"$(inherited)",
+					"-DFOLLY_NO_CONFIG",
+					"-DFOLLY_MOBILE=1",
+					"-DFOLLY_USE_LIBCPP=1",
+					"-Wno-comma",
+					"-Wno-shorten-64-to-32",
+					"-DREACT_NATIVE_MINOR_VERSION=74",
+					"-DREANIMATED_VERSION=3.9.0",
+				);
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+					"-lc++",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = kr.wisemobile.parking;
+				PRODUCT_NAME = ParkingPark;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				USE_HERMES = false;
+				VERSIONING_SYSTEM = "apple-generic";
+			};
+			name = Debug;
+		};
+		13B07F951A680F5B00A75B9A /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = D64794484FBB7E4E86599299 /* Pods-ParkingPark.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = ParkingPark/ParkingPark.entitlements;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = YFA45PYNGX;
+				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/Alamofire/Alamofire.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/AppAuth/AppAuth.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/BVLinearGradient/BVLinearGradient.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/BoringSSL-GRPC/openssl_grpc.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/DoubleConversion/DoubleConversion.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/FirebaseAppCheckInterop/FirebaseAppCheckInterop.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/FirebaseAuth/FirebaseAuth.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/FirebaseAuthInterop/FirebaseAuthInterop.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/FirebaseCore/FirebaseCore.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/FirebaseCoreExtension/FirebaseCoreExtension.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/FirebaseCoreInternal/FirebaseCoreInternal.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/FirebaseDynamicLinks/FirebaseDynamicLinks.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/FirebaseFirestore/FirebaseFirestore.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/FirebaseFirestoreInternal/FirebaseFirestoreInternal.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/FirebaseInstallations/FirebaseInstallations.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/FirebaseMessaging/FirebaseMessaging.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/FirebaseSharedSwift/FirebaseSharedSwift.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/FirebaseStorage/FirebaseStorage.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/GTMAppAuth/GTMAppAuth.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/GTMSessionFetcher/GTMSessionFetcher.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/GoogleDataTransport/GoogleDataTransport.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/GoogleSignIn/GoogleSignIn.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/GoogleUtilities/GoogleUtilities.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/KakaoSDKAuth/KakaoSDKAuth.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/KakaoSDKCommon/KakaoSDKCommon.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/KakaoSDKShare/KakaoSDKShare.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/KakaoSDKTemplate/KakaoSDKTemplate.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/KakaoSDKUser/KakaoSDKUser.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/PromisesObjC/FBLPromises.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/RCT-Folly/folly.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/RCTDeprecation/RCTDeprecation.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/RCTTypeSafety/RCTTypeSafety.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/RNAppleAuthentication/RNAppleAuthentication.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/RNBootSplash/RNBootSplash.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/RNCAsyncStorage/RNCAsyncStorage.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/RNDeviceInfo/RNDeviceInfo.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/RNFBApp/RNFBApp.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/RNFBAuth/RNFBAuth.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/RNFBDynamicLinks/RNFBDynamicLinks.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/RNFBFirestore/RNFBFirestore.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/RNFBMessaging/RNFBMessaging.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/RNFBStorage/RNFBStorage.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/RNFS/RNFS.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/RNFastImage/RNFastImage.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/RNFlashList/RNFlashList.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/RNGestureHandler/RNGestureHandler.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/RNGoogleSignin/RNGoogleSignin.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/RNNaverLogin/RNNaverLogin.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/RNNotifee/RNNotifee.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/RNPermissions/RNPermissions.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/RNReanimated/RNReanimated.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/RNSVG/RNSVG.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/RNScreens/RNScreens.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/RNShare/RNShare.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/RNVectorIcons/RNVectorIcons.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-Codegen/React_Codegen.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-Core/React.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-CoreModules/CoreModules.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-Fabric/React_Fabric.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-FabricImage/React_FabricImage.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-ImageManager/React_ImageManager.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-Mapbuffer/React_Mapbuffer.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-NativeModulesApple/React_NativeModulesApple.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-RCTAnimation/RCTAnimation.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-RCTAppDelegate/React_RCTAppDelegate.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-RCTBlob/RCTBlob.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-RCTFabric/RCTFabric.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-RCTImage/RCTImage.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-RCTLinking/RCTLinking.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-RCTNetwork/RCTNetwork.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-RCTSettings/RCTSettings.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-RCTText/RCTText.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-RCTVibration/RCTVibration.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-RuntimeApple/React_RuntimeApple.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-RuntimeCore/React_RuntimeCore.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-cxxreact/cxxreact.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-debug/React_debug.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-featureflags/React_featureflags.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-graphics/React_graphics.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-jsc/React_jsc.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-jserrorhandler/React_jserrorhandler.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-jsi/jsi.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-jsiexecutor/jsireact.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-jsinspector/jsinspector_modern.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-logger/logger.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-nativeconfig/React_nativeconfig.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-perflogger/reactperflogger.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-rendererdebug/React_rendererdebug.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-runtimescheduler/React_runtimescheduler.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-utils/React_utils.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/ReactCommon/ReactCommon.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/RealmJS/RealmJS.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/RecaptchaInterop/RecaptchaInterop.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/SDWebImage/SDWebImage.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/SDWebImageWebPCoder/SDWebImageWebPCoder.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/SocketRocket/SocketRocket.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/Yoga/yoga.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/abseil/absl.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/fmt/fmt.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/gRPC-C++/grpcpp.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/gRPC-Core/grpc.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/glog/glog.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/kakao-login/kakao_login.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/leveldb-library/leveldb.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/libwebp/libwebp.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/mj-studio-react-native-naver-map/mj_studio_react_native_naver_map.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/nanopb/nanopb.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/react-native-blob-util/react_native_blob_util.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/react-native-config/react_native_config.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/react-native-date-picker/react_native_date_picker.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/react-native-geolocation-service/react_native_geolocation_service.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/react-native-geolocation/react_native_geolocation.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/react-native-image-picker/react_native_image_picker.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/react-native-kakao-share-link/react_native_kakao_share_link.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/react-native-keep-awake/react_native_keep_awake.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/react-native-mail/react_native_mail.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/react-native-netinfo/react_native_netinfo.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/react-native-orientation-locker/react_native_orientation_locker.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/react-native-pager-view/react_native_pager_view.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/react-native-pdf/react_native_pdf.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/react-native-safe-area-context/react_native_safe_area_context.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/react-native-sms/react_native_sms.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/react-native-video/react_native_video.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/react-native-webview/react_native_webview.framework/Headers\"",
+					"\"${PODS_ROOT}/Headers/Public\"",
+					"\"${PODS_ROOT}/Headers/Public/FBLazyVector\"",
+					"\"${PODS_ROOT}/Headers/Public/Firebase\"",
+					"\"${PODS_ROOT}/Headers/Public/RCTRequired\"",
+					"\"${PODS_ROOT}/Headers/Public/React-callinvoker\"",
+					"\"${PODS_ROOT}/Headers/Public/React-runtimeexecutor\"",
+					"\"${PODS_XCFRAMEWORKS_BUILD_DIR}/RealmJS/Headers\"",
+					"\"$(PODS_ROOT)/DoubleConversion\"",
+					"$(inherited)",
+					"${PODS_ROOT}/Firebase/CoreOnly/Sources",
+					"\"$(PODS_ROOT)/boost\"",
+					"\"$(PODS_ROOT)/boost\"",
+					"\"$(PODS_ROOT)/boost-for-react-native\"",
+					"\"$(PODS_ROOT)/glog\"",
+					"\"$(PODS_ROOT)/RCT-Folly\"",
+					"\"$(PODS_ROOT)/Headers/Public/React-hermes\"",
+					"\"$(PODS_ROOT)/Headers/Public/hermes-engine\"",
+					"\"$(PODS_ROOT)/../../node_modules/react-native/ReactCommon\"",
+					"\"$(PODS_ROOT)/Headers/Private/React-Core\"",
+					"\"$(PODS_ROOT)/../node_modules/react-native/Libraries/AppDelegate\"/**",
+				);
+				INFOPLIST_FILE = ParkingPark/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "파킹박";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.navigation";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.4;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 3.3.3;
+				OTHER_CFLAGS = (
+					"$(inherited)",
+					"-DFOLLY_NO_CONFIG",
+					"-DFOLLY_MOBILE=1",
+					"-DFOLLY_USE_LIBCPP=1",
+					"-Wno-comma",
+					"-Wno-shorten-64-to-32",
+					"-DREACT_NATIVE_MINOR_VERSION=74",
+					"-DREANIMATED_VERSION=3.9.0",
+				);
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+					"-lc++",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = kr.wisemobile.parking;
+				PRODUCT_NAME = ParkingPark;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				USE_HERMES = false;
+				VERSIONING_SYSTEM = "apple-generic";
+			};
+			name = Release;
+		};
+		83CBBA201A601CBA00E9B192 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CC = "";
+				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "c++20";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				CXX = "";
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = i386;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+					_LIBCPP_ENABLE_CXX17_REMOVED_UNARY_BINARY_FUNCTION,
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"${PODS_CONFIGURATION_BUILD_DIR}/ReactCommon-Samples/ReactCommon_Samples.framework/Headers",
+					"${PODS_CONFIGURATION_BUILD_DIR}/ReactCommon/ReactCommon.framework/Headers/react/nativemodule/core",
+					"${PODS_CONFIGURATION_BUILD_DIR}/ReactCommon-Samples/ReactCommon_Samples.framework/Headers/platform/ios",
+					"${PODS_CONFIGURATION_BUILD_DIR}/React-NativeModulesApple/React_NativeModulesApple.framework/Headers",
+					"${PODS_CONFIGURATION_BUILD_DIR}/React-graphics/React_graphics.framework/Headers/react/renderer/graphics/platform/ios",
+					"${PODS_CONFIGURATION_BUILD_DIR}/ReactCommon/ReactCommon.framework/Headers",
+					"${PODS_CONFIGURATION_BUILD_DIR}/React-Fabric/React_Fabric.framework/Headers/react/renderer/components/view/platform/cxx",
+					"${PODS_CONFIGURATION_BUILD_DIR}/React-graphics/React_graphics.framework/Headers",
+				);
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				LD = "";
+				LDPLUSPLUS = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					/usr/lib/swift,
+					"$(inherited)",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"\"$(SDKROOT)/usr/lib/swift\"",
+					"\"$(TOOLCHAIN_DIR)/usr/lib/swift/$(PLATFORM_NAME)\"",
+					"\"$(inherited)\"",
+				);
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				OTHER_CFLAGS = "$(inherited)";
+				OTHER_CPLUSPLUSFLAGS = (
+					"$(OTHER_CFLAGS)",
+					"-DFOLLY_NO_CONFIG",
+					"-DFOLLY_MOBILE=1",
+					"-DFOLLY_USE_LIBCPP=1",
+				);
+				OTHER_LDFLAGS = "$(inherited)";
+				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
+				SDKROOT = iphoneos;
+				USE_HERMES = true;
+			};
+			name = Debug;
+		};
+		83CBBA211A601CBA00E9B192 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CC = "";
+				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "c++20";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				CXX = "";
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = i386;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					_LIBCPP_ENABLE_CXX17_REMOVED_UNARY_BINARY_FUNCTION,
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"${PODS_CONFIGURATION_BUILD_DIR}/ReactCommon-Samples/ReactCommon_Samples.framework/Headers",
+					"${PODS_CONFIGURATION_BUILD_DIR}/ReactCommon/ReactCommon.framework/Headers/react/nativemodule/core",
+					"${PODS_CONFIGURATION_BUILD_DIR}/ReactCommon-Samples/ReactCommon_Samples.framework/Headers/platform/ios",
+					"${PODS_CONFIGURATION_BUILD_DIR}/React-NativeModulesApple/React_NativeModulesApple.framework/Headers",
+					"${PODS_CONFIGURATION_BUILD_DIR}/React-graphics/React_graphics.framework/Headers/react/renderer/graphics/platform/ios",
+					"${PODS_CONFIGURATION_BUILD_DIR}/ReactCommon/ReactCommon.framework/Headers",
+					"${PODS_CONFIGURATION_BUILD_DIR}/React-Fabric/React_Fabric.framework/Headers/react/renderer/components/view/platform/cxx",
+					"${PODS_CONFIGURATION_BUILD_DIR}/React-graphics/React_graphics.framework/Headers",
+				);
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				LD = "";
+				LDPLUSPLUS = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					/usr/lib/swift,
+					"$(inherited)",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"\"$(SDKROOT)/usr/lib/swift\"",
+					"\"$(TOOLCHAIN_DIR)/usr/lib/swift/$(PLATFORM_NAME)\"",
+					"\"$(inherited)\"",
+				);
+				MTL_ENABLE_DEBUG_INFO = NO;
+				OTHER_CFLAGS = "$(inherited)";
+				OTHER_CPLUSPLUSFLAGS = (
+					"$(OTHER_CFLAGS)",
+					"-DFOLLY_NO_CONFIG",
+					"-DFOLLY_MOBILE=1",
+					"-DFOLLY_USE_LIBCPP=1",
+				);
+				OTHER_LDFLAGS = "$(inherited)";
+				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
+				SDKROOT = iphoneos;
+				USE_HERMES = true;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "ParkingParkTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				00E356F61AD99517003FC87E /* Debug */,
+				00E356F71AD99517003FC87E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "ParkingPark" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				13B07F941A680F5B00A75B9A /* Debug */,
+				13B07F951A680F5B00A75B9A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "ParkingPark" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				83CBBA201A601CBA00E9B192 /* Debug */,
+				83CBBA211A601CBA00E9B192 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 83CBB9F71A601CBA00E9B192 /* Project object */;
+}

@@ -1,0 +1,101 @@
+{
+  "project_info": {
+    "project_number": "569856446356",
+    "firebase_url": "https://parkingpark-e6038.firebaseio.com",
+    "project_id": "parkingpark-e6038",
+    "storage_bucket": "parkingpark-e6038.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:569856446356:android:288cf763d994a983",
+        "android_client_info": {
+          "package_name": "kr.wisemobile.parking"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "569856446356-q49dh7et4t4dlfubva4dpo0qpa82hkfb.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "kr.wisemobile.parking",
+            "certificate_hash": "2d921f4646150f53d474f903425107623797753b"
+          }
+        },
+        {
+          "client_id": "569856446356-52mei7h3r2opnol422olnje6o53qh7h3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDz48qsO3bq8Ou6T-wMpVI46mS_cX7SREI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "569856446356-52mei7h3r2opnol422olnje6o53qh7h3.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "569856446356-7vgpr21i18gf3skkm6uluag40mh35q47.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "kr.wisemobile.parking",
+                "app_store_id": "1129098766"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:569856446356:android:2f2cd5a74caa634b324981",
+        "android_client_info": {
+          "package_name": "kr.wisemobile.parkingcarpool"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "569856446356-9l7da00olk48bhinadtut2v52mnfcmkn.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "kr.wisemobile.parkingcarpool",
+            "certificate_hash": "2d921f4646150f53d474f903425107623797753b"
+          }
+        },
+        {
+          "client_id": "569856446356-52mei7h3r2opnol422olnje6o53qh7h3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDz48qsO3bq8Ou6T-wMpVI46mS_cX7SREI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "569856446356-52mei7h3r2opnol422olnje6o53qh7h3.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "569856446356-7vgpr21i18gf3skkm6uluag40mh35q47.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "kr.wisemobile.parking",
+                "app_store_id": "1129098766"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

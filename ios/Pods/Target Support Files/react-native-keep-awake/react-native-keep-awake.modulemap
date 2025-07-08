@@ -1,0 +1,6 @@
+framework module react_native_keep_awake {
+  umbrella header "react-native-keep-awake-umbrella.h"
+
+  export *
+  module * { export * }
+}

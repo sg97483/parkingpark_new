@@ -1,0 +1,41 @@
+{
+  "migIndex": 1,
+  "data": [
+    {
+      "path": "src/assets/fonts/NanumSquareRoundB.ttf",
+      "sha1": "e92331df4c26e67374cb41c18d4bdf326db8e53d"
+    },
+    {
+      "path": "src/assets/fonts/NanumSquareRoundEB.ttf",
+      "sha1": "4480112377baeea3de17a1d839da691d978927b7"
+    },
+    {
+      "path": "src/assets/fonts/NanumSquareRoundL.ttf",
+      "sha1": "d5015ab895abdfd00f8a23105552f153cd953afa"
+    },
+    {
+      "path": "src/assets/fonts/NanumSquareRoundR.ttf",
+      "sha1": "f0c70764bea3fab551e1dedaae059d4495afd8db"
+    },
+    {
+      "path": "src/assets/fonts/Pretendard-Bold.ttf",
+      "sha1": "5014ee949529efb25dc8d2555fb8d4586f43e058"
+    },
+    {
+      "path": "src/assets/fonts/Pretendard-Light.ttf",
+      "sha1": "1714361a51ce1fd7f0700b16a735022946f5cd27"
+    },
+    {
+      "path": "src/assets/fonts/Pretendard-Medium.ttf",
+      "sha1": "68efbed10e1229e9c9ed49d8c620a8fef87cda07"
+    },
+    {
+      "path": "src/assets/fonts/Pretendard-Regular.ttf",
+      "sha1": "f5e25d12ff08ff058acd8a64d5f9b5f9c92b9d17"
+    },
+    {
+      "path": "src/assets/fonts/Pretendard-SemiBold.ttf",
+      "sha1": "e247ab351a1797b1a81f7a5e945c416de9f7fd91"
+    }
+  ]
+}

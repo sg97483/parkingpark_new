@@ -1,0 +1,6 @@
+framework module kakao_login {
+  umbrella header "kakao-login-umbrella.h"
+
+  export *
+  module * { export * }
+}

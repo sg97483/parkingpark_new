@@ -1,0 +1,43 @@
+diff --git a/src/calendar/day/basic/index.js b/src/calendar/day/basic/index.js
+index 138687c8f361748309976dfeedb8af5af3247492..dea5d9eacdd2fc898352f4e8d381086a66409383 100644
+--- a/src/calendar/day/basic/index.js
++++ b/src/calendar/day/basic/index.js
+@@ -95,11 +95,11 @@ const BasicDay = (props) => {
+         return (
+             <View>
+                 <View style = {basicDayContainerStyle}>    
+-                    <Pressable testID={testID} style={[getContainerStyle(), theme.periodStyle]} disabled={shouldDisableTouchEvent()} activeOpacity={activeOpacity} onPress={!shouldDisableTouchEvent() ? _onPress : undefined} onLongPress={!shouldDisableTouchEvent() ? _onLongPress : undefined} accessible accessibilityRole={isDisabled ? undefined : 'button'} accessibilityLabel={accessibilityLabel}>
++                    <Pressable testID={testID} style={[getContainerStyle(), theme?.periodStyle]} disabled={shouldDisableTouchEvent()} activeOpacity={activeOpacity} onPress={!shouldDisableTouchEvent() ? _onPress : undefined} onLongPress={!shouldDisableTouchEvent() ? _onLongPress : undefined} accessible accessibilityRole={isDisabled ? undefined : 'button'} accessibilityLabel={accessibilityLabel}>
+                         {renderContent()}
+                     </Pressable>
+                 </View>
+-                {renderBookingStatus(dateData)}
++                {renderBookingStatus?.(dateData)}
+             </View>
+       );
+     };
+diff --git a/src/calendar/header/style.js b/src/calendar/header/style.js
+index 2b6e01c533ac285d85250be4ea20adeb15cd8ce3..09a8ef6ed834e117ccebb6a606945acb76631723 100644
+--- a/src/calendar/header/style.js
++++ b/src/calendar/header/style.js
+@@ -27,7 +27,7 @@ export default function (theme = {}) {
+             margin: 10
+         },
+         arrow: {
+-            padding: 10,
++            // padding: 10,
+             ...appStyle.arrowStyle
+         },
+         arrowImage: {
+diff --git a/src/calendar/index.js b/src/calendar/index.js
+index f9e73a2f19b0b08620922d0f44b713f053966fff..01156a9107e1727098c35a7f58112eec660032a5 100644
+--- a/src/calendar/index.js
++++ b/src/calendar/index.js
+@@ -83,7 +83,6 @@ const Calendar = (props) => {
+     const _onDayPress = useCallback((date) => {
+         if (date)
+             handleDayInteraction(date, onDayPress);
+-        console.log("press vo day ne")
+     }, [handleDayInteraction, onDayPress]);
+     const onLongPressDay = useCallback((date) => {
+         if (date)

@@ -1,0 +1,6 @@
+framework module sparkfabrik_react_native_idfa_aaid {
+  umbrella header "sparkfabrik-react-native-idfa-aaid-umbrella.h"
+
+  export *
+  module * { export * }
+}

@@ -1,0 +1,24 @@
+diff --git a/node_modules/realm/react-native/ios/RealmReact/RealmReact.mm b/node_modules/realm/react-native/ios/RealmReact/RealmReact.mm
+index 55f97af..78ff3f5 100644
+--- a/node_modules/realm/react-native/ios/RealmReact/RealmReact.mm
++++ b/node_modules/realm/react-native/ios/RealmReact/RealmReact.mm
+@@ -126,6 +126,11 @@ - (void)setBridge:(RCTBridge *)bridge {
+           }
+           s_currentJSThread = [NSThread currentThread];
+ 
++          if (!bridge || !bridge.runtime) {
++            NSLog(@"[RealmReact] JS runtime is nil, skipping realm_jsi_init.");
++            return;
++          }
++
+           auto &rt = *static_cast<facebook::jsi::Runtime *>(bridge.runtime);
+           auto exports = jsi::Object(rt);
+           realm_jsi_init(rt, exports, ^{
+diff --git a/node_modules/realm/realm-constants.json b/node_modules/realm/realm-constants.json
+new file mode 100644
+index 0000000..2a43fe5
+--- /dev/null
++++ b/node_modules/realm/realm-constants.json
+@@ -0,0 +1 @@
++{"REALM_ANONYMIZED_BUNDLE_ID":"zWgriZaCr5o32kJpzPtmiDTTiLJt31UqtgfRuSNLi1E="}
+\ No newline at end of file

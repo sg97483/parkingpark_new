@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">파킹박</string>
+    <string name="naver_map_key">taykdvx2ps</string>
+    <string name="kakao_app_key">71df8d2939975788b6fee8dd85acb245</string>
+    <string name="kakao_scheme">kakao71df8d2939975788b6fee8dd85acb245</string>
+    <string name="kakaolink_host">kakaolink</string>
+</resources>

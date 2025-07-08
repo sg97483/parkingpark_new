@@ -1,0 +1,28 @@
+{
+  "name": "RNNaverLogin",
+  "version": "3.0.0",
+  "summary": "Naver Login Module for React Native (iOS and Android)",
+  "description": "RNNaverLogin",
+  "homepage": "https://github.com/crossplatformkorea/react-native-naver-login.git",
+  "license": "MIT",
+  "authors": {
+    "author": "dooboolab@gmail.com"
+  },
+  "platforms": {
+    "ios": "9.0"
+  },
+  "source": {
+    "git": "https://github.com/crossplatformkorea/react-native-naver-login.git",
+    "tag": "main"
+  },
+  "source_files": "ios/**/*.{h,m,swift}",
+  "requires_arc": true,
+  "dependencies": {
+    "React": [
+
+    ],
+    "naveridlogin-sdk-ios": [
+      "~> 4.1.5"
+    ]
+  }
+}

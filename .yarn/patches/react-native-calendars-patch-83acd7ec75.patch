@@ -1,0 +1,192 @@
+diff --git a/src/calendar/header/index.js b/src/calendar/header/index.js
+index c12fac31780c381a76187f1f6259e92c8e311739..4f92e474f32bffb274ace437eff6164f5803b13f 100644
+--- a/src/calendar/header/index.js
++++ b/src/calendar/header/index.js
+@@ -27,6 +27,7 @@ const CalendarHeader = forwardRef((props, ref) => {
+     const dayNamesStyle = useMemo(() => {
+         return [style.current.week, numberOfDaysCondition ? partialWeekStyle : undefined];
+     }, [numberOfDaysCondition, partialWeekStyle]);
++
+     const hitSlop = useMemo(() => typeof arrowsHitSlop === 'number'
+         ? { top: arrowsHitSlop, left: arrowsHitSlop, bottom: arrowsHitSlop, right: arrowsHitSlop }
+         : arrowsHitSlop, [arrowsHitSlop]);
+diff --git a/src/calendar/index.d.ts b/src/calendar/index.d.ts
+index 51bd634549d1e9f4358bda62fbbee8e362047cc8..b9435f2889e88795164f31d9e55455afd467b05e 100644
+--- a/src/calendar/index.d.ts
++++ b/src/calendar/index.d.ts
+@@ -56,6 +56,8 @@ export interface CalendarProps extends CalendarHeaderProps, DayProps {
+     onGetLayout?: (event: LayoutRectangle) => void;
+     onGetFirstWeekHeight?: (height: number) => void;
+     getHeaderLayout?: (layout: LayoutRectangle) => void;
++    isExpanded?: boolean;
++    selectedDate?: DateDate;
+ }
+ /**
+  * @description: Calendar component
+diff --git a/src/calendar/index.js b/src/calendar/index.js
+index 492da3b7e409adb8d8507601ce37c78f2fb17a19..f9e73a2f19b0b08620922d0f44b713f053966fff 100644
+--- a/src/calendar/index.js
++++ b/src/calendar/index.js
+@@ -4,6 +4,7 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+ import { View } from 'react-native';
+ import XDate from 'xdate';
+ // @ts-expect-error
++import dayjs from "dayjs";
+ import GestureRecognizer, { swipeDirections } from 'react-native-swipe-gestures';
+ import constants from '../commons/constants';
+ import { extractDayProps, extractHeaderProps } from '../componentUpdater';
+@@ -25,7 +26,8 @@ const Calendar = (props) => {
+         onDayPress, onDayLongPress, onMonthChange, onVisibleMonthsChange, disableMonthChange, enableSwipeMonths, hideExtraDays,
+         firstDay, showSixWeeks, displayLoadingIndicator, customHeader, headerStyle, accessibilityElementsHidden,
+         importantForAccessibility, testID, style: propsStyle, customNewHeader, renderBookingStatus, 
+-        basicDayContainerStyle, daysNameContainerStyle, dayNameStyle, onGetLayout, onGetFirstWeekHeight, getHeaderLayout} = props;
++        basicDayContainerStyle, daysNameContainerStyle, dayNameStyle, onGetLayout, onGetFirstWeekHeight, 
++        getHeaderLayout, isExpanded, selectedDate} = props;
+     const [currentMonth, setCurrentMonth] = useState(current || initialDate ? parseDate(current || initialDate) : new XDate());
+     const [calendarLayoutInfo, setCalendarLayoutInfo] = useState()
+     const [weeksHeight, setWeeksHeight] = useState([]);
+@@ -36,8 +38,14 @@ const Calendar = (props) => {
+ 
+     useEffect(() => {
+         if(onGetLayout && onGetFirstWeekHeight && weeksHeight?.length && calendarLayoutInfo){
++
+             onGetLayout(calendarLayoutInfo)
+-            onGetFirstWeekHeight(weeksHeight[0])
++            weeksHeight.forEach((item) => {
++                if(item?.index === 0){
++            onGetFirstWeekHeight(item.value)
++                }
++
++            })
+         }
+     }, [calendarLayoutInfo, weeksHeight, onGetLayout, onGetFirstWeekHeight])
+ 
+@@ -75,6 +83,7 @@ const Calendar = (props) => {
+     const _onDayPress = useCallback((date) => {
+         if (date)
+             handleDayInteraction(date, onDayPress);
++        console.log("press vo day ne")
+     }, [handleDayInteraction, onDayPress]);
+     const onLongPressDay = useCallback((date) => {
+         if (date)
+@@ -123,7 +132,7 @@ const Calendar = (props) => {
+       </View>);
+     };
+ 
+-    const renderWeek = (days, id) => {
++    const renderWeek = (days, id, index) => {
+         const week = [];
+         days.forEach((day, id2) => {
+             week.push(renderDay(day, id2));
+@@ -131,7 +140,9 @@ const Calendar = (props) => {
+         if (props.showWeekNumbers) {
+             week.unshift(renderWeekNumber(days[days.length - 1].getWeek()));
+         }
+-        return (<View onLayout={(e) => setWeeksHeight([...weeksHeight, e.nativeEvent.layout.height])} style={[style.current.week, {marginVertical: 0}]} key={id}>
++
++        return (<View onLayout={(e) =>{
++            setWeeksHeight([...weeksHeight, {index: index, value: e.nativeEvent.layout.height}])}} style={[style.current.week, {marginVertical: 0}]} key={id}>
+         {week}
+       </View>);
+     };
+@@ -139,10 +150,39 @@ const Calendar = (props) => {
+     const renderMonth = () => {
+         const shouldShowSixWeeks = showSixWeeks && !hideExtraDays;
+         const days = page(currentMonth, firstDay, shouldShowSixWeeks);
++        const newArray = [...days];
++        const resArray = [];
++        while(newArray.length){
++            resArray.push(newArray.splice(0, 5))
++        }
++
++        for(let i= 0; i < resArray.length; i++) {
++            const dateFind = resArray?.[i].find(item => dayjs(item).format("YYYY-MM-DD") === selectedDate?.dateString)
++            if(selectedDate && dateFind){
++                resArray.splice(0, i);
++                break;
++            }
++        }
++
++        let finalArray = [];
++        resArray.forEach(item => {
++            finalArray = finalArray.concat(item)
++        })
++        
+         const weeks = [];
+-        while (days.length) {
+-            weeks.push(renderWeek(days.splice(0, 5), weeks.length));
++        let index =0
++        if(isExpanded) {
++            while (days.length) {
++                weeks.push(renderWeek(days.splice(0, 5), weeks.length, index));
++                index++;
++            }
++        }else{
++            while (finalArray.length) {
++                weeks.push(renderWeek(finalArray.splice(0, 5), weeks.length, index));
++                index++;
++            }
+         }
++        
+         return <View onLayout={(e) => {
+            setCalendarLayoutInfo(e.nativeEvent.layout);
+         }} style={[ ]}>{weeks}</View>;
+diff --git a/src/expandableCalendar/index.js b/src/expandableCalendar/index.js
+index 44f922f4d1fb215d963aaa0ef6c1451712a18d42..fc3fdea4d7b6fead4e54c1a358232cc137e337c3 100644
+--- a/src/expandableCalendar/index.js
++++ b/src/expandableCalendar/index.js
+@@ -51,6 +51,13 @@ const ExpandableCalendar = (props) => {
+     customNewHeader, daysNameContainerStyle, dayNameStyle, dayComponent, renderBookingStatus, basicDayContainerStyle, 
+     knobHeight, knobStyle, knobUnnecessaryHeight, ...others } = props;
+     const [screenReaderEnabled, setScreenReaderEnabled] = useState(false);
++    const [selectedDate, setSelectedDate] = useState(
++        {dateString: dayjs().format('YYYY-MM-DD'),
++        month: Number(dayjs().format('MM')),
++        day: Number(dayjs().format('DD')),
++        year: Number(dayjs().format('YYYY')),
++        timestamp: Number(dayjs().valueOf())}
++    );
+ 
+     const [calendarHeight, setCalendarHeight] = useState(0);
+     const [firstWeekHeight, setFirstWeekHeight] = useState(0);
+@@ -66,7 +73,7 @@ const ExpandableCalendar = (props) => {
+     const [position, setPosition] = useState(numberOfDays ? Positions.CLOSED : initialPosition);
+     const isOpen = position === Positions.OPEN;
+    
+-    const closedHeight = useMemo(() => headerHeight + firstWeekHeight + (knobHeight || KNOB_CONTAINER_HEIGHT) - (knobUnnecessaryHeight || 10), [firstWeekHeight, headerHeight, knobHeight]);
++    const closedHeight = useMemo(() => headerHeight + firstWeekHeight + (knobHeight || KNOB_CONTAINER_HEIGHT) - (firstWeekHeight < 70? knobUnnecessaryHeight : 0 ) , [firstWeekHeight, headerHeight, knobHeight, knobUnnecessaryHeight]);
+     const startHeight = useMemo(() => isOpen ? calendarHeight : closedHeight, [closedHeight, isOpen,calendarHeight]);
+     const _height = useRef(startHeight);
+     const deltaY = useMemo(() => new Animated.Value(startHeight), [startHeight]);
+@@ -196,14 +203,20 @@ const ExpandableCalendar = (props) => {
+                 <Calendar 
+                 firstDay={1} 
+                 theme={theme}
+-                onDayPress={onDayPress}
++                onDayPress={(date)=> {
++                    onDayPress(date) 
++                    setSelectedDate(date);
++                    if(isOpen) {
++                        toggleCalendarPosition()
++                    }
++                }}
+                 markedDates={markedDates}
+                 minDate={`${dayjs().format('YYYY-MM-DD')}`}
+                 maxDate={`${dayjs().subtract(-14, 'day').format('YYYY-MM-DD')}`}
+                 customNewHeader = {customNewHeader}
+                 style = {{
+                     paddingLeft: 0,
+-                    paddingRight: 0
++                    paddingRight: 0,
+                 }}
+                 hideExtraDays
+                 daysNameContainerStyle = {daysNameContainerStyle}
+@@ -219,6 +232,8 @@ const ExpandableCalendar = (props) => {
+                 getHeaderLayout = {(layout) => {
+                     setHeaderHeight(layout?.height)
+                 }}
++                isExpanded = {isOpen}
++                selectedDate = {selectedDate}
+                 />
+              </ScrollView>
+         )

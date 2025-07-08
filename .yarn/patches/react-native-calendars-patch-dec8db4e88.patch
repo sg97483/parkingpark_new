@@ -1,0 +1,15 @@
+diff --git a/src/expandableCalendar/index.js b/src/expandableCalendar/index.js
+index fc3fdea4d7b6fead4e54c1a358232cc137e337c3..c80ec98a77d7322b76b74f6e28dfc42e6840d6af 100644
+--- a/src/expandableCalendar/index.js
++++ b/src/expandableCalendar/index.js
+@@ -211,8 +211,8 @@ const ExpandableCalendar = (props) => {
+                     }
+                 }}
+                 markedDates={markedDates}
+-                minDate={`${dayjs().format('YYYY-MM-DD')}`}
+-                maxDate={`${dayjs().subtract(-14, 'day').format('YYYY-MM-DD')}`}
++                // minDate={`${dayjs().format('YYYY-MM-DD')}`}
++                // maxDate={`${dayjs().subtract(-14, 'day').format('YYYY-MM-DD')}`}
+                 customNewHeader = {customNewHeader}
+                 style = {{
+                     paddingLeft: 0,

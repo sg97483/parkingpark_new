@@ -1,0 +1,153 @@
+# ios/Podfile
+
+# Resolve react_native_pods.rb with node to allow for hoisting
+require Pod::Executable.execute_command('node', ['-p',
+  'require.resolve(
+    "react-native/scripts/react_native_pods.rb",
+    {paths: [process.argv[1]]},
+  )', __dir__]).strip
+require_relative '../node_modules/react-native/scripts/react_native_pods'
+require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
+require_relative '../node_modules/react-native-permissions/scripts/setup'
+
+platform :ios, '15.4'
+prepare_react_native_project!
+
+setup_permissions([
+  'Camera',
+  'MediaLibrary',
+  'PhotoLibrary',
+  'PhotoLibraryAddOnly',
+  'Notifications',
+  'LocationAccuracy',
+  'LocationAlways',
+  'LocationWhenInUse',
+  'AppTrackingTransparency'
+])
+
+linkage = ENV['USE_FRAMEWORKS']
+if linkage != nil
+  Pod::UI.puts "Configuring Pod with #{linkage}ally linked Frameworks".green
+  use_frameworks! :linkage => linkage.to_sym
+end
+
+target 'ParkingPark' do
+  config = use_native_modules!
+  use_frameworks! :linkage => :static
+  $RNFirebaseAsStaticFramework = true
+  flags = get_default_flags()
+
+  use_react_native!(
+    :path => config[:reactNativePath],
+    :hermes_enabled => flags[:hermes_enabled],
+    :fabric_enabled => flags[:fabric_enabled],
+    :app_path => "#{Pod::Config.instance.installation_root}/.."
+  )
+
+  target 'ParkingParkTests' do
+    inherit! :complete
+  end
+  
+  # 필요한 Pod들 명시
+  # pod 'NMapsMap', '3.17.0' # 네이버맵은 일단 비활성화 유지
+  pod 'react-native-blob-util', :path => '../node_modules/react-native-blob-util'
+  pod 'RNFS', :path => '../node_modules/react-native-fs'
+  pod 'GoogleUtilities', :modular_headers => true
+  pod 'FirebaseCore', :modular_headers => true
+  pod 'FirebaseCoreExtension', :modular_headers => true
+  pod 'Firebase/Messaging', :modular_headers => true
+
+  post_install do |installer|
+    config = use_native_modules!
+    react_native_post_install(
+      installer,
+      config[:reactNativePath],
+      :mac_catalyst_enabled => false
+    )
+  
+    Pod::UI.puts "Starting v12: BoringSSL/Folly Patches, Specific Bitcode Disable & Naver Login Bitcode Strip."
+  
+    installer.pods_project.targets.each do |target|
+      target.build_configurations.each do |build_config|
+        # 시뮬레이터 빌드 오류 방지 (arm64 제외)
+        build_config.build_settings['EXCLUDED_ARCHS[sdk=iphonesimulator*]'] = "arm64"
+        # Bitcode 비활성화
+        build_config.build_settings['ENABLE_BITCODE'] = 'NO'
+      end
+  
+      # BoringSSL 플래그 최적화
+      if target.name == 'BoringSSL-GRPC'
+        Pod::UI.puts "Processing target: #{target.name} for flag cleanup."
+        target.build_configurations.each do |build_config|
+          essential_flags = ["-DOPENSSL_NO_ASM", "-w", "-DBORINGSSL_PREFIX=GRPC", "-fno-objc-arc"]
+          ['OTHER_CFLAGS', 'OTHER_CPLUSPLUSFLAGS'].each do |flags_key|
+            current_flags = build_config.build_settings[flags_key]
+            new_flags_array = []
+            if current_flags.is_a?(String)
+              new_flags_array = current_flags.split(' ').reject { |f| f.start_with?('-G') || f == '-GCC_WARN_INHIBIT_ALL_WARNINGS' }
+            elsif current_flags.is_a?(Array)
+              new_flags_array = current_flags.reject { |f| f.start_with?('-G') || f == '-GCC_WARN_INHIBIT_ALL_WARNINGS' }
+            end
+            build_config.build_settings[flags_key] = (new_flags_array + essential_flags).uniq.join(' ')
+          end
+        end
+      end
+  
+      # Hermes Bitcode 비활성화
+      if target.name == 'hermes-engine'
+        target.build_configurations.each do |config|
+          config.build_settings['ENABLE_BITCODE'] = 'NO'
+        end
+      end
+    end
+  
+    # 추가: 외부 Framework에서 Bitcode 강제 제거
+    require 'fileutils'
+  
+    def strip_bitcode_from_framework(framework_path)
+      puts "Stripping bitcode from #{framework_path}..."
+      Dir.glob("#{framework_path}/**/*.framework/*.a") do |lib|
+        puts "Processing static library: #{lib}"
+        `xcrun bitcode_strip -r #{lib} -o #{lib}`
+      end
+      Dir.glob("#{framework_path}/**/*.framework/*.dylib") do |dylib|
+        puts "Processing dynamic library: #{dylib}"
+        `xcrun bitcode_strip -r #{dylib} -o #{dylib}`
+      end
+    end
+  
+    # 👇 [수정] 개선된 비트코드 제거 스크립트
+    def strip_bitcode_from_xcframework(xcframework_path)
+      puts "Processing XCFramework: #{xcframework_path}"
+      binary_name = File.basename(xcframework_path, ".xcframework")
+      
+      # .xcframework 내부에서 dSYM 폴더를 제외하고 실제 바이너리 경로만 찾습니다.
+      Dir.glob("#{xcframework_path}/**/*.framework/#{binary_name}").each do |binary_path|
+        if File.file?(binary_path) && !File.directory?(binary_path)
+          puts "  - Stripping bitcode from: #{binary_path}"
+          `xcrun bitcode_strip -r "#{binary_path}" -o "#{binary_path}"`
+        end
+      end
+    end
+
+    # NaverThirdPartyLogin.xcframework 처리
+    naver_framework_path = "./Pods/naveridlogin-sdk-ios/NaverThirdPartyLogin.xcframework"
+    if Dir.exist?(naver_framework_path)
+      strip_bitcode_from_xcframework(naver_framework_path)
+    else
+      puts "Warning: NaverThirdPartyLogin.xcframework not found at expected path: #{naver_framework_path}"
+    end
+    
+  
+    # TMapSDK.framework 처리
+    #tmap_framework_path = "../node_modules/티맵SDK_위치_or_수동추가위치/TMapSDK.framework"
+    #if File.exist?(tmap_framework_path)
+    #  strip_bitcode_from_framework(tmap_framework_path)
+    #else
+    #  puts "Warning: TMapSDK.framework not found at expected path."
+    #end
+  
+    Pod::UI.puts "Finished v12 post-install script."
+  end
+  
+end

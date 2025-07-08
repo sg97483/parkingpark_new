@@ -1,0 +1,73 @@
+diff --git a/src/calendar/index.js b/src/calendar/index.js
+index 9c4d9ff25978795ea146c579702adacb291762a9..492da3b7e409adb8d8507601ce37c78f2fb17a19 100644
+--- a/src/calendar/index.js
++++ b/src/calendar/index.js
+@@ -131,7 +131,7 @@ const Calendar = (props) => {
+         if (props.showWeekNumbers) {
+             week.unshift(renderWeekNumber(days[days.length - 1].getWeek()));
+         }
+-        return (<View onLayout={(e) => setWeeksHeight([...weeksHeight, e.nativeEvent.layout.height])} style={[style.current.week, {marginVertical: 5}]} key={id}>
++        return (<View onLayout={(e) => setWeeksHeight([...weeksHeight, e.nativeEvent.layout.height])} style={[style.current.week, {marginVertical: 0}]} key={id}>
+         {week}
+       </View>);
+     };
+diff --git a/src/calendar/style.js b/src/calendar/style.js
+index 735afb5263ec14aeb6af7e65255c485a4d362b0a..2dbf4fd60f76f9a3ca6f11678741339ceee932ee 100644
+--- a/src/calendar/style.js
++++ b/src/calendar/style.js
+@@ -19,7 +19,7 @@ export default function getStyle(theme = {}) {
+             backgroundColor: appStyle.calendarBackground
+         },
+         week: {
+-            marginVertical: appStyle.weekVerticalMargin,
++            // marginVertical: appStyle.weekVerticalMargin,
+             flexDirection: 'row',
+             justifyContent: 'space-around'
+         },
+diff --git a/src/expandableCalendar/index.d.ts b/src/expandableCalendar/index.d.ts
+index 08b326560034e53ad1df107744078bd239867243..760249fe261f6f51f20d74ddf209abbb7a6b222f 100644
+--- a/src/expandableCalendar/index.d.ts
++++ b/src/expandableCalendar/index.d.ts
+@@ -35,7 +35,9 @@ export interface ExpandableCalendarProps extends CalendarListProps {
+     daysNameContainerStyle?:StyleProp<ViewStyle>;
+     renderBookingStatus?: (dateData: DateData) => React.ReactNode;
+     basicDayContainerStyle?: StyleProp<ViewStyle>;
+-    knobHeight?: number
++    knobHeight?: number;
++    knobUnnecessaryHeight?: number;
++    knobStyle?: StyleProp<ViewStyle>;
+ }
+ /**
+  * @description: Expandable calendar component
+diff --git a/src/expandableCalendar/index.js b/src/expandableCalendar/index.js
+index e6dc901b279f0d061368ca0474fd7dcd80b2a8b1..5fe151352ea530c234bb251b6ba0536bf576b0d1 100644
+--- a/src/expandableCalendar/index.js
++++ b/src/expandableCalendar/index.js
+@@ -48,7 +48,8 @@ const ExpandableCalendar = (props) => {
+     initialPosition = Positions.CLOSED, onCalendarToggled, disablePan, hideKnob = numberOfDays && numberOfDays > 1, leftArrowImageSource = LEFT_ARROW, rightArrowImageSource = RIGHT_ARROW, allowShadow = true, openThreshold = PAN_GESTURE_THRESHOLD, closeThreshold = PAN_GESTURE_THRESHOLD, closeOnDayPress = true, 
+     /** CalendarList props */
+     horizontal = true, calendarStyle, theme, style: propsStyle, firstDay = 0, onDayPress, testID, markedDates, 
+-    customNewHeader, daysNameContainerStyle, dayNameStyle, dayComponent, renderBookingStatus, basicDayContainerStyle, knobHeight, ...others } = props;
++    customNewHeader, daysNameContainerStyle, dayNameStyle, dayComponent, renderBookingStatus, basicDayContainerStyle, 
++    knobHeight, knobStyle, knobUnnecessaryHeight, ...others } = props;
+     const [screenReaderEnabled, setScreenReaderEnabled] = useState(false);
+ 
+     const [calendarHeight, setCalendarHeight] = useState(0);
+@@ -65,7 +66,7 @@ const ExpandableCalendar = (props) => {
+     const [position, setPosition] = useState(numberOfDays ? Positions.CLOSED : initialPosition);
+     const isOpen = position === Positions.OPEN;
+    
+-    const closedHeight = useMemo(() => headerHeight + firstWeekHeight + (knobHeight || KNOB_CONTAINER_HEIGHT) + 10, [firstWeekHeight, headerHeight, knobHeight]);
++    const closedHeight = useMemo(() => headerHeight + firstWeekHeight + (knobHeight || KNOB_CONTAINER_HEIGHT) - (knobUnnecessaryHeight || 10), [firstWeekHeight, headerHeight, knobHeight]);
+     const startHeight = useMemo(() => isOpen ? calendarHeight : closedHeight, [closedHeight, isOpen,calendarHeight]);
+     const _height = useRef(startHeight);
+     const deltaY = useMemo(() => new Animated.Value(startHeight), [startHeight]);
+@@ -184,7 +185,7 @@ const ExpandableCalendar = (props) => {
+ 
+     const renderKnob = () => {
+         return (<View style={[style.current.knobContainer, {height: knobHeight || KNOB_CONTAINER_HEIGHT}]} pointerEvents={'box-none'}>
+-        <TouchableOpacity style={style.current.knob} testID={`${testID}.knob`} onPress={toggleCalendarPosition} hitSlop={knobHitSlop} /* activeOpacity={isOpen ? undefined : 1} *//>
++        <TouchableOpacity style={[style.current.knob, knobStyle]} testID={`${testID}.knob`} onPress={toggleCalendarPosition} hitSlop={knobHitSlop} /* activeOpacity={isOpen ? undefined : 1} *//>
+       </View>);
+     };
+ 

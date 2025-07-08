@@ -1,0 +1,21 @@
+{
+  "name": "sparkfabrik-react-native-idfa-aaid",
+  "version": "1.2.0",
+  "summary": "React Native module to get IDFA (iOS) or AAID (Android)",
+  "homepage": "https://github.com/sparkfabrik/sparkfabrik-react-native-idfa-aaid#readme",
+  "license": "MIT",
+  "authors": "Edoardo Dusi <edoardo.dusi@sparkfabrik.com> (https://github.com/sparkfabrik)",
+  "platforms": {
+    "ios": "9.0"
+  },
+  "source": {
+    "git": "https://github.com/sparkfabrik/sparkfabrik-react-native-idfa-aaid.git",
+    "tag": "1.2.0"
+  },
+  "source_files": "ios/**/*.{h,m,mm,swift}",
+  "dependencies": {
+    "React": [
+
+    ]
+  }
+}

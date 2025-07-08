@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>569856446356-7vgpr21i18gf3skkm6uluag40mh35q47.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.569856446356-7vgpr21i18gf3skkm6uluag40mh35q47</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>569856446356-9l7da00olk48bhinadtut2v52mnfcmkn.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyBdy_-7z6Jki-H6hpQVF60JgCyesn1CKaU</string>
+	<key>GCM_SENDER_ID</key>
+	<string>569856446356</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>kr.wisemobile.parking</string>
+	<key>PROJECT_ID</key>
+	<string>parkingpark-e6038</string>
+	<key>STORAGE_BUCKET</key>
+	<string>parkingpark-e6038.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:569856446356:ios:19575dfe4c01c862324981</string>
+	<key>DATABASE_URL</key>
+	<string>https://parkingpark-e6038.firebaseio.com</string>
+</dict>
+</plist>

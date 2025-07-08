@@ -1,0 +1,6 @@
+framework module react_native_kakao_share_link {
+  umbrella header "react-native-kakao-share-link-umbrella.h"
+
+  export *
+  module * { export * }
+}

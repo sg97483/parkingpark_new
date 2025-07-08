@@ -1,0 +1,14 @@
+diff --git a/src/calendar/header/index.js b/src/calendar/header/index.js
+index 4f92e474f32bffb274ace437eff6164f5803b13f..97ac0d30e80f91367725c33e8b674d413b157f59 100644
+--- a/src/calendar/header/index.js
++++ b/src/calendar/header/index.js
+@@ -68,7 +68,8 @@ const CalendarHeader = forwardRef((props, ref) => {
+     const renderWeekDays = useMemo(() => {
+         const dayOfTheWeek = new XDate(current).getDay();
+         const weekDaysNames = numberOfDaysCondition ? weekDayNames(dayOfTheWeek) : weekDayNames(firstDay);
+-        const dayNames = numberOfDaysCondition ? weekDaysNames.slice(0, numberOfDays) : weekDaysNames;
++        // const dayNames = numberOfDaysCondition ? weekDaysNames.slice(0, numberOfDays) : weekDaysNames;
++        const dayNames = ["월요일", "화요일", "수요일", "목요일", "금요일"]
+         return dayNames.map((day, index) => {
+             const dayStyle = [style.current.dayHeader];
+             if (includes(disabledDaysIndexes, index)) {

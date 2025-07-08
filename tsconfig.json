@@ -1,0 +1,45 @@
+{
+  "extends": "@react-native/typescript-config/tsconfig.json",
+  "compilerOptions": {
+    "target": "esnext",
+    "module": "esnext", // <-- 이 부분을 'commonjs'에서 'esnext'로 변경
+    "resolveJsonModule": true,
+    "lib": ["es2019", "dom"],
+    "allowJs": true,
+    "jsx": "react-jsx",
+    "noEmit": true,
+    "isolatedModules": true,
+
+    /* Strict Type-Checking Options */
+    "strict": true,
+    "noImplicitAny": true,
+
+    /* Module Resolution Options */
+    "moduleResolution": "bundler",
+    /* Absolute Import */
+    "baseUrl": ".",
+    "paths": {
+      "~images/*": ["./src/assets/images/*"],
+      "~icons/*": ["./src/assets/icons/*"],
+      "~fonts/*": ["./src/assets/fonts/*"],
+      "~lotties/*": ["./src/assets/lotties/*"],
+      "~components/*": ["./src/components/*"],
+      "~constants/*": ["./src/constants/*"],
+      "~hooks/*": ["./src/hooks/*"],
+      "~navigators/*": ["./src/navigators/*"],
+      "~screens/*": ["./src/screens/*"],
+      "~services/*": ["./src/services/*"],
+      "~reducers/*": ["./src/stores/reducers/*"],
+      "~store/*": ["./src/stores/store/*"],
+      "~styles/*": ["./src/styles/*"],
+      "~utils/*": ["./src/utils/*"],
+      "~schemas/*": ["./src/schemas/*"],
+      "~model/*": ["./src/model/*"],
+      "~/*": ["./src/*"]
+    },
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true
+  },
+  "include": ["./src", "./declarations.d.ts"]
+}

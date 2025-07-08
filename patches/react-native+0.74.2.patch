@@ -1,0 +1,463 @@
+diff --git a/node_modules/react-native/ReactAndroid/src/main/java/com/facebook/react/views/view/ReactViewGroup.java b/node_modules/react-native/ReactAndroid/src/main/java/com/facebook/react/views/view/ReactViewGroup.java
+index 793a0f9..43b6895 100644
+--- a/node_modules/react-native/ReactAndroid/src/main/java/com/facebook/react/views/view/ReactViewGroup.java
++++ b/node_modules/react-native/ReactAndroid/src/main/java/com/facebook/react/views/view/ReactViewGroup.java
+@@ -55,16 +55,17 @@ import com.facebook.react.uimanager.common.ViewUtil;
+ import com.facebook.yoga.YogaConstants;
+ 
+ /**
+- * Backing for a React View. Has support for borders, but since borders aren't common, lazy
++ * Backing for a React View. Has support for borders, but since borders aren't
++ * common, lazy
+  * initializes most of the storage needed for them.
+  */
+ public class ReactViewGroup extends ViewGroup
+     implements ReactInterceptingViewGroup,
+-        ReactClippingViewGroup,
+-        ReactPointerEventsView,
+-        ReactHitSlopView,
+-        ReactZIndexedViewGroup,
+-        ReactOverflowViewWithInset {
++    ReactClippingViewGroup,
++    ReactPointerEventsView,
++    ReactHitSlopView,
++    ReactZIndexedViewGroup,
++    ReactOverflowViewWithInset {
+ 
+   private static final int ARRAY_CAPACITY_INCREMENT = 12;
+   private static final int DEFAULT_BACKGROUND_COLOR = Color.TRANSPARENT;
+@@ -74,11 +75,15 @@ public class ReactViewGroup extends ViewGroup
+   private static final Rect sHelperRect = new Rect();
+ 
+   /**
+-   * This listener will be set for child views when removeClippedSubview property is enabled. When
+-   * children layout is updated, it will call {@link #updateSubviewClipStatus} to notify parent view
++   * This listener will be set for child views when removeClippedSubview property
++   * is enabled. When
++   * children layout is updated, it will call {@link #updateSubviewClipStatus} to
++   * notify parent view
+    * about that fact so that view can be attached/detached if necessary.
+    *
+-   * <p>TODO(7728005): Attach/detach views in batch - once per frame in case when multiple children
++   * <p>
++   * TODO(7728005): Attach/detach views in batch - once per frame in case when
++   * multiple children
+    * update their layout.
+    */
+   private static final class ChildrenLayoutChangeListener implements View.OnLayoutChangeListener {
+@@ -106,14 +111,21 @@ public class ReactViewGroup extends ViewGroup
+     }
+   }
+ 
+-  // Following properties are here to support the option {@code removeClippedSubviews}. This is a
+-  // temporary optimization/hack that is mainly applicable to the large list of images. The way
+-  // it's implemented is that we store an additional array of children in view node. We selectively
+-  // remove some of the views (detach) from it while still storing them in that additional array.
+-  // We override all possible add methods for {@link ViewGroup} so that we can control this process
++  // Following properties are here to support the option {@code
++  // removeClippedSubviews}. This is a
++  // temporary optimization/hack that is mainly applicable to the large list of
++  // images. The way
++  // it's implemented is that we store an additional array of children in view
++  // node. We selectively
++  // remove some of the views (detach) from it while still storing them in that
++  // additional array.
++  // We override all possible add methods for {@link ViewGroup} so that we can
++  // control this process
+   // whenever the option is set. We also override {@link ViewGroup#getChildAt} and
+-  // {@link ViewGroup#getChildCount} so those methods may return views that are not attached.
+-  // This is risky but allows us to perform a correct cleanup in {@link NativeViewHierarchyManager}.
++  // {@link ViewGroup#getChildCount} so those methods may return views that are
++  // not attached.
++  // This is risky but allows us to perform a correct cleanup in {@link
++  // NativeViewHierarchyManager}.
+   private boolean mRemoveClippedSubviews;
+   private @Nullable View[] mAllChildren;
+   private int mAllChildrenCount;
+@@ -137,8 +149,10 @@ public class ReactViewGroup extends ViewGroup
+   }
+ 
+   /**
+-   * Set all default values here as opposed to in the constructor or field defaults. It is important
+-   * that these properties are set during the constructor, but also on-demand whenever an existing
++   * Set all default values here as opposed to in the constructor or field
++   * defaults. It is important
++   * that these properties are set during the constructor, but also on-demand
++   * whenever an existing
+    * ReactTextView is recycled.
+    */
+   private void initView() {
+@@ -207,7 +221,8 @@ public class ReactViewGroup extends ViewGroup
+   @Override
+   @SuppressLint("MissingSuperCall")
+   public void requestLayout() {
+-    // No-op, terminate `requestLayout` here, UIManagerModule handles laying out children and
++    // No-op, terminate `requestLayout` here, UIManagerModule handles laying out
++    // children and
+     // `layout` is called on all RN-managed views by `NativeViewHierarchyManager`
+   }
+ 
+@@ -224,7 +239,8 @@ public class ReactViewGroup extends ViewGroup
+   @Override
+   public void setBackgroundColor(int color) {
+     if (color == Color.TRANSPARENT && mReactBackgroundDrawable == null) {
+-      // don't do anything, no need to allocate ReactBackgroundDrawable for transparent background
++      // don't do anything, no need to allocate ReactBackgroundDrawable for
++      // transparent background
+     } else {
+       getOrCreateReactViewBackground().setColor(color);
+     }
+@@ -232,19 +248,21 @@ public class ReactViewGroup extends ViewGroup
+ 
+   @Override
+   public void setBackground(Drawable drawable) {
+-    throw new UnsupportedOperationException(
+-        "This method is not supported for ReactViewGroup instances");
++    // throw new UnsupportedOperationException(
++    // "This method is not supported for ReactViewGroup instances");
+   }
+ 
+   public void setTranslucentBackgroundDrawable(@Nullable Drawable background) {
+-    // it's required to call setBackground to null, as in some of the cases we may set new
+-    // background to be a layer drawable that contains a drawable that has been setup
+-    // as a background previously. This will not work correctly as the drawable callback logic is
++    // it's required to call setBackground to null, as in some of the cases we may
++    // set new
++    // background to be a layer drawable that contains a drawable that has been
++    // setup
++    // as a background previously. This will not work correctly as the drawable
++    // callback logic is
+     // messed up in AOSP
+     updateBackgroundDrawable(null);
+     if (mReactBackgroundDrawable != null && background != null) {
+-      LayerDrawable layerDrawable =
+-          new LayerDrawable(new Drawable[] {mReactBackgroundDrawable, background});
++      LayerDrawable layerDrawable = new LayerDrawable(new Drawable[] { mReactBackgroundDrawable, background });
+       updateBackgroundDrawable(layerDrawable);
+     } else if (background != null) {
+       updateBackgroundDrawable(background);
+@@ -285,7 +303,8 @@ public class ReactViewGroup extends ViewGroup
+ 
+   @Override
+   public boolean dispatchGenericPointerEvent(MotionEvent ev) {
+-    // We do not dispatch the pointer event if its children are not supposed to receive it
++    // We do not dispatch the pointer event if its children are not supposed to
++    // receive it
+     if (!PointerEvents.canChildrenBeTouchTarget(mPointerEvents)) {
+       return false;
+     }
+@@ -294,7 +313,8 @@ public class ReactViewGroup extends ViewGroup
+   }
+ 
+   /**
+-   * We override this to allow developers to determine whether they need offscreen alpha compositing
++   * We override this to allow developers to determine whether they need offscreen
++   * alpha compositing
+    * or not. See the documentation of needsOffscreenAlphaCompositing in View.js.
+    */
+   @Override
+@@ -349,7 +369,8 @@ public class ReactViewGroup extends ViewGroup
+       }
+       updateClippingRect();
+     } else {
+-      // Add all clipped views back, deallocate additional arrays, remove layoutChangeListener
++      // Add all clipped views back, deallocate additional arrays, remove
++      // layoutChangeListener
+       Assertions.assertNotNull(mClippingRect);
+       Assertions.assertNotNull(mAllChildren);
+       Assertions.assertNotNull(mChildrenLayoutChangeListener);
+@@ -404,20 +425,24 @@ public class ReactViewGroup extends ViewGroup
+ 
+     View child = Assertions.assertNotNull(mAllChildren)[idx];
+     sHelperRect.set(child.getLeft(), child.getTop(), child.getRight(), child.getBottom());
+-    boolean intersects =
+-        clippingRect.intersects(
+-            sHelperRect.left, sHelperRect.top, sHelperRect.right, sHelperRect.bottom);
++    boolean intersects = clippingRect.intersects(
++        sHelperRect.left, sHelperRect.top, sHelperRect.right, sHelperRect.bottom);
+     boolean needUpdateClippingRecursive = false;
+-    // We never want to clip children that are being animated, as this can easily break layout :
+-    // when layout animation changes size and/or position of views contained inside a listview that
+-    // clips offscreen children, we need to ensure that, when view exits the viewport, final size
++    // We never want to clip children that are being animated, as this can easily
++    // break layout :
++    // when layout animation changes size and/or position of views contained inside
++    // a listview that
++    // clips offscreen children, we need to ensure that, when view exits the
++    // viewport, final size
+     // and position is set prior to removing the view from its listview parent.
+-    // Otherwise, when view gets re-attached again, i.e when it re-enters the viewport after scroll,
++    // Otherwise, when view gets re-attached again, i.e when it re-enters the
++    // viewport after scroll,
+     // it won't be size and located properly.
+     Animation animation = child.getAnimation();
+     boolean isAnimating = animation != null && !animation.hasEnded();
+     if (!intersects && child.getParent() != null && !isAnimating) {
+-      // We can try saving on invalidate call here as the view that we remove is out of visible area
++      // We can try saving on invalidate call here as the view that we remove is out
++      // of visible area
+       // therefore invalidation is not necessary.
+       removeViewsInLayout(idx - clippedSoFar, 1);
+       needUpdateClippingRecursive = true;
+@@ -426,12 +451,14 @@ public class ReactViewGroup extends ViewGroup
+       invalidate();
+       needUpdateClippingRecursive = true;
+     } else if (intersects) {
+-      // If there is any intersection we need to inform the child to update its clipping rect
++      // If there is any intersection we need to inform the child to update its
++      // clipping rect
+       needUpdateClippingRecursive = true;
+     }
+     if (needUpdateClippingRecursive) {
+       if (child instanceof ReactClippingViewGroup) {
+-        // we don't use {@link sHelperRect} until the end of this loop, therefore it's safe
++        // we don't use {@link sHelperRect} until the end of this loop, therefore it's
++        // safe
+         // to call this method that may write to the same {@link sHelperRect} object.
+         ReactClippingViewGroup clippingChild = (ReactClippingViewGroup) child;
+         if (clippingChild.getRemoveClippedSubviews()) {
+@@ -451,9 +478,8 @@ public class ReactViewGroup extends ViewGroup
+ 
+     // do fast check whether intersect state changed
+     sHelperRect.set(subview.getLeft(), subview.getTop(), subview.getRight(), subview.getBottom());
+-    boolean intersects =
+-        mClippingRect.intersects(
+-            sHelperRect.left, sHelperRect.top, sHelperRect.right, sHelperRect.bottom);
++    boolean intersects = mClippingRect.intersects(
++        sHelperRect.left, sHelperRect.top, sHelperRect.right, sHelperRect.bottom);
+ 
+     // If it was intersecting before, should be attached to the parent
+     boolean oldIntersects = (subview.getParent() != null);
+@@ -537,7 +563,8 @@ public class ReactViewGroup extends ViewGroup
+ 
+   @Override
+   public void addView(View child, int index, ViewGroup.LayoutParams params) {
+-    // This will get called for every overload of addView so there is not need to override every
++    // This will get called for every overload of addView so there is not need to
++    // override every
+     // method.
+     handleAddView(child);
+     super.addView(child, index, params);
+@@ -625,33 +652,34 @@ public class ReactViewGroup extends ViewGroup
+     // to it's children.
+   }
+ 
+-  /*package*/ void setPointerEvents(PointerEvents pointerEvents) {
++  /* package */ void setPointerEvents(PointerEvents pointerEvents) {
+     mPointerEvents = pointerEvents;
+   }
+ 
+-  /*package*/ void resetPointerEvents() {
++  /* package */ void resetPointerEvents() {
+     mPointerEvents = PointerEvents.AUTO;
+   }
+ 
+-  /*package*/ int getAllChildrenCount() {
++  /* package */ int getAllChildrenCount() {
+     return mAllChildrenCount;
+   }
+ 
+-  /*package*/ View getChildAtWithSubviewClippingEnabled(int index) {
++  /* package */ View getChildAtWithSubviewClippingEnabled(int index) {
+     return Assertions.assertNotNull(mAllChildren)[index];
+   }
+ 
+-  /*package*/ void addViewWithSubviewClippingEnabled(View child, int index) {
++  /* package */ void addViewWithSubviewClippingEnabled(View child, int index) {
+     addViewWithSubviewClippingEnabled(child, index, sDefaultLayoutParam);
+   }
+ 
+-  /*package*/ void addViewWithSubviewClippingEnabled(
++  /* package */ void addViewWithSubviewClippingEnabled(
+       final View child, int index, ViewGroup.LayoutParams params) {
+     Assertions.assertCondition(mRemoveClippedSubviews);
+     Assertions.assertNotNull(mClippingRect);
+     Assertions.assertNotNull(mAllChildren);
+     addInArray(child, index);
+-    // we add view as "clipped" and then run {@link #updateSubviewClipStatus} to conditionally
++    // we add view as "clipped" and then run {@link #updateSubviewClipStatus} to
++    // conditionally
+     // attach it
+     int clippedSoFar = 0;
+     for (int i = 0; i < index; i++) {
+@@ -686,7 +714,8 @@ public class ReactViewGroup extends ViewGroup
+     }
+   }
+ 
+-  // TODO: make this method package only once we remove Android's mounting layer retry mechanism.
++  // TODO: make this method package only once we remove Android's mounting layer
++  // retry mechanism.
+   @VisibleForTesting
+   public void removeViewWithSubviewClippingEnabled(View view) {
+     UiThreadUtil.assertOnUiThread();
+@@ -708,7 +737,7 @@ public class ReactViewGroup extends ViewGroup
+     removeFromArray(index);
+   }
+ 
+-  /*package*/ void removeAllViewsWithSubviewClippingEnabled() {
++  /* package */ void removeAllViewsWithSubviewClippingEnabled() {
+     Assertions.assertCondition(mRemoveClippedSubviews);
+     Assertions.assertNotNull(mAllChildren);
+     for (int i = 0; i < mAllChildrenCount; i++) {
+@@ -787,13 +816,12 @@ public class ReactViewGroup extends ViewGroup
+       if (backgroundDrawable == null) {
+         updateBackgroundDrawable(mReactBackgroundDrawable);
+       } else {
+-        LayerDrawable layerDrawable =
+-            new LayerDrawable(new Drawable[] {mReactBackgroundDrawable, backgroundDrawable});
++        LayerDrawable layerDrawable = new LayerDrawable(
++            new Drawable[] { mReactBackgroundDrawable, backgroundDrawable });
+         updateBackgroundDrawable(layerDrawable);
+       }
+ 
+-      mLayoutDirection =
+-          I18nUtil.getInstance().isRTL(getContext()) ? LAYOUT_DIRECTION_RTL : LAYOUT_DIRECTION_LTR;
++      mLayoutDirection = I18nUtil.getInstance().isRTL(getContext()) ? LAYOUT_DIRECTION_RTL : LAYOUT_DIRECTION_LTR;
+       mReactBackgroundDrawable.setResolvedLayoutDirection(mLayoutDirection);
+     }
+     return mReactBackgroundDrawable;
+@@ -830,10 +858,12 @@ public class ReactViewGroup extends ViewGroup
+ 
+   /**
+    * Set the background for the view or remove the background. It calls {@link
+-   * #setBackground(Drawable)} or {@link #setBackgroundDrawable(Drawable)} based on the sdk version.
++   * #setBackground(Drawable)} or {@link #setBackgroundDrawable(Drawable)} based
++   * on the sdk version.
+    *
+-   * @param drawable {@link Drawable} The Drawable to use as the background, or null to remove the
+-   *     background
++   * @param drawable {@link Drawable} The Drawable to use as the background, or
++   *                 null to remove the
++   *                 background
+    */
+   /* package */ void updateBackgroundDrawable(Drawable drawable) {
+     super.setBackground(drawable);
+@@ -845,7 +875,8 @@ public class ReactViewGroup extends ViewGroup
+       dispatchOverflowDraw(canvas);
+       super.dispatchDraw(canvas);
+     } catch (NullPointerException | StackOverflowError e) {
+-      // Adding special exception management for StackOverflowError for logging purposes.
++      // Adding special exception management for StackOverflowError for logging
++      // purposes.
+       // This will be removed in the future.
+       RootView rootView = RootViewUtil.getRootView(ReactViewGroup.this);
+       if (rootView != null) {
+@@ -909,32 +940,24 @@ public class ReactViewGroup extends ViewGroup
+             }
+ 
+             final float borderRadius = mReactBackgroundDrawable.getFullBorderRadius();
+-            float topLeftBorderRadius =
+-                mReactBackgroundDrawable.getBorderRadiusOrDefaultTo(
+-                    borderRadius, ReactViewBackgroundDrawable.BorderRadiusLocation.TOP_LEFT);
+-            float topRightBorderRadius =
+-                mReactBackgroundDrawable.getBorderRadiusOrDefaultTo(
+-                    borderRadius, ReactViewBackgroundDrawable.BorderRadiusLocation.TOP_RIGHT);
+-            float bottomLeftBorderRadius =
+-                mReactBackgroundDrawable.getBorderRadiusOrDefaultTo(
+-                    borderRadius, ReactViewBackgroundDrawable.BorderRadiusLocation.BOTTOM_LEFT);
+-            float bottomRightBorderRadius =
+-                mReactBackgroundDrawable.getBorderRadiusOrDefaultTo(
+-                    borderRadius, ReactViewBackgroundDrawable.BorderRadiusLocation.BOTTOM_RIGHT);
++            float topLeftBorderRadius = mReactBackgroundDrawable.getBorderRadiusOrDefaultTo(
++                borderRadius, ReactViewBackgroundDrawable.BorderRadiusLocation.TOP_LEFT);
++            float topRightBorderRadius = mReactBackgroundDrawable.getBorderRadiusOrDefaultTo(
++                borderRadius, ReactViewBackgroundDrawable.BorderRadiusLocation.TOP_RIGHT);
++            float bottomLeftBorderRadius = mReactBackgroundDrawable.getBorderRadiusOrDefaultTo(
++                borderRadius, ReactViewBackgroundDrawable.BorderRadiusLocation.BOTTOM_LEFT);
++            float bottomRightBorderRadius = mReactBackgroundDrawable.getBorderRadiusOrDefaultTo(
++                borderRadius, ReactViewBackgroundDrawable.BorderRadiusLocation.BOTTOM_RIGHT);
+ 
+             final boolean isRTL = mLayoutDirection == View.LAYOUT_DIRECTION_RTL;
+-            float topStartBorderRadius =
+-                mReactBackgroundDrawable.getBorderRadius(
+-                    ReactViewBackgroundDrawable.BorderRadiusLocation.TOP_START);
+-            float topEndBorderRadius =
+-                mReactBackgroundDrawable.getBorderRadius(
+-                    ReactViewBackgroundDrawable.BorderRadiusLocation.TOP_END);
+-            float bottomStartBorderRadius =
+-                mReactBackgroundDrawable.getBorderRadius(
+-                    ReactViewBackgroundDrawable.BorderRadiusLocation.BOTTOM_START);
+-            float bottomEndBorderRadius =
+-                mReactBackgroundDrawable.getBorderRadius(
+-                    ReactViewBackgroundDrawable.BorderRadiusLocation.BOTTOM_END);
++            float topStartBorderRadius = mReactBackgroundDrawable.getBorderRadius(
++                ReactViewBackgroundDrawable.BorderRadiusLocation.TOP_START);
++            float topEndBorderRadius = mReactBackgroundDrawable.getBorderRadius(
++                ReactViewBackgroundDrawable.BorderRadiusLocation.TOP_END);
++            float bottomStartBorderRadius = mReactBackgroundDrawable.getBorderRadius(
++                ReactViewBackgroundDrawable.BorderRadiusLocation.BOTTOM_START);
++            float bottomEndBorderRadius = mReactBackgroundDrawable.getBorderRadius(
++                ReactViewBackgroundDrawable.BorderRadiusLocation.BOTTOM_END);
+ 
+             if (I18nUtil.getInstance().doLeftAndRightSwapInRTL(getContext())) {
+               if (YogaConstants.isUndefined(topStartBorderRadius)) {
+@@ -953,28 +976,20 @@ public class ReactViewGroup extends ViewGroup
+                 bottomEndBorderRadius = bottomRightBorderRadius;
+               }
+ 
+-              final float directionAwareTopLeftRadius =
+-                  isRTL ? topEndBorderRadius : topStartBorderRadius;
+-              final float directionAwareTopRightRadius =
+-                  isRTL ? topStartBorderRadius : topEndBorderRadius;
+-              final float directionAwareBottomLeftRadius =
+-                  isRTL ? bottomEndBorderRadius : bottomStartBorderRadius;
+-              final float directionAwareBottomRightRadius =
+-                  isRTL ? bottomStartBorderRadius : bottomEndBorderRadius;
++              final float directionAwareTopLeftRadius = isRTL ? topEndBorderRadius : topStartBorderRadius;
++              final float directionAwareTopRightRadius = isRTL ? topStartBorderRadius : topEndBorderRadius;
++              final float directionAwareBottomLeftRadius = isRTL ? bottomEndBorderRadius : bottomStartBorderRadius;
++              final float directionAwareBottomRightRadius = isRTL ? bottomStartBorderRadius : bottomEndBorderRadius;
+ 
+               topLeftBorderRadius = directionAwareTopLeftRadius;
+               topRightBorderRadius = directionAwareTopRightRadius;
+               bottomLeftBorderRadius = directionAwareBottomLeftRadius;
+               bottomRightBorderRadius = directionAwareBottomRightRadius;
+             } else {
+-              final float directionAwareTopLeftRadius =
+-                  isRTL ? topEndBorderRadius : topStartBorderRadius;
+-              final float directionAwareTopRightRadius =
+-                  isRTL ? topStartBorderRadius : topEndBorderRadius;
+-              final float directionAwareBottomLeftRadius =
+-                  isRTL ? bottomEndBorderRadius : bottomStartBorderRadius;
+-              final float directionAwareBottomRightRadius =
+-                  isRTL ? bottomStartBorderRadius : bottomEndBorderRadius;
++              final float directionAwareTopLeftRadius = isRTL ? topEndBorderRadius : topStartBorderRadius;
++              final float directionAwareTopRightRadius = isRTL ? topStartBorderRadius : topEndBorderRadius;
++              final float directionAwareBottomLeftRadius = isRTL ? bottomEndBorderRadius : bottomStartBorderRadius;
++              final float directionAwareBottomRightRadius = isRTL ? bottomStartBorderRadius : bottomEndBorderRadius;
+ 
+               if (!YogaConstants.isUndefined(directionAwareTopLeftRadius)) {
+                 topLeftBorderRadius = directionAwareTopLeftRadius;
+@@ -1005,14 +1020,14 @@ public class ReactViewGroup extends ViewGroup
+               mPath.addRoundRect(
+                   new RectF(left, top, right, bottom),
+                   new float[] {
+-                    Math.max(topLeftBorderRadius - borderWidth.left, 0),
+-                    Math.max(topLeftBorderRadius - borderWidth.top, 0),
+-                    Math.max(topRightBorderRadius - borderWidth.right, 0),
+-                    Math.max(topRightBorderRadius - borderWidth.top, 0),
+-                    Math.max(bottomRightBorderRadius - borderWidth.right, 0),
+-                    Math.max(bottomRightBorderRadius - borderWidth.bottom, 0),
+-                    Math.max(bottomLeftBorderRadius - borderWidth.left, 0),
+-                    Math.max(bottomLeftBorderRadius - borderWidth.bottom, 0),
++                      Math.max(topLeftBorderRadius - borderWidth.left, 0),
++                      Math.max(topLeftBorderRadius - borderWidth.top, 0),
++                      Math.max(topRightBorderRadius - borderWidth.right, 0),
++                      Math.max(topRightBorderRadius - borderWidth.top, 0),
++                      Math.max(bottomRightBorderRadius - borderWidth.right, 0),
++                      Math.max(bottomRightBorderRadius - borderWidth.bottom, 0),
++                      Math.max(bottomLeftBorderRadius - borderWidth.left, 0),
++                      Math.max(bottomLeftBorderRadius - borderWidth.bottom, 0),
+                   },
+                   Path.Direction.CW);
+               canvas.clipPath(mPath);
+@@ -1051,8 +1066,7 @@ public class ReactViewGroup extends ViewGroup
+     float rotationX = getRotationX();
+     float rotationY = getRotationY();
+ 
+-    boolean isFrontfaceVisible =
+-        (rotationX >= -90.f && rotationX < 90.f) && (rotationY >= -90.f && rotationY < 90.f);
++    boolean isFrontfaceVisible = (rotationX >= -90.f && rotationX < 90.f) && (rotationY >= -90.f && rotationY < 90.f);
+ 
+     if (isFrontfaceVisible) {
+       setAlpha(mBackfaceOpacity);

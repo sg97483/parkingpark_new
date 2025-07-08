@@ -1,0 +1,41 @@
+{
+  "name": "RealmJS",
+  "version": "12.6.0",
+  "summary": "Realm by MongoDB is an offline-first mobile database: an alternative to SQLite and key-value stores",
+  "license": "apache-2.0",
+  "authors": {
+    "name": "MongoDB",
+    "email": "help@realm.io",
+    "url": "https://www.mongodb.com/docs/realm/"
+  },
+  "homepage": "https://www.mongodb.com/docs/realm/",
+  "platforms": {
+    "ios": "9.0"
+  },
+  "source": {
+    "http": "https://github.com/realm/realm-js/blob/main/CONTRIBUTING.md#how-to-debug-react-native-podspec"
+  },
+  "source_files": "react-native/ios/RealmReact/*.mm",
+  "public_header_files": "react-native/ios/RealmReact/*.h",
+  "frameworks": [
+
+  ],
+  "libraries": [
+    "c++",
+    "z",
+    "compression"
+  ],
+  "pod_target_xcconfig": {
+    "CLANG_CXX_LANGUAGE_STANDARD": "c++17",
+    "CLANG_CXX_LIBRARY": "libc++",
+    "CURRENT_PROJECT_VERSION": "12.6.0",
+    "VERSIONING_SYSTEM": "apple-generic",
+    "HEADER_SEARCH_PATHS": "\"$(PODS_TARGET_SRCROOT)/react-native/ios/RealmReact/\" \"$(PODS_ROOT)/Headers/Public/React-Core/\""
+  },
+  "vendored_frameworks": "react-native/ios/realm-js-ios.xcframework",
+  "dependencies": {
+    "React": [
+
+    ]
+  }
+}

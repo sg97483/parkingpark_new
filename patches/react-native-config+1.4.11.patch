@@ -1,0 +1,12 @@
+diff --git a/node_modules/react-native-config/android/build.gradle b/node_modules/react-native-config/android/build.gradle
+index c8f7fd4..32a9fb8 100644
+--- a/node_modules/react-native-config/android/build.gradle
++++ b/node_modules/react-native-config/android/build.gradle
+@@ -16,6 +16,7 @@ def safeExtGet(prop, fallback) {
+ }
+ 
+ android {
++    namespace "com.lugg.ReactNativeConfig"
+     compileSdkVersion rootProject.ext.compileSdkVersion
+ 
+     defaultConfig {

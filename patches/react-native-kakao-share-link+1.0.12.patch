@@ -1,0 +1,12 @@
+diff --git a/node_modules/react-native-kakao-share-link/android/build.gradle b/node_modules/react-native-kakao-share-link/android/build.gradle
+index 2471a40..67fffd2 100644
+--- a/node_modules/react-native-kakao-share-link/android/build.gradle
++++ b/node_modules/react-native-kakao-share-link/android/build.gradle
+@@ -20,6 +20,7 @@ apply plugin: 'kotlin-android'
+ 
+ 
+ android {
++  namespace "com.reactnativekakaosharelink"
+   compileSdkVersion getExtOrDefault('compileSdkVersion').toInteger()
+ 
+   defaultConfig {
