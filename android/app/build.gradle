@@ -53,8 +53,8 @@ android {
         minSdk rootProject.ext.minSdkVersion
         targetSdk rootProject.ext.targetSdkVersion
         // 버전 정보도 기존 설정을 그대로 가져옵니다.
-        versionCode 465
-        versionName "3.4.4"
+        versionCode 466
+        versionName "3.4.5"
     }
 
     // 서명 설정은 기존 설정을 그대로 가져옵니다.
