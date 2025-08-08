@@ -1,5 +1,3 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import {getDynamicLinks} from '@react-native-firebase/dynamic-links';
 import {getMessaging} from '@react-native-firebase/messaging';
 import {uniqBy} from 'lodash';
 import React, {memo, useEffect} from 'react';
@@ -10,7 +8,7 @@ import Video from 'react-native-video';
 import RNBootSplash from 'react-native-bootsplash';
 import FixedContainer from '~components/fixed-container';
 import {IS_ANDROID} from '~constants/constant';
-import {ASYNC_STORAGE_KEY, IS_ACTIVE} from '~constants/enum';
+import {IS_ACTIVE} from '~constants/enum';
 import {ParkingMapProps} from '~constants/types';
 import {userHook} from '~hooks/userHook';
 import {ROUTE_KEY} from '~navigators/router';
@@ -198,28 +196,8 @@ const Splash = memo((props: RootStackScreenProps<'Splash'>) => {
           navigation.replace(ROUTE_KEY.ParkingParkHome);
         }
       }
-      listenerDeepLink();
+      // listenerDeepLink(); // 👈 이 줄을 완전히 삭제합니다.
     }, 2000);
-  };
-
-  const listenerDeepLink = async () => {
-    const deep_link_str = await AsyncStorage.getItem(ASYNC_STORAGE_KEY.DEEP_LINK);
-    if (deep_link_str) {
-      const deep_link = JSON.parse(deep_link_str);
-      navigationDeepLink(deep_link?.url?.split('=')[1]);
-    } else {
-      await getDynamicLinks()
-        .getInitialLink()
-        .then(async (res: any) => {
-          res && navigationDeepLink(res?.url?.split('=')[1]);
-        });
-    }
-  };
-
-  const navigationDeepLink = (idShop: string) => {
-    if (idShop) {
-      navigation.navigate(ROUTE_KEY.ParkingDetails, {id: parseInt(idShop, 10)});
-    }
   };
 
   // 🚩 [수정] 모든 초기화 로직을 이 useEffect 하나에서 순차적으로 관리합니다.

@@ -63,10 +63,6 @@
     </array>
     <key>CFBundleVersion</key>
     <string>$(CURRENT_PROJECT_VERSION)</string>
-    <key>FirebaseDynamicLinksCustomDomains</key>
-    <array>
-        <string>https://wisemobileapplink.page.link</string>
-    </array>
     <key>KAKAO_APP_KEY</key>
     <string>71df8d2939975788b6fee8dd85acb245</string>
     <key>KAKAO_APP_SCHEME</key>

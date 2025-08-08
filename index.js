@@ -3,9 +3,6 @@ import App from './src';
 import {enableScreens} from 'react-native-screens';
 import {name as appName} from './app.json';
 import Modal from 'react-native-modal';
-import {getDynamicLinks} from '@react-native-firebase/dynamic-links';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import {ASYNC_STORAGE_KEY} from './src/constants/enum';
 import Orientation from 'react-native-orientation-locker';
 import {LocaleConfig} from 'react-native-calendars';
 
@@ -52,11 +49,5 @@ Modal.defaultProps.deviceHeight = Math.max(width, height);
 Modal.defaultProps.statusBarTranslucent = true;
 Modal.defaultProps.backdropTransitionOutTiming = 0;
 Modal.defaultProps.hideModalContentWhileAnimating = true;
-
-getDynamicLinks()
-  .getInitialLink()
-  .then(async res => {
-    await AsyncStorage.setItem(ASYNC_STORAGE_KEY.DEEP_LINK, res ? JSON.stringify(res) : '');
-  });
 
 AppRegistry.registerComponent(appName, () => App);

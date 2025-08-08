@@ -1,6 +1,5 @@
 import {BottomSheetModalProvider} from '@gorhom/bottom-sheet';
 import NetInfo from '@react-native-community/netinfo';
-import {getDynamicLinks} from '@react-native-firebase/dynamic-links';
 import {
   NavigationContainer,
   NavigationContainerRef,
@@ -47,46 +46,54 @@ const App = () => {
     }
   };
 
-  const prefixes = ['https://wisemobileapplink.page.link'];
+  const prefixes = ['https://cafe.wisemobile.kr'];
   const linking = {
     prefixes,
-    subscribe(listener: any) {
-      try {
-        const onReceiveURL = async ({url}: {url: string}) => {
+    subscribe(listener: (url: string) => void) {
+      const onReceiveURL = async (url: string) => {
+        if (!url) {
+          return;
+        }
+        try {
           if (navigationRef.current?.getCurrentRoute()?.name === ROUTE_KEY.ParkingDetails) {
             navigationRef.current.goBack();
             await sleep(200);
           }
-          navigationRef?.current?.navigate(ROUTE_KEY.ParkingDetails, {
-            id: parseInt(url?.split('=')[1], 10),
-          });
-          return listener(url);
-        };
-        const dynamicLinksListener = getDynamicLinks().onLink((link: any) => {
-          return onReceiveURL(link);
-        });
-        const sub = Linking.addEventListener('url', link => {
-          if (link.url.startsWith('/link')) {
-            return;
-          }
-          onReceiveURL(link);
-        });
 
-        return () => {
-          dynamicLinksListener();
-          sub.remove();
-        };
-      } catch (error) {}
+          // 👇 URL 파싱 방식을 안정적인 문자열 처리로 변경합니다.
+          const domain = 'https://cafe.wisemobile.kr';
+          let pathname = url;
+          if (url.startsWith(domain)) {
+            // domain 부분을 잘라내어 "/parking/123" 같은 경로만 남깁니다.
+            pathname = url.substring(domain.length);
+          }
+
+          const pathParts = pathname.split('/'); // => ["", "parking", "123"]
+          // 👆 여기까지 변경
+
+          if (pathParts[1] === 'parking' && pathParts[2]) {
+            const parkingId = parseInt(pathParts[2], 10);
+            if (!isNaN(parkingId)) {
+              navigationRef.current?.navigate(ROUTE_KEY.ParkingDetails, {
+                id: parkingId,
+              });
+            }
+          }
+        } catch (e) {
+          console.error('[DeepLink] URL 파싱 에러:', e);
+        }
+        listener(url);
+      };
+
+      const subscription = Linking.addEventListener('url', ({url}) => onReceiveURL(url));
+
+      return () => {
+        subscription.remove();
+      };
     },
     async getInitialURL() {
-      const dynamicLinkInitialURL = await getDynamicLinks().getInitialLink();
-      if (dynamicLinkInitialURL?.url) {
-        return dynamicLinkInitialURL?.url;
-      }
+      // 앱이 꺼져있을 때 링크로 실행되면 초기 URL을 가져옵니다.
       const initialURL = await Linking.getInitialURL();
-      if (!initialURL || initialURL.startsWith('/link')) {
-        return;
-      }
       return initialURL;
     },
   };

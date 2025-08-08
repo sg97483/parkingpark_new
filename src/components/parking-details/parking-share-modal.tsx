@@ -14,7 +14,6 @@ import Share, {ShareSingleOptions} from 'react-native-share';
 import {getNumberWithCommas} from '~utils/numberUtils';
 import KakaoShareLink from 'react-native-kakao-share-link';
 import {ParkingProps} from '~constants/types';
-import axios from 'axios';
 
 interface Props {
   parkignID: number;
@@ -53,9 +52,12 @@ const ParkingShareModal = forwardRef((props: Props, ref) => {
   );
 
   useEffect(() => {
-    genLinkShare(
-      `http://cafe.wisemobile.kr/imobile/partner_list/theme_detail_view_facebook.php?id=${parkignID}`,
-    );
+    if (parkignID) {
+      // 새로운 긴 딥링크 주소를 직접 생성합니다.
+      const newLongLink = `https://cafe.wisemobile.kr/parking/${parkignID}`;
+      setLinkShare(newLongLink);
+      setIsLoading(false);
+    }
   }, [parkignID]);
 
   const getAddress = (): string => {
@@ -90,28 +92,6 @@ const ParkingShareModal = forwardRef((props: Props, ref) => {
     } else {
       return '';
     }
-  };
-
-  const genLinkShare = async (link: string) => {
-    setIsLoading(true);
-    const API_KEY = 'AIzaSyCts2-_uJS0UxyrBzGI_RmjB-RdC6m-1F4';
-    const URL = `https://firebasedynamiclinks.googleapis.com/v1/shortLinks?key=${API_KEY}`;
-    const body = {
-      dynamicLinkInfo: {
-        domainUriPrefix: 'https://wisemobileapplink.page.link',
-        link: link,
-        androidInfo: {
-          androidPackageName: 'kr.wisemobile.parking',
-        },
-        iosInfo: {
-          iosBundleId: 'kr.wisemobile.parking',
-        },
-      },
-    };
-    const res = await axios.post(URL, body);
-    setLinkShare(res.data?.shortLink);
-    setIsLoading(false);
-    return res.data?.shortLink;
   };
 
   return (

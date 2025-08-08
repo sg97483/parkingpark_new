@@ -7,6 +7,8 @@
 #import <React/RCTRootView.h>
 #import <React/RCTSourceCode.h>
 
+#import <React/RCTLinkingManager.h>
+
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
@@ -46,6 +48,17 @@
   }
   return NO;
 }
+
+// 👇 2. 이 메소드 전체를 추가합니다. (Universal Links 처리용)
+- (BOOL)application:(UIApplication *)application
+   continueUserActivity:(NSUserActivity *)userActivity
+     restorationHandler:(void (^)(NSArray<id<UIUserActivityRestoring>> * _Nullable))restorationHandler
+{
+  return [RCTLinkingManager application:application
+                   continueUserActivity:userActivity
+                     restorationHandler:restorationHandler];
+}
+// 👆 여기까지 추가
 
 - (NSURL *)bundleURL
 {
