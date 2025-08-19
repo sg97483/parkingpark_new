@@ -221,16 +221,16 @@ const Login = memo((props: RootStackScreenProps<'Login'>) => {
       password: encrypt(password),
     };
 
-    getMessaging()
-      .getToken()
-      .then(fcmValue => {
-        if (!FCMToken) {
-          dispatch(cacheFCMToken(fcmValue));
-        }
-      })
-      .catch(error => {
-        console.log('🚀 ~ handleLoginEmail ~ error:', error);
-      });
+    let fcmTokenValue = '';
+
+    try {
+      fcmTokenValue = await getMessaging().getToken();
+      if (fcmTokenValue) {
+        dispatch(cacheFCMToken(fcmTokenValue));
+      }
+    } catch (error) {
+      console.log('FCM Token retrieval failed:', error);
+    }
 
     loginWithEmailAndPass(body)
       .unwrap()
@@ -245,10 +245,15 @@ const Login = memo((props: RootStackScreenProps<'Login'>) => {
               parkingLotId: res?.parkingLotId,
             }),
           );
-          await updateUserFCMToken({
-            memberId: res?.id as any,
-            fcmToken: FCMToken,
-          });
+
+          console.log('FCM Token to be updated:', FCMToken); // 💡 이 코드를 추가
+
+          if (res?.id && fcmTokenValue) {
+            await updateUserFCMToken({
+              memberId: res?.id as any,
+              fcmToken: fcmTokenValue,
+            });
+          }
           navigation.goBack();
         } else {
           showMessage({

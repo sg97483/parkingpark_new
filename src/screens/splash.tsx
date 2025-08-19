@@ -257,6 +257,20 @@ const Splash = memo((props: RootStackScreenProps<'Splash'>) => {
     initApp();
   }, [databaseVersion, versionInfo, myFCMToken, userID]);
 
+  // 💡 FCM 토큰 갱신 리스너만 담당하는 새로운 useEffect 훅 추가
+  useEffect(() => {
+    if (userID) {
+      // 로그인 상태일 때만 리스너를 설정
+      const onTokenRefreshListener = getMessaging().onTokenRefresh(async token => {
+        console.log('FCM Token was refreshed:', token);
+        dispatch(cacheFCMToken(token));
+        await updateUserFCMToken({fcmToken: token, memberId: String(userID)});
+      });
+
+      return () => onTokenRefreshListener(); // 리스너 정리
+    }
+  }, [userID]); // userID가 변경될 때마다 실행
+
   return (
     <FixedContainer edges={['left', 'right']} style={styles.container}>
       <StatusBar translucent backgroundColor={colors.transparent} />

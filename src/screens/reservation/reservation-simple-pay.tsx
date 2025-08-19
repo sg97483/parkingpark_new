@@ -498,6 +498,11 @@ const ReservationSimplePay = memo((props: RootStackScreenProps<'ReservationSimpl
         <CustomText
           string="(입차 후 결제로 인한 현장결제 시 취소 불가)"
           color={colors.red}
+          size={FONT.CAPTION}
+        />
+        <CustomText
+          string="월주차를 제외한 모든 주차권은 한번의 입출차에 하나의 할인권만 적용(수시입출차불가, 무료회차 미포함)되기에 출차후 재입차하여 주차장 이용시 현장결제 요금이 발생할수 있습니다."
+          color={colors.red}
           textStyle={{
             marginVertical: heightScale(3),
           }}

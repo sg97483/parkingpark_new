@@ -173,18 +173,12 @@ const MapView: React.FC = memo(() => {
       return;
     }
 
+    // UI를 즉시 보여주는 로직
     setSelectedParkingLot(item);
+    setShowQuickView(true);
     setIsSearchResult(false);
 
-    const zoomInfo = getLocationDelta(item.lat, item.lng, 500);
-    const regionToAnimate = {
-      latitude: item.lat - 0.0019,
-      longitude: item.lng - 0.0022,
-      latitudeDelta: zoomInfo.latitudeDelta,
-      longitudeDelta: zoomInfo.longitudeDelta,
-    };
-    mapRef.current?.animateRegionTo({...regionToAnimate, duration: 1000});
-
+    // 주변 주차장 계산 로직
     const clickedItem = item;
     const nearbyPartners = listDataRef.current.filter(p => p.id !== clickedItem.id);
 
@@ -200,8 +194,24 @@ const MapView: React.FC = memo(() => {
 
     const finalRecommendList = [clickedItem, ...partnersWithDistance.slice(0, 4)];
     setRecommendParkingList(finalRecommendList);
-    setShowQuickView(true);
   }, []);
+
+  useEffect(() => {
+    if (selectedParkingLot && selectedParkingLot.lat && selectedParkingLot.lng) {
+      const zoomInfo = getLocationDelta(selectedParkingLot.lat, selectedParkingLot.lng, 500);
+      const regionToAnimate = {
+        // (수직 보정) 줌 레벨의 25%만큼 마커를 위로 올립니다.
+        latitude: selectedParkingLot.lat - zoomInfo.latitudeDelta * 0.4,
+
+        // 👇 (수평 보정) 줌 레벨에 비례하여 마커를 오른쪽으로 살짝 이동시킵니다.
+        longitude: selectedParkingLot.lng - zoomInfo.longitudeDelta * 0.5,
+
+        latitudeDelta: zoomInfo.latitudeDelta,
+        longitudeDelta: zoomInfo.longitudeDelta,
+      };
+      mapRef.current?.animateRegionTo({...regionToAnimate, duration: 1000});
+    }
+  }, [selectedParkingLot]);
 
   const handleKakaoNavigation = () => {
     const installLink = 'https://pf.kakao.com/_Sxdjxij/chat?...';
