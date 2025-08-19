@@ -46,37 +46,44 @@ const App = () => {
     }
   };
 
-  const prefixes = ['https://cafe.wisemobile.kr'];
+  const prefixes = ['https://cafe.wisemobile.kr', 'parkingpark://'];
   const linking = {
     prefixes,
+    config: {
+      screens: {
+        [ROUTE_KEY.ParkingDetails]: 'parking/:id',
+      },
+    },
     subscribe(listener: (url: string) => void) {
       const onReceiveURL = async (url: string) => {
         if (!url) {
           return;
         }
+
         try {
           if (navigationRef.current?.getCurrentRoute()?.name === ROUTE_KEY.ParkingDetails) {
             navigationRef.current.goBack();
             await sleep(200);
           }
 
-          // 👇 URL 파싱 방식을 안정적인 문자열 처리로 변경합니다.
-          const domain = 'https://cafe.wisemobile.kr';
-          let pathname = url;
-          if (url.startsWith(domain)) {
-            // domain 부분을 잘라내어 "/parking/123" 같은 경로만 남깁니다.
-            pathname = url.substring(domain.length);
+          // ✅✅✅ 이 부분을 아래의 더 안정적인 코드로 교체합니다. ✅✅✅
+          let pathString = '';
+          if (url.startsWith('https://cafe.wisemobile.kr/')) {
+            pathString = url.split('cafe.wisemobile.kr/')[1]; // 결과: "parking/123"
+          } else if (url.startsWith('parkingpark://')) {
+            pathString = url.split('parkingpark://')[1]; // 결과: "parking/123"
           }
 
-          const pathParts = pathname.split('/'); // => ["", "parking", "123"]
-          // 👆 여기까지 변경
-
-          if (pathParts[1] === 'parking' && pathParts[2]) {
-            const parkingId = parseInt(pathParts[2], 10);
-            if (!isNaN(parkingId)) {
-              navigationRef.current?.navigate(ROUTE_KEY.ParkingDetails, {
-                id: parkingId,
-              });
+          if (pathString) {
+            const pathParts = pathString.split('/'); // 결과: ["parking", "123"]
+            // 이제 pathParts[0]이 'parking'인지 확인합니다.
+            if (pathParts[0] === 'parking' && pathParts[1]) {
+              const parkingId = parseInt(pathParts[1], 10);
+              if (!isNaN(parkingId)) {
+                navigationRef.current?.navigate(ROUTE_KEY.ParkingDetails, {
+                  id: parkingId,
+                });
+              }
             }
           }
         } catch (e) {
@@ -92,7 +99,6 @@ const App = () => {
       };
     },
     async getInitialURL() {
-      // 앱이 꺼져있을 때 링크로 실행되면 초기 URL을 가져옵니다.
       const initialURL = await Linking.getInitialURL();
       return initialURL;
     },

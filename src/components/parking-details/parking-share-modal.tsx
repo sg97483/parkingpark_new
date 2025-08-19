@@ -53,9 +53,9 @@ const ParkingShareModal = forwardRef((props: Props, ref) => {
 
   useEffect(() => {
     if (parkignID) {
-      // 새로운 긴 딥링크 주소를 직접 생성합니다.
-      const newLongLink = `https://cafe.wisemobile.kr/parking/${parkignID}`;
-      setLinkShare(newLongLink);
+      // 👇 주소를 landing.html로 변경하고, parkingId를 파라미터로 넘겨줍니다.
+      const newLink = `https://cafe.wisemobile.kr/imobile/landing.php?parkingId=${parkignID}`;
+      setLinkShare(newLink);
       setIsLoading(false);
     }
   }, [parkignID]);
