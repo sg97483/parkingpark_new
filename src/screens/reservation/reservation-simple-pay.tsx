@@ -41,11 +41,22 @@ import {getUserPointAndChange} from '~utils/getUserPointAndChange';
 import {getDayName, getFullDayName, getFullHourName} from '~utils/hourUtils';
 import {getNumberWithCommas} from '~utils/numberUtils';
 
+import {useParkingDetailsQuery} from '~services/parkingServices';
+import {ROUTE_KEY} from '~navigators/router';
+
 const ReservationSimplePay = memo((props: RootStackScreenProps<'ReservationSimplePay'>) => {
   const {navigation, route} = props;
   const parkId = route?.params?.parkId;
   const parkTicketName = route?.params?.parkTicketName;
   const requirements = route?.params?.requirements;
+
+  // parkId를 사용해 주차장 상세 정보를 가져옵니다.
+  const {data: parkingLotData} = useParkingDetailsQuery(
+    {id: Number(parkId)},
+    {
+      skip: !parkId,
+    },
+  );
 
   const holidayList: string[] = solar;
   const weekendNameList: string[] = ['토', '일'];
@@ -235,6 +246,21 @@ const ReservationSimplePay = memo((props: RootStackScreenProps<'ReservationSimpl
     }
   };
 
+  const handleViewParkingLot = () => {
+    showMessage({
+      message: '해당 주차권 상품이 변경되어 간편예약이 아닌 해당주차장 진입후 결제 가능합니다',
+    });
+    if (parkingLotData) {
+      navigation.navigate(ROUTE_KEY.Reservation, {
+        parkingLot: parkingLotData,
+      });
+    } else {
+      showMessage({
+        message: '주차장 정보를 불러오는 중입니다. 잠시 후 다시 시도해주세요.',
+      });
+    }
+  };
+
   const handleSubmit = () => {
     // 선택한 주차권의 매진 날짜 제한을 확인
     const ticketLimitDates = selectedTicket?.ticketdayLimit
@@ -275,9 +301,20 @@ const ReservationSimplePay = memo((props: RootStackScreenProps<'ReservationSimpl
     }
     if (Number(ticketAmount) == 0) {
       showMessage({
-        message:
-          '해당 주차권 상품이 변경되어 간편예약이 아닌 메인화면 해당주차장 진입후 결제 가능합니다',
+        message: '해당 주차권 상품이 변경되어 간편예약이 아닌 해당주차장 진입후 결제 가능합니다',
       });
+
+      // 주차장 데이터가 이미 로드된 경우에만 이동
+      if (parkingLotData) {
+        navigation.navigate(ROUTE_KEY.Reservation, {
+          parkingLot: parkingLotData,
+        });
+      } else {
+        // 데이터가 아직 로드되지 않았을 경우, 사용자에게 메시지를 보여줍니다.
+        showMessage({
+          message: '주차장 정보를 불러오는 중입니다. 잠시 후 다시 시도해주세요.',
+        });
+      }
       return;
     }
     if (Number(ticketAmount) <= 0) {
@@ -478,6 +515,18 @@ const ReservationSimplePay = memo((props: RootStackScreenProps<'ReservationSimpl
       });
   };
 
+  const handleNavigateToReservation = () => {
+    if (parkingLotData) {
+      navigation.navigate(ROUTE_KEY.Reservation, {
+        parkingLot: parkingLotData,
+      });
+    } else {
+      showMessage({
+        message: '주차장 정보를 불러오는 중입니다. 잠시 후 다시 시도해주세요.',
+      });
+    }
+  };
+
   useEffect(() => {
     if (payInfo && payInfo?.limitedNumber <= 0) {
       showMessage({
@@ -517,7 +566,12 @@ const ReservationSimplePay = memo((props: RootStackScreenProps<'ReservationSimpl
           style={{
             marginVertical: heightScale(10),
           }}>
-          <MenuItem title="주차장명:" content={<CustomText string={payInfo?.garageName || ''} />} />
+          <TouchableOpacity onPress={handleNavigateToReservation}>
+            <MenuItem
+              title="주차장명:"
+              content={<CustomText string={payInfo?.garageName || ''} />}
+            />
+          </TouchableOpacity>
           <MenuItem title="주차권명:" content={<CustomText string={parkTicketName} />} />
           <MenuItem
             title="주차권금액:"
@@ -679,8 +733,14 @@ const ReservationSimplePay = memo((props: RootStackScreenProps<'ReservationSimpl
         </HStack>
 
         {/* Confirm */}
-        <TouchableOpacity onPress={handleSubmit} style={styles.confirmButtonWrapper}>
-          <CustomText string="결제하기" color={colors.white} family={FONT_FAMILY.SEMI_BOLD} />
+        <TouchableOpacity
+          onPress={Number(ticketAmount) === 0 ? handleViewParkingLot : handleSubmit}
+          style={styles.confirmButtonWrapper}>
+          <CustomText
+            string={Number(ticketAmount) === 0 ? '주차상품 변경으로 주차권 다시보기' : '결제하기'}
+            color={colors.white}
+            family={FONT_FAMILY.SEMI_BOLD}
+          />
         </TouchableOpacity>
       </ScrollView>
 
