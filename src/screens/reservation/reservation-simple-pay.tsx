@@ -572,7 +572,25 @@ const ReservationSimplePay = memo((props: RootStackScreenProps<'ReservationSimpl
               content={<CustomText string={payInfo?.garageName || ''} />}
             />
           </TouchableOpacity>
-          <MenuItem title="주차권명:" content={<CustomText string={parkTicketName} />} />
+          <TouchableOpacity onPress={handleNavigateToReservation}>
+            <MenuItem
+              title="주차권명:"
+              content={
+                <HStack style={{alignItems: 'center'}}>
+                  <CustomText string={parkTicketName} />
+                  <CustomText
+                    string="(주차권 변경하기)"
+                    color={colors.darkGray}
+                    size={FONT.CAPTION}
+                    textStyle={{
+                      marginLeft: widthScale(5),
+                      textDecorationLine: 'underline',
+                    }}
+                  />
+                </HStack>
+              }
+            />
+          </TouchableOpacity>
           <MenuItem
             title="주차권금액:"
             content={

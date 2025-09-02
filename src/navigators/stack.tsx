@@ -218,6 +218,7 @@ import TutorialSlider from '~screens/tutorial-slider';
 import TestScreen from '~screens/TestScreen';
 import CancelRoutePaymentConfirmation from '~screens/usage-history/cancel-route-payment-confirmation';
 import ParkingPaymentReceipt from '~screens/usage-history/parking-payment-receipt';
+import ParkingPaymentReceipt2 from '~screens/usage-history/parking-payment-receipt2';
 import UsageHistory from '~screens/usage-history/usage-history';
 import UsageHistoryOld from '~screens/usage-history/usage-history-old';
 import ValetInfo from '~screens/valte-info';
@@ -295,6 +296,7 @@ export type RootStackScreensParams = {
     parkingLot: ParkingProps;
   };
   ParkingPaymentReceipt: {tid: string};
+  ParkingPaymentReceipt2: {tid: string};
   ValetParkingAtIncheon: undefined;
   DirectIndoorParkingAtIncheon: undefined;
   DirectIndoorParkingAtGimpo: undefined;
@@ -908,6 +910,7 @@ const Stack = () => {
       <Screen name={ROUTE_KEY.PointManagementNew} component={PointManagementNew} />
       <Screen name={ROUTE_KEY.Reservation} component={Reservation} />
       <Screen name={ROUTE_KEY.ParkingPaymentReceipt} component={ParkingPaymentReceipt} />
+      <Screen name={ROUTE_KEY.ParkingPaymentReceipt2} component={ParkingPaymentReceipt2} />
       <Screen name={ROUTE_KEY.ValetParkingAtIncheon} component={ValetParkingAtIncheon} />
       <Screen
         name={ROUTE_KEY.DirectIndoorParkingAtIncheon}

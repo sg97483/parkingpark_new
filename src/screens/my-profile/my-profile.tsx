@@ -158,17 +158,11 @@ const MyProfile: React.FC = memo(() => {
 
         <MyCoupon />
 
-        <Divider
-          style={{
-            marginBottom: heightScale1(0),
-          }}
-        />
-
-        <ScrollView style={{paddingHorizontal: widthScale1(20)}}>
+        {/* <ScrollView style={{paddingHorizontal: widthScale1(20)}}>
           <Pressable onPress={handlerulletBannerPress}>
             <Image source={IMAGES.rullet_banner} style={styles.image2} />
           </Pressable>
-        </ScrollView>
+        </ScrollView>*/}
 
         <Divider
           style={{

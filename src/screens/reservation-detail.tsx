@@ -223,6 +223,23 @@ const ReservationDetail = memo((props: RootStackScreenProps<'ReservationDetail'>
               buttonStyle={{marginLeft: widthScale(10)}}
             />
 
+            <HStack style={styles.rowContainer}>
+              <CustomText string={strings.reservation_detail.amount_of_payment2} />
+              <TouchableOpacity
+                onPress={() =>
+                  navigation.navigate(ROUTE_KEY.ParkingPaymentReceipt2, {
+                    tid: reservation?.id.toString(),
+                  })
+                }>
+                <CustomText
+                  string={'결제내역 영수증보기'}
+                  family={FONT_FAMILY.SEMI_BOLD}
+                  color={colors.blue} // 클릭 가능한 링크처럼 보이도록 색상 변경
+                  textStyle={{textDecorationLine: 'underline'}} // 밑줄 추가
+                />
+              </TouchableOpacity>
+            </HStack>
+
             <RowItem
               title={strings.reservation_detail.reservation_for_use}
               value={`${getNumberWithCommas(Number(reservation?.usePoint))}${

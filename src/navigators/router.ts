@@ -49,6 +49,7 @@ export const ROUTE_KEY = createEnum({
   PointManagementNew: 'PointManagementNew',
   Reservation: 'Reservation',
   ParkingPaymentReceipt: 'ParkingPaymentReceipt',
+  ParkingPaymentReceipt2: 'ParkingPaymentReceipt2',
   ValetParkingAtIncheon: 'ValetParkingAtIncheon',
   DirectIndoorParkingAtIncheon: 'DirectIndoorParkingAtIncheon',
   DirectIndoorParkingAtGimpo: 'DirectIndoorParkingAtGimpo',

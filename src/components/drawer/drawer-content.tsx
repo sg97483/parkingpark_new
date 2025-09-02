@@ -126,9 +126,11 @@ const DrawerContent: React.FC = memo(() => {
       onPress: () => navigation.navigate(ROUTE_KEY.EventBanner),
     },
     {
+      /*{
       name: strings.drawer.event_game,
       icon: ICONS.user_guide,
       onPress: () => navigation.navigate(ROUTE_KEY.EventGame),
+    },*/
     },
   ];
 
