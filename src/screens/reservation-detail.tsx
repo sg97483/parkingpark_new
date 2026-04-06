@@ -1,6 +1,6 @@
 import moment from 'moment';
-import React, {memo, useRef} from 'react';
-import {Image, ScrollView, StyleSheet, TouchableOpacity, View, ViewStyle} from 'react-native';
+import React, {memo, useEffect, useRef} from 'react';
+import {Alert, Image, ScrollView, StyleSheet, TouchableOpacity, View, ViewStyle} from 'react-native';
 import {showMessage} from 'react-native-flash-message';
 import {ICONS} from '~/assets/images-path';
 import CustomHeader from '~components/custom-header';
@@ -11,11 +11,12 @@ import AutoPayPopup, {AutoPayRefs} from '~components/usage-history.tsx/autopay-p
 import CancelPaymentRecheckPopup, {
   CancelPaymentRecheckRefs,
 } from '~components/usage-history.tsx/cancel-payment-recheck-popup';
-import {PADDING, PADDING_HEIGHT} from '~constants/constant';
+import {BASE_URL, PADDING, PADDING_HEIGHT} from '~constants/constant';
 import {FONT, FONT_FAMILY, IS_ACTIVE} from '~constants/enum';
 import {strings} from '~constants/strings';
 import {ROUTE_KEY} from '~navigators/router';
 import {RootStackScreenProps} from '~navigators/stack';
+import {useParkingDetailsQuery, useTicketInfoQuery} from '~services/parkingServices';
 import {useRequestRevocableQuery} from '~services/usageHistoryServices';
 import {useAppSelector} from '~store/storeHooks';
 import {colors} from '~styles/colors';
@@ -70,6 +71,10 @@ const ReservationDetail = memo((props: RootStackScreenProps<'ReservationDetail'>
 
   const reservation = route?.params?.item;
 
+  useEffect(() => {
+    console.log('====== NAVIGATING to > ReservationDetail', {reservationId: reservation?.id});
+  }, [reservation?.id]);
+
   const userToken = useAppSelector(state => state?.userReducer?.userToken);
 
   const {data: revocable} = useRequestRevocableQuery({
@@ -77,6 +82,22 @@ const ReservationDetail = memo((props: RootStackScreenProps<'ReservationDetail'>
     memberID: userToken?.id,
     memberPass: userToken?.password,
   });
+
+  // 주차장 정보 가져오기 (Amano API 호출용)
+  const {data: parkingLot} = useParkingDetailsQuery(
+    {id: Number(reservation?.parkingLotId)},
+    {
+      skip: !reservation?.parkingLotId,
+    },
+  );
+
+  // 티켓 정보 가져오기 (Amano API 호출용)
+  const {data: parkingTickets} = useTicketInfoQuery(
+    {id: Number(reservation?.parkingLotId)},
+    {
+      skip: !reservation?.parkingLotId,
+    },
+  );
 
   const cancelPopupRef = useRef<CancelPaymentRecheckRefs>(null);
 
@@ -96,11 +117,11 @@ const ReservationDetail = memo((props: RootStackScreenProps<'ReservationDetail'>
     } else {
       let stDtm =
         getYearMonthDateFromDtm(reservation?.reservedStDtm) +
-        ` (${getDayName(moment(reservation?.reservedStDtm, 'YYYYMMDDHHmm').valueOf())})`;
+        ` (${getDayName(moment(reservation?.reservedStDtm || '202601010000', 'YYYYMMDDHHmm').valueOf())})`;
 
       let edDtm =
         getYearMonthDateFromDtm(reservation?.reservedEdDtm) +
-        ` (${getDayName(moment(reservation?.reservedEdDtm, 'YYYYMMDDHHmm').valueOf())})`;
+        ` (${getDayName(moment(reservation?.reservedEdDtm || '202601010000', 'YYYYMMDDHHmm').valueOf())})`;
       if (stDtm === edDtm) {
         return stDtm;
       } else {
@@ -110,7 +131,93 @@ const ReservationDetail = memo((props: RootStackScreenProps<'ReservationDetail'>
     }
   };
 
-  const handleCancel = () => {
+  const AMANO_CANCEL_ERROR_MESSAGE_MAP: Record<string, string> = {
+    ERR_AKC_8002: '요청 처리 중 일시적인 문제가 발생했습니다.',
+    ERR_AKC_8003: '요청 데이터에 오류가 있습니다. 올바른 파라미터가 아닙니다.',
+    ERR_AKC_8104: '차량번호를 올바르게 입력해 주세요.',
+    ERR_AKC_8624: '이미 주차권이 완료된 차량입니다.',
+  };
+
+  const handleAmanoCancelAPI = async (): Promise<{ok: boolean}> => {
+    const isAmanoAgency = parkingLot?.agency === '아마노코리아';
+    const hasMTicketTimeStart =
+      parkingLot?.MTicketTimeStart && parkingLot?.MTicketTimeStart.trim() !== '';
+    const selectedTicket = parkingTickets?.find(
+      ticket => ticket.ticketName === reservation?.TotalTicketType,
+    );
+    const amanoGdsId = selectedTicket?.amano_gds_id;
+    const ticketType = selectedTicket?.ticket_type;
+
+    const gdsTrdId = reservation?.moid || reservation?.tid;
+
+    if (!isAmanoAgency || !hasMTicketTimeStart || !amanoGdsId || !gdsTrdId) {
+      return {ok: true};
+    }
+
+    const isSeason = ticketType === '정기권';
+    const cancelDate = moment().utc().format('YYYY-MM-DDTHH:mm:ss');
+    const amanoBody = {
+      plotId: parkingLot?.MTicketTimeStart,
+      gdsId: amanoGdsId,
+      cancelDate: cancelDate,
+      cnclRsn: '사용자 취소',
+    };
+
+    const AMANO_BASE = `${BASE_URL.replace(/\/$/, '')}/api/amano`;
+    const amanoUrl = isSeason
+      ? `${AMANO_BASE}/seasonpasses/purchase/${encodeURIComponent(gdsTrdId)}/cancel`
+      : `${AMANO_BASE}/parkingtickets/purchase/${encodeURIComponent(gdsTrdId)}/cancel`;
+
+    try {
+      const res = await fetch(amanoUrl, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(amanoBody),
+      });
+
+      const raw = await res.text();
+      let json: any = {};
+      try {
+        json = raw ? JSON.parse(raw) : {};
+      } catch {
+        json = {};
+      }
+
+      const ok = res.ok && (json.success === undefined || json.success === true);
+      if (!ok) {
+        const errCode = (
+          json?.errCode ||
+          json?.err_code ||
+          json?.errorCode ||
+          json?.code ||
+          json?.rsltCd ||
+          json?.data?.errCode ||
+          ''
+        ).toString();
+        const errMsg =
+          json?.message ||
+          json?.rsltMsg ||
+          json?.msg ||
+          raw ||
+          `주차권 취소 실패 (code: ${errCode || res.status})`;
+        const mapped = errCode ? AMANO_CANCEL_ERROR_MESSAGE_MAP[errCode] : undefined;
+        const displayMsg =
+          (mapped || errMsg) + '\n\n(관련 문의사항이 있을시 아래 문의하기 부탁드립니다.)';
+        Alert.alert('주차권 취소 실패', displayMsg, [{text: '확인'}]);
+        return {ok: false};
+      }
+      return {ok: true};
+    } catch (error: any) {
+      Alert.alert(
+        '주차권 취소 오류',
+        '주차권 취소 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.\n\n(관련 문의사항이 있을시 아래 문의하기 부탁드립니다.)',
+        [{text: '확인'}],
+      );
+      return {ok: false};
+    }
+  };
+
+  const handleCancel = async () => {
     if (!reservation?.reservedStDtm || reservation?.reservedStDtm?.length < 8) {
       showMessage({
         message: '취소할 수 없습니다. 고객센터 혹은 문의게시판에 문의부탁드립니다.',
@@ -134,10 +241,12 @@ const ReservationDetail = memo((props: RootStackScreenProps<'ReservationDetail'>
     } else {
       if (reservation?.TotalTicketType) {
         const currentDateTime = moment().valueOf();
-        const reservedTime = moment(reservation?.reservedStDtm, 'YYYYMMDDHHmm').valueOf();
+        const reservedTime = moment(reservation?.reservedStDtm || '202601010000', 'YYYYMMDDHHmm').valueOf();
 
         if (moment(currentDateTime).isAfter(reservedTime)) {
           if (revocable && revocable?.inCarCheck === IS_ACTIVE.YES) {
+            const cancelResult = await handleAmanoCancelAPI();
+            if (!cancelResult.ok) return;
             helpofflinCancelReservationRef?.current?.show();
           } else {
             showMessage({
@@ -161,8 +270,15 @@ const ReservationDetail = memo((props: RootStackScreenProps<'ReservationDetail'>
     }
   };
 
-  const handleCancelOffline = () => {
+  const handleCancelOffline = async () => {
+    const cancelResult = await handleAmanoCancelAPI();
+    if (!cancelResult.ok) return;
     helpofflinCancelReservationRef?.current?.show();
+  };
+
+  const handleAmanoBeforeCancel = async () => {
+    const result = await handleAmanoCancelAPI();
+    return result.ok;
   };
 
   const shouldHideComponents = ['대기신청', '자동결제', '자동신청'].some(keyword =>
@@ -176,6 +292,7 @@ const ReservationDetail = memo((props: RootStackScreenProps<'ReservationDetail'>
   const shouldHideInquiryButton = ['월주차', '월연장', '자동결제', '자동신청', '대기신청'].some(
     keyword => reservation?.TotalTicketType?.includes(keyword),
   );
+
 
   return (
     <FixedContainer>
@@ -205,7 +322,7 @@ const ReservationDetail = memo((props: RootStackScreenProps<'ReservationDetail'>
             {/* 입차예정시간 */}
             <RowItem
               title={'입차예정시간'}
-              value={moment(reservation?.reservedStDtm, 'YYYYMMDDHHmm').format('HH시mm분')}
+              value={moment(reservation?.reservedStDtm || '202601010000', 'YYYYMMDDHHmm').format('HH시mm분')}
             />
 
             <RowItem
@@ -364,7 +481,7 @@ const ReservationDetail = memo((props: RootStackScreenProps<'ReservationDetail'>
         </View>
       </ScrollView>
 
-      {moment().isAfter(moment(reservation?.reservedStDtm, 'YYYYMMDDHHmm'))
+      {moment().isAfter(moment(reservation?.reservedStDtm || '202601010000', 'YYYYMMDDHHmm'))
         ? !shouldHideCancelButton &&
           !shouldHideComponents && (
             <PaddingHorizontalWrapper
@@ -457,7 +574,11 @@ const ReservationDetail = memo((props: RootStackScreenProps<'ReservationDetail'>
       )}
 
       {/* Cancel recheck popup */}
-      <CancelPaymentRecheckPopup ref={cancelPopupRef} onSuccess={() => navigation.goBack()} />
+      <CancelPaymentRecheckPopup
+        ref={cancelPopupRef}
+        onSuccess={() => navigation.goBack()}
+        onBeforeCancel={handleAmanoBeforeCancel}
+      />
 
       {/* AutoPay confirmation popup */}
       <AutoPayPopup ref={autoPayComfirmRef} onSuccess={() => navigation.goBack()} />

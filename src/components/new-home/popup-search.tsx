@@ -55,7 +55,7 @@ const PopupSearch = forwardRef(({}, ref: Ref<PopupSearchRef>) => {
       console.log('검색 키워드:', trimmedKeyword);
 
       const filterCondition =
-        'ticketPartnerYN = "Y" AND (garageName CONTAINS[c] $0 OR keyword CONTAINS[c] $0)';
+        'ticketPartnerYN = "Y" AND (garageName CONTAINS[c] $0 OR keyword CONTAINS[c] $0) AND (creditCardYN != "A" OR creditCardYN == nil)';
 
       if (trimmedKeyword === '서울역') {
         const mapLists = allData.filtered(filterCondition, trimmedKeyword).sorted([['id', false]]);
@@ -70,7 +70,9 @@ const PopupSearch = forwardRef(({}, ref: Ref<PopupSearchRef>) => {
         setDataMain(mapLists as any);
       }
 
-      const filteredData = allData.filtered('keyword CONTAINS[c] $0', trimmedKeyword).sorted([
+      const filteredData = allData
+        .filtered('(creditCardYN != "A" OR creditCardYN == nil) AND keyword CONTAINS[c] $0', trimmedKeyword)
+        .sorted([
         ['ticketPartnerYN', true], // DESC order
         ['paylank', true], // ASC order
       ]);

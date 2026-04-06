@@ -13,6 +13,30 @@ import {
 import {CarModel} from '~model/car-model';
 import {createFormDataToObject} from '~utils/index';
 
+type DbMetaResponse = {
+  total: number;
+  filteredTotal: number;
+};
+
+type DbPagedRequest = {
+  startIndex: number;
+  limitSize: number;
+  type: 'all' | 'filtered';
+};
+
+type DbPagedResponse<T = any> = {
+  total: number;
+  startIndex: number;
+  limitSize: number;
+  // Backend response meta for verifying limit application
+  requestedLimitSize?: number;
+  appliedLimitSize?: number;
+  limitSizeMax?: number;
+  hasNext: boolean;
+  nextStartIndex: number;
+  items: T[];
+};
+
 export const userServices = createApi({
   reducerPath: 'userServices',
   refetchOnMountOrArgChange: true,
@@ -583,6 +607,42 @@ export const userServices = createApi({
         return response?.update;
       },
     }),
+    getDbMeta: builder.query<DbMetaResponse, void>({
+      query: () => {
+        return {
+          url: 'db/meta',
+          method: 'GET',
+        };
+      },
+      transformResponse: (response: DbMetaResponse) => {
+        return {
+          total: Number(response?.total || 0),
+          filteredTotal: Number(response?.filteredTotal || 0),
+        };
+      },
+    }),
+    getDbPaged: builder.query<DbPagedResponse, DbPagedRequest>({
+      query: ({startIndex, limitSize, type}) => {
+        return {
+          url: 'db/getPaged',
+          method: 'GET',
+          params: {startIndex, limitSize, type},
+        };
+      },
+      transformResponse: (response: DbPagedResponse) => {
+        return {
+          total: Number(response?.total || 0),
+          startIndex: Number(response?.startIndex || 0),
+          limitSize: Number(response?.limitSize || 0),
+          requestedLimitSize: Number((response as any)?.requestedLimitSize || 0),
+          appliedLimitSize: Number((response as any)?.appliedLimitSize || 0),
+          limitSizeMax: Number((response as any)?.limitSizeMax || 0),
+          hasNext: Boolean(response?.hasNext),
+          nextStartIndex: Number(response?.nextStartIndex || 0),
+          items: Array.isArray(response?.items) ? response.items : [],
+        };
+      },
+    }),
     deleteAccount: builder.mutation<
       any,
       Partial<{
@@ -1032,6 +1092,8 @@ export const {
   useReadMyProfileMutation,
   useGetDatabaseVersionQuery,
   useGetVersionInfoQuery,
+  useLazyGetDbMetaQuery,
+  useLazyGetDbPagedQuery,
   useDeleteAccountMutation,
   useEGiveMoneyYNMutation,
   useFirebaseTokenUpdateMutation,

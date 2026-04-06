@@ -1,6 +1,6 @@
 import BottomSheet, {BottomSheetBackdrop, BottomSheetView} from '@gorhom/bottom-sheet';
 import {useNavigation} from '@react-navigation/native';
-import React, {memo, useMemo, useRef} from 'react';
+import React, {memo, useCallback, useMemo, useRef, useState} from 'react';
 import {Pressable, StatusBar, StyleSheet, Text, View} from 'react-native';
 import FastImage from 'react-native-fast-image';
 import {showMessage} from 'react-native-flash-message';
@@ -30,12 +30,15 @@ const QuickActionMenu: React.FC = memo(() => {
   const bottomSheetRef = useRef<BottomSheet>(null);
   const {CMemberID, userID} = userHook();
 
+  // ✅ [최적화] 바텀시트를 올리기 전까지는 API 호출을 하지 않도록 상태 추가
+  const [isActivated, setIsActivated] = useState(false);
+
   const {data: passengerDataRoad} = useGetMyRiderRoadQuery(
     {
       memberId: userID as number,
       id: CMemberID as number,
     },
-    {skip: !userID || !CMemberID},
+    {skip: !userID || !CMemberID || !isActivated, refetchOnFocus: false},
   );
 
   const {data: driverDataRoad} = useGetMyDriverRoadQuery(
@@ -43,12 +46,19 @@ const QuickActionMenu: React.FC = memo(() => {
       memberId: userID as number,
       id: CMemberID as number,
     },
-    {skip: !userID || !CMemberID},
+    {skip: !userID || !CMemberID || !isActivated, refetchOnFocus: false},
   );
 
   const [checkAuthDriverAndPassenger] = useCheckAuthDriverAndPassengerMutation();
 
   const dispatch = useAppDispatch();
+
+  // 사용자가 바텀시트를 움직일 때 호출되는 콜백
+  const handleSheetChange = useCallback((index: number) => {
+    if (index > 0 && !isActivated) {
+      setIsActivated(true);
+    }
+  }, [isActivated]);
 
   const isModeSelect = useMemo(() => {
     return (!passengerDataRoad?.startPlaceOut &&
@@ -93,6 +103,7 @@ const QuickActionMenu: React.FC = memo(() => {
       ref={bottomSheetRef}
       index={0}
       handleComponent={() => null}
+      onChange={handleSheetChange}
       backdropComponent={props => (
         <BottomSheetBackdrop
           {...props}

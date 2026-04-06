@@ -43,7 +43,7 @@ const ModalTimePicker = forwardRef(
           confirmText={'확인'}
           onCancel={hide}
           maximumDate={
-            maximumDate
+            maximumDate != null
               ? new Date(new Date().getTime() + maximumDate * 24 * 60 * 60 * 1000)
               : undefined
           }

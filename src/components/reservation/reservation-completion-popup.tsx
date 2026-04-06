@@ -192,7 +192,7 @@ const ReservationCompletionPopup = forwardRef((props: Props, ref) => {
           </HStack>
         </TouchableOpacity>
 
-        <TouchableOpacity
+        {/*<TouchableOpacity
           onPress={() => {
             hide();
             onRulletBannerPress && onRulletBannerPress();
@@ -235,7 +235,7 @@ const ReservationCompletionPopup = forwardRef((props: Props, ref) => {
               style={{width: 16, height: 16, resizeMode: 'contain'}}
             />
           </HStack>
-        </TouchableOpacity>
+        </TouchableOpacity>*/}
 
         <PaddingHorizontalWrapper containerStyles={{marginTop: 30, marginBottom: 42}}>
           <CustomButton

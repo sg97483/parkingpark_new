@@ -135,9 +135,10 @@ const MapView: React.FC = memo(() => {
       setCurrentCordinate({lat: data.lat, long: data.lng});
 
       const realm = await getRealm();
+      // creditCardYN === 'A' 인 주차장은 제외
       const matchedItemFromDB = realm
         .objects<ParkingMapProps>('Parking')
-        .filtered(`id == ${data.id}`)[0];
+        .filtered(`id == ${data.id} AND (creditCardYN != 'A' OR creditCardYN == nil)`)[0];
 
       const mainItem = {
         ...data,
@@ -153,6 +154,19 @@ const MapView: React.FC = memo(() => {
       };
       mapRef.current?.animateRegionTo({...regionToAnimate, duration: 1000});
 
+      // 카카오 검색 결과는 제휴 주차장 DB 매칭이 된 경우에만 하단 카드(QuickView)를 표시합니다.
+      // 비제휴 장소는 목적지 핀은 유지하고, 하단 카드만 숨깁니다.
+      const isKakaoSearch = mainItem.category === '카카오 검색';
+      const isAffiliatedResult =
+        mainItem.ticketPartnerYN === 'Y' && (!!matchedItemFromDB || !isKakaoSearch);
+      if (!isAffiliatedResult) {
+        setSelectedParkingLot(mainItem);
+        setIsSearchResult(true);
+        setRecommendParkingList([]);
+        setShowQuickView(false);
+        return;
+      }
+
       setSelectedParkingLot(mainItem);
       setIsSearchResult(true);
       setRecommendParkingList([mainItem]);
@@ -165,7 +179,32 @@ const MapView: React.FC = memo(() => {
       EMIT_EVENT.PING_ON_MAP,
       updateRecommendParkingList,
     );
-    return () => pingOnMap.remove();
+    const moveToLocation = DeviceEventEmitter.addListener(
+      EMIT_EVENT.MOVE_TO_LOCATION,
+      (data: {lat: number; lng: number}) => {
+        if (data && data.lat && data.lng && mapRef.current) {
+          const zoomInfo = getLocationDelta(data.lat, data.lng, 800);
+          const regionToAnimate = {
+            latitude: data.lat - 0.0019,
+            longitude: data.lng - 0.0022,
+            latitudeDelta: zoomInfo.latitudeDelta,
+            longitudeDelta: zoomInfo.longitudeDelta,
+          };
+          mapRef.current.animateRegionTo({...regionToAnimate, duration: 1000});
+          setCurrentCordinate({lat: data.lat, long: data.lng});
+          
+          // ✅ 좌표로 이동 시 하단 주차장 상세 정보 닫기
+          setSelectedParkingLot(null);
+          setShowQuickView(false);
+          setRecommendParkingList([]);
+          setIsSearchResult(false);
+        }
+      },
+    );
+    return () => {
+      pingOnMap.remove();
+      moveToLocation.remove();
+    };
   }, [updateRecommendParkingList]);
 
   const handleMarkerPress = useCallback((item: ParkingMapProps) => {

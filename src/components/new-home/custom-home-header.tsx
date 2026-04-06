@@ -128,7 +128,7 @@ const CustomHomeHeader: React.FC<Props> = props => {
       </View>
       <HStack style={styles.buttonWrapperStyle}>
         <HotPlaceButton
-          text="주말 핫플레이스 주차장 한눈에"
+          text="핫플레이스 주차장 한눈에"
           type="light-blue"
           icon={
             <Icons.ChevronRight

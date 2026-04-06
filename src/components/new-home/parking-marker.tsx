@@ -29,6 +29,10 @@ const ParkingMarker: React.FC<Props> = memo(props => {
     return null;
   }
 
+  // iOS 터치 안정성을 위한 명시적 zIndex 설정
+  // 제휴 주차장이 일반 주차장보다 위에 표시되도록 차등 적용
+  const baseZIndex = item.ticketPartnerYN === 'Y' ? 10 : 1;
+
   return (
     <NaverMapMarkerOverlay
       latitude={item.lat}
@@ -40,7 +44,7 @@ const ParkingMarker: React.FC<Props> = memo(props => {
       onTap={() => {
         onMarkerPress(item);
       }}
-      zIndex={isSelected ? 999 : undefined}
+      zIndex={isSelected ? 999 : baseZIndex}
     />
   );
 });

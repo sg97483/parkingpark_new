@@ -88,7 +88,12 @@ export const parkingServices = createApi({
         };
       },
       transformResponse: (response: {parkingTicket: TicketProps[]}) => {
-        return response?.parkingTicket || [];
+        const list = response?.parkingTicket || [];
+        // soldOutYn 필드 기본값을 'N'으로 보정
+        return list.map(t => ({
+          ...t,
+          soldOutYn: t.soldOutYn ?? 'N',
+        }));
       },
     }),
     getParkingLimit: builder.query<ParkingLimitProps | null, Partial<{parkingLotId: number}>>({

@@ -23,6 +23,7 @@ interface Props {
 const TicketItem: React.FC<Props> = memo(props => {
   const {item, onItemPress, selectedItem} = props;
 
+  // 매진 표시는 기존 로직(ticketLimit === 0)만 사용
   const isSoldOut = item?.ticketLimit === 0;
 
   const formatTicketDayLimit = (dateString: string): string => {

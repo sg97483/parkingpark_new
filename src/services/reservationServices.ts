@@ -57,6 +57,7 @@ export const reservationServices = createApi({
         requirements: string;
         TotalTicketType: string;
         payLocation?: string;
+        moid?: string; // 아마노 거래 ID
       }>
     >({
       query: ({
@@ -73,9 +74,13 @@ export const reservationServices = createApi({
         useCoupon,
         usePoint,
         usePointSklent,
+        moid,
       }) => {
+        const baseUrl = `sTicketParking/pay?memberId=${memberId}&memberPwd=${memberPwd}&parkId=${parkId}&stDtm=${stDtm}&edDtm=${edDtm}&usePoint=${usePoint}&usePointSklent=${usePointSklent}&useCoupon=${useCoupon}&payAmt=${payAmt}&agCarNumber=${agCarNumber}&requirements=${requirements}&TotalTicketType=${TotalTicketType}&payLocation=${payLocation}`;
+        const urlWithMoid = moid ? `${baseUrl}&moid=${moid}` : baseUrl;
+        
         return {
-          url: `sTicketParking/pay?memberId=${memberId}&memberPwd=${memberPwd}&parkId=${parkId}&stDtm=${stDtm}&edDtm=${edDtm}&usePoint=${usePoint}&usePointSklent=${usePointSklent}&useCoupon=${useCoupon}&payAmt=${payAmt}&agCarNumber=${agCarNumber}&requirements=${requirements}&TotalTicketType=${TotalTicketType}&payLocation=${payLocation}`,
+          url: urlWithMoid,
           method: 'POST',
           headers: {
             'Content-Type': 'application/x-www-form-urlencoded',

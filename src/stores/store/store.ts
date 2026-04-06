@@ -26,15 +26,6 @@ import rootReducer from '../reducers/rootReducer';
 
 // 미들웨어 정의
 export const rtkQueryErrorLogger: Middleware = (api: MiddlewareAPI) => next => action => {
-  action?.meta?.arg?.queryCacheKey &&
-    console.log(
-      `
-${action?.meta?.baseQueryMeta?.request?.url ? '\u001b[34m' : '\u001b[32m'}${
-        action?.meta?.arg?.queryCacheKey
-      }
-${action?.meta?.baseQueryMeta?.request?.url || ''}
-    `,
-    );
   if (isRejectedWithValue(action)) {
     console.log(
       `

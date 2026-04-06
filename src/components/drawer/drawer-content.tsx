@@ -25,10 +25,16 @@ const DrawerContent: React.FC = memo(() => {
 
   const userToken = useAppSelector(state => state?.userReducer?.userToken);
 
-  const {data: couponData} = useGetListCouponQuery({
-    id: userToken?.id,
-    pass: userToken?.password,
-  });
+  const {data: couponData} = useGetListCouponQuery(
+    {
+      id: userToken?.id,
+      pass: userToken?.password,
+    },
+    {
+      skip: !userToken?.id || !userToken?.password,
+      refetchOnFocus: false, // 드로어 포커스 시 자동 재호출 방지
+    },
+  );
 
   const drawerContent = [
     {

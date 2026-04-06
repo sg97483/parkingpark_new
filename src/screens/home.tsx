@@ -305,7 +305,12 @@ const Home = memo(() => {
       <MapView />
 
       {/* Event popup */}
-      <EventPopup ref={eventPopupRef} />
+      <EventPopup
+        ref={eventPopupRef}
+        onLocationPress={(lat, lng) => {
+          DeviceEventEmitter.emit(EMIT_EVENT.MOVE_TO_LOCATION, {lat, lng});
+        }}
+      />
 
       {/* Consent popup */}
       <ConsentPopup ref={consentPopupRef} />

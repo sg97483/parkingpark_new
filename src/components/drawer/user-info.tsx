@@ -29,7 +29,10 @@ const UserInfo: React.FC<Props> = memo(props => {
       id: userToken?.id,
       password: userToken?.password,
     },
-    {skip: !userToken?.id || !userToken?.password},
+    {
+      skip: !userToken?.id || !userToken?.password,
+      refetchOnFocus: false, // 드로어 포커스 시 자동 재호출 방지
+    },
   );
 
   useEffect(() => {

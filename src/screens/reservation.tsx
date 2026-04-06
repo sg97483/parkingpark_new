@@ -38,11 +38,13 @@ import ReservationConfirmPopup, {
 } from '~components/reservation/reservation-confirm-popup';
 import ReservationCoupon from '~components/reservation/reservation-coupon';
 import TicketItem from '~components/reservation/ticket-item';
+import Spinner from '~components/spinner';
 import TextBorder from '~components/text-border';
 import TextInputChoose from '~components/textinput-choose-date';
 import TextInputVoucherReservation from '~components/textinput-voucher-reservation';
 import {PADDING} from '~constants/constant';
 import {solar} from '~constants/data';
+import {BASE_URL} from '~constants/constant';
 import {EMIT_EVENT, FONT, FONT_FAMILY, IS_ACTIVE} from '~constants/enum';
 import {strings} from '~constants/strings';
 import {CouponProps, TicketProps} from '~constants/types';
@@ -80,7 +82,6 @@ const Reservation = (props: RootStackScreenProps<'Reservation'>) => {
   const [isCheckReservationCBRule, setIsCheckReservationCBRule] = useState<boolean>(false);
   const [isCheckReservationCBAgree, setIsCheckReservationCBAgree] = useState<boolean>(false);
   const [isCheckingReservation, setIsCheckingReservation] = useState<boolean>(false);
-
   const [isAutoPaymentChecked, setIsAutoPaymentChecked] = useState<boolean>(false);
 
   const {
@@ -227,8 +228,12 @@ const Reservation = (props: RootStackScreenProps<'Reservation'>) => {
       });*/
       }
       if (mIsMonth) {
-        const tempt = [
-          ...parkingTickets,
+        const baseTickets: TicketProps[] = parkingTickets.map(t => ({
+          ...t,
+          soldOutYn: t.soldOutYn ?? 'N',
+        }));
+        const tempt: TicketProps[] = [
+          ...baseTickets,
           {
             ticketAmt: '0',
             ticketEnd: '00:00',
@@ -237,18 +242,23 @@ const Reservation = (props: RootStackScreenProps<'Reservation'>) => {
             ticketStart: '00:00',
             ticketText:
               '해당 서비스는 만료일 또는 매월(20일~21일)에 자동으로 결제 및 갱신되는 서비스입니다.(신규가능 및 연장고객전용)',
-            // --- TicketProps 타입에 맞게 정확한 기본값으로 수정 ---
-            ticketLimit: 0, // number 타입이므로 0으로 초기화
-            ticketRealTime: 0, // number 타입이므로 0으로 초기화
-            ticketRate: 0, // number 타입이므로 0으로 초기화
-            ticketdayLimit: '', // string 타입이므로 빈 문자열로 초기화
+            ticketLimit: 0,
+            ticketRealTime: 0,
+            ticketRate: 0,
+            ticketdayLimit: '',
+            soldOutYn: 'N',
           },
         ];
         setParkingTicketList(tempt);
         setSelectedTicket(tempt[0]);
       } else {
-        setParkingTicketList(parkingTickets);
-        setSelectedTicket(parkingTickets[0]);
+        // soldOutYn 기본값 보정 (혹시 API에서 누락된 경우 대비)
+        const normalized: TicketProps[] = parkingTickets.map(t => ({
+          ...t,
+          soldOutYn: t.soldOutYn ?? 'N',
+        }));
+        setParkingTicketList(normalized);
+        setSelectedTicket(normalized[0]);
       }
     }
   }, [parkingTickets]);
@@ -323,9 +333,82 @@ const Reservation = (props: RootStackScreenProps<'Reservation'>) => {
     }
   };
 
-  const handleConfirm = (isAutoPaymentChecked: boolean) => {
-    console.log('Auto Payment Checked:', isAutoPaymentChecked);
+  // Amano API 에러 정책(errCode → 사용자 메시지)
+  // - 우선 자주 발생/요구된 코드부터 매핑하고, 나머지는 서버 message를 그대로 노출합니다.
+  const AMANO_ERROR_MESSAGE_MAP: Record<string, string> = {
+    ERR_AKC_8002: '요청 처리 중 일시적인 문제가 발생했습니다.',
+    ERR_AKC_8003: '요청 데이터에 오류가 있습니다. 올바른 파라미터가 아닙니다.',
+    ERR_AKC_8004: '현재 선택하신 상품의 판매 가능 수량이 부족합니다. 다른 상품이나 다른 기간을 선택해 주세요.',
+    ERR_AKC_8005: '로컬 센터 서버와 일시적으로 연결할 수 없습니다. 잠시 후 다시 시도해 주세요.',
+    ERR_AKC_8101: '입차 예정 시각이 올바르지 않습니다. 현재 예약 시간을 다시 확인해 주세요.',
+    ERR_AKC_8102: '입차 예정 시각이 올바르지 않습니다. 입차 예정 시간을 다시 확인해 주세요.',
+    ERR_AKC_8103: '최소 입차 시간을 지났습니다. 날짜를 yyyy-MM-dd 형식으로 입력해 주세요.',
+    ERR_AKC_8104: '차량번호를 올바르게 입력해 주세요.',
+    ERR_AKC_8105: '변경할 차량번호 형식이 올바르지 않습니다. 차량번호를 정확히 입력해 주세요.',
+    ERR_AKC_8106: '변경할 차량번호 형식이 올바르지 않습니다. 날짜를 yyyy-MM-dd 형식으로 입력해 주세요.',
+    ERR_AKC_8107: '입차할 차량번호를 입력해 주세요.',
+    ERR_AKC_8108: '차량명을 입력해 주세요.',
+    ERR_AKC_8109: '고객 별칭이 누락되었습니다. 식별을 위한 별칭을 입력해 주세요.',
+    ERR_AKC_8110: '고객 별칭의 차량번호 형식이 올바르지 않습니다. 차량번호를 정확히 입력해 주세요.',
+    ERR_AKC_8600: '요청한 리소스를 찾을 수 없습니다.',
+    ERR_AKC_8601: '요청 처리할 리소스를 찾을 수 없습니다.',
+    ERR_AKC_8604: '유효하지 않은 토큰입니다. 올바른 인증 정보로 다시 시도해 주세요.',
+    ERR_AKC_8605: '해당 리소스에 대한 접근 권한이 없습니다.',
+    ERR_AKC_8606: '입력 값에 오류가 있습니다. 입력 내용을 확인 후 다시 시도해 주세요.',
+    ERR_AKC_8607: '해당 차량은 서비스 이용이 제한됩니다. 이미 구매한 내역을 확인해 주세요.',
+    ERR_AKC_8608: '해당 차량은 이미 등록되어 있습니다. 기존 등록 내용을 확인하거나 다른 차량번호로 시도해 주세요.',
+    ERR_AKC_8612: '현재 차량은 이용 요금에만 이용 가능합니다. 운행 요일을 확인해 주세요.',
+    ERR_AKC_8613: '현재 차량은 운행 요일에만 이용 가능합니다. 운행 기간을 확인해 주세요.',
+    ERR_AKC_8614: '이미 사용 중인 정기권이 존재합니다. 변경 가능한 정기권을 확인해 주세요.',
+    ERR_AKC_8615: '요청 횟수를 초과했습니다. 잠시 후 다시 시도해 주세요.',
+    ERR_AKC_8616: '해당 정기권은 이미 취소되어 있습니다.',
+    ERR_AKC_8617: '변경 가능한 기간이 지났습니다. 변경 가능 기간을 확인해 주세요.',
+    ERR_AKC_8618: '정기권 종료일 이후에는 환불이 불가능합니다. 이용 기간을 확인해 주세요.',
+    ERR_AKC_8620: '변경 가능 횟수를 모두 사용했습니다. 더 이상 변경할 수 없습니다.',
+    ERR_AKC_8621: '선택하신 시작일이 올바르지 않습니다. 상품의 종료일 이전으로 날짜를 선택해 주세요.',
+    ERR_AKC_8622: '선택하신 시작일이 올바르지 않습니다. 오늘 이후의 날짜를 선택해 주세요.',
+    ERR_AKC_8623: '연박권은 차량 변경 할 수 없습니다.',
+    ERR_AKC_8624: '이미 주차권이 완료된 차량입니다.',
+    ERR_AKC_8625: '상품이 만료되어 구매할 수 없습니다. 다른 상품을 선택해 주세요.',
+    ERR_AKC_8626: '아직 사용 전인 정기권은 환불이 불가능하니 취소를 진행해 주세요.',
+    ERR_AKC_9001: '로컬 현장 서버에서 데이터 저장에 실패했습니다.',
+    ERR_AKC_9002: '로컬 현장 서버에서 일시적인 네트워크가 발생했습니다.',
+    ERR_AKC_9003: '로컬 현장 서버에서 정보 수집에 실패했습니다.',
+    ERR_AKC_9004: '이미 정기권으로 등록된 차량입니다.',
+    ERR_AKC_9005: '해당 차량은 이미 정기권이 등록되어 있어 주차권을 추가로 등록할 수 없습니다.',
+    ERR_AKC_9401: '해당 일일 정산 마감이 완료되어 아침 조정할 수 없습니다.',
+    ERR_AKC_9600: '이미 취소된 상태입니다. 취소 요청을 수행할 수 없습니다.',
+    ERR_AKC_9601: '해당 거래 정보를 찾을 수 없습니다.',
+    ERR_AKC_9602: '기존 차량번호와 동일한 번호입니다. 다른 차량번호를 입력해 주세요.',
+    ERR_AKC_9603: '해당 차량이 이미 다른 할인에 적용되어 있어 등록할 수 없습니다.',
+    ERR_AKC_9604: '변경하려는 차량번호에 이미 다른 할인에 적용되어 있어 변경할 수 없습니다.',
+    ERR_AKC_9605: '해당 거래 정보가 삭제되어 처리할 수 없습니다.',
+    ERR_AKC_9606: '해당 거래 정보가 만료되어 처리할 수 없습니다.',
+    ERR_AKC_9607: '이미 주차가 완료된 차량입니다.',
+    ERR_AKC_9608: '이미 정기권 등록이 완료되었습니다.',
+    ERR_AKC_9609: '해당 상품의 정기권 정보가 존재하지 않습니다.',
+    ERR_AKC_9610: '현재 주차장에 있는 차량으로 처리할 수 없습니다.',
+    ERR_AKC_9611: '변경하려는 차량번호가 현재 주차장에 있어 변경할 수 없습니다.',
+    ERR_AKC_9612: '이전 차량이 72시간 동안 출차하지 않아 이전 차량을 입력합니다.',
+    ERR_AKC_9613: '로컬 현장 서버에 준차하지 않은 상품 코드(Dec) 입니다.',
+    ERR_AKC_9614: '출차할 수 있는 시간이 지나 확인이 어려울 수 있습니다.',
+    ERR_AKC_9615: '이미 정산되었거나 출차가 완료된 차량입니다.',
+    ERR_AKC_9616: '로컬 현장 서버에 할인코드가 존재하지 않아 처리할 수 없습니다.',
+    ERR_AKC_9713: '정기권 유형 코드 값이 유효하지 않습니다. (허용 범위: 1~8)',
+    ERR_AKC_9714: '이미 존재하는 거래 ID(gdsTrId) 입니다. 중복 생성이 불가능합니다.',
+    ERR_AKC_9715: '요청 데이터가 비어 있습니다. 필수 입력 항목을 확인해 주세요.',
+    ERR_AKC_9716: '이미 유효한 정기권이 있습니다. (yyyy-MM-dd ~ yyyy-MM-dd)',
+    ERR_AKC_9717: '정기권 유형 형식(gktTpNm)이 누락되었습니다.',
+    ERR_AKC_9718: '요청하신 동작 유형이 올바르지 않습니다.',
+    ERR_AKC_9719: '동일한 정기권 그룹번호가 이미 존재합니다.',
+    ERR_AKC_9720: '해당 정기권 그룹번호를 찾을 수 없습니다.',
+  };
 
+  // 아마노 에러 중 "결제는 계속 진행"하고 싶은 코드들
+  // (예: 이미 완료된 주차권 등, 안내만 받고 추가 연동만 생략)
+  const AMANO_IGNORE_ERROR_CODES = new Set<string>(['ERR_AKC_8624']);
+
+  const handleConfirm = async (isAutoPaymentChecked: boolean) => {
     if (!payInfo?.cardName) {
       showMessage({
         message: '결제카드를 등록해주세요',
@@ -364,6 +447,13 @@ const Reservation = (props: RootStackScreenProps<'Reservation'>) => {
     if (!selectedTicket) {
       showMessage({
         message: '주차권을 선택해주세요',
+      });
+      return;
+    }
+
+    if (selectedTicket?.soldOutYn === 'Y') {
+      showMessage({
+        message: '해당 주차권은 매진되어 구매할 수 없습니다.',
       });
       return;
     }
@@ -551,6 +641,9 @@ const Reservation = (props: RootStackScreenProps<'Reservation'>) => {
       }
     }
 
+    // ✅ 아마노 API 호출은 ReservationCheck의 handleConfirm에서 실제 결제 시점에 수행됩니다.
+    // 여기서는 팝업만 표시합니다.
+
     setIsCheckingReservation(true);
     reservationCheckRef?.current?.show();
   };
@@ -612,10 +705,6 @@ const Reservation = (props: RootStackScreenProps<'Reservation'>) => {
     ticketEndHour: number,
     ticketEndMin: number,
   ): boolean => {
-    console.log(`time // ${hourOfDay}:${minute}`);
-    console.log(`ticketStart // ${ticketStartHour}:${ticketStartMin}`);
-    console.log(`ticketEnd // ${ticketEndHour}:${ticketEndMin}`);
-
     if (
       ticketStartHour === 0 &&
       ticketStartMin === 0 &&
@@ -1018,7 +1107,7 @@ const Reservation = (props: RootStackScreenProps<'Reservation'>) => {
               marginBottom: heightScale(15),
             }}
             isShowIcon
-            placeholder={'2025년'}
+            placeholder={'2026년'}
             value={
               dateHire
                 ? moment(dateHire?.valueOf()).format(`YYYY년 M월 D일 (${getDayName(dateHire)})`)
@@ -1035,7 +1124,7 @@ const Reservation = (props: RootStackScreenProps<'Reservation'>) => {
 
           <CustomText
             string={moment(
-              new Date(new Date().getTime() + parkingLot?.a1TicketCost * 24 * 60 * 60 * 1000),
+              new Date(new Date().getTime() + Number(parkingLot?.a1TicketCost ?? 0) * 24 * 60 * 60 * 1000),
             ).format('MM월DD일까지 예약가능')}
             textStyle={{
               marginLeft: widthScale(95),
@@ -1089,8 +1178,9 @@ const Reservation = (props: RootStackScreenProps<'Reservation'>) => {
             <View>
               <CustomText
                 string={
-                  '* 선불주차권 구매 및 입차후 , 주차권 추가 구매 사용 절대 불가합니다. 초과사용시 , 현장요금으로 부과됩니다.'
+                  '* 주차권 예약구매시 ,주차권 추가 구매사용 절대 불가합니다. (주차권 + 주차권 붙여서 이용불가) 초과사용시 현장요금으로 부과됩니다.'
                 }
+                color={colors.red}
                 size={FONT.CAPTION}
               />
               <CustomText
@@ -1252,12 +1342,8 @@ const Reservation = (props: RootStackScreenProps<'Reservation'>) => {
               setDateHire(value);
             }
           }}
-          // 최대 날짜를 2025년 12월 31일로 설정하거나 parkingLot 값에 따라 동적으로 계산
-          maximumDate={
-            parkingLot?.a1TicketCost ? new Date(parkingLot.a1TicketCost) : new Date('2025-12-31')
-          }
-          // 최소 날짜는 오늘 날짜로 설정하여 과거 날짜 선택을 방지
-          minimumDate={new Date()}
+          // a1TicketCost: 오늘부터 예약 가능한 최대 '일수' (0이면 오늘만, 1이면 오늘+내일)
+          maximumDate={Number(parkingLot?.a1TicketCost ?? 0)}
         />
 
         <ModalDateTimePicker ref={chooseTimeRef} onConfirm={handleCheckTimeReservation} />
@@ -1285,7 +1371,15 @@ const Reservation = (props: RootStackScreenProps<'Reservation'>) => {
         useCharge={Number(charge)}
         useCoupon={Number(coupon)}
         usePoint={Number(point)}
-        isAutoPaymentChecked={isAutoPaymentChecked} // 추가
+        isAutoPaymentChecked={isAutoPaymentChecked}
+        // 아마노 API 호출에 필요한 정보 전달
+        dateHire={dateHire}
+        timeHire={timeHire}
+        parkingLotAgency={parkingLot?.agency}
+        parkingLotMTicketTimeStart={parkingLot?.MTicketTimeStart}
+        ticketAmanoGdsId={selectedTicket?.amano_gds_id}
+        ticketType={selectedTicket?.ticket_type}
+        carModel={(payInfo as any)?.carModel}
         onSuccess={() => {
           setTimeout(() => {
             reservationCompletionRef?.current?.show();

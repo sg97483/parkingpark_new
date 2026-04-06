@@ -331,6 +331,10 @@ export interface TicketProps {
   ticketRealTime: number;
   ticketRate: number;
   ticketdayLimit: string;
+  // 'Y'이면 매진으로 결제/선택 불가, 기본값은 'N'
+  soldOutYn?: 'Y' | 'N';
+  amano_gds_id?: string;
+  ticket_type?: string;
 }
 
 export interface NoticeEventProps {
@@ -503,6 +507,7 @@ export interface PaymentHistoryProps {
   outFlightAndCityName: string;
   ticketPartnerYN: IS_ACTIVE;
   tid: string;
+  moid?: string; // Amano 취소 API용 거래 ID
   useCoupon: string;
   usePoint: string;
   usePointSklent: string;

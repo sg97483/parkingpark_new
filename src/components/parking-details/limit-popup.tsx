@@ -98,12 +98,12 @@ const LimitPopup = forwardRef((props: Props, ref) => {
           <CustomText string={data?.textField || ''} textStyle={styles.text} color={colors.red} />
         </ScrollView>
 
-        {/* Description */}
+        {/* Description 
         <CustomText
           string="* 위 차종들은 해당 주차장 이용에 제한이 있습니다 *"
           size={FONT.CAPTION_2}
           textStyle={styles.description}
-        />
+        />*/}
 
         {/* Search vehicle type */}
         <View style={styles.searchWrapper}>
@@ -157,6 +157,6 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
   },
   text: {
-    textAlign: 'center',
+    textAlign: 'left',
   },
 });

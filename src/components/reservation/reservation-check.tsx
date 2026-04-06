@@ -2,15 +2,20 @@ import React, {forwardRef, useImperativeHandle, useRef, useState, useCallback, m
 import {ActivityIndicator, Alert, Platform, StyleSheet, TouchableOpacity, View} from 'react-native';
 import ReactNativeModal from 'react-native-modal';
 import WebView from 'react-native-webview';
+import moment from 'moment';
+import {showMessage} from 'react-native-flash-message';
 import CustomText from '~components/custom-text';
 import HStack from '~components/h-stack';
 import TermModal, {TermModalRefs} from '~components/preferences/term-modal';
 import ViewTermsPopup, {
   ViewTermsRefs,
 } from '~components/valet-parking-reservation/view-terms-popup';
-import {PADDING, width} from '~constants/constant';
+import Spinner from '~components/spinner';
+import {BASE_URL, PADDING, width} from '~constants/constant';
 import {FONT, FONT_FAMILY} from '~constants/enum';
 import {strings} from '~constants/strings';
+import {useNavigation} from '@react-navigation/native';
+import {ROUTE_KEY} from '~navigators/router';
 import {useSubmitParkingReservationMutation} from '~services/reservationServices';
 import {useAppSelector} from '~store/storeHooks';
 import {colors} from '~styles/colors';
@@ -35,6 +40,14 @@ interface Props {
   useCoupon: number;
   agCarNumber: string;
   isAutoPaymentChecked: boolean;
+  // 아마노 API 호출에 필요한 정보
+  dateHire?: Date;
+  timeHire?: Date;
+  parkingLotAgency?: string;
+  parkingLotMTicketTimeStart?: string;
+  ticketAmanoGdsId?: string;
+  ticketType?: string;
+  carModel?: string;
   onSuccess: () => void;
   onDismiss: () => void;
 }
@@ -55,7 +68,15 @@ const ReservationCheck = forwardRef((props: Props, ref) => {
     usePoint,
     onSuccess,
     onDismiss,
-    isAutoPaymentChecked, // Props에서 isAutoPaymentChecked를 받아옵니다.
+    isAutoPaymentChecked,
+    // 아마노 API 호출에 필요한 정보
+    dateHire,
+    timeHire,
+    parkingLotAgency,
+    parkingLotMTicketTimeStart,
+    ticketAmanoGdsId,
+    ticketType,
+    carModel,
   } = props;
 
   const userToken = useAppSelector(state => state?.userReducer?.userToken);
@@ -72,6 +93,9 @@ const ReservationCheck = forwardRef((props: Props, ref) => {
   const [showWebviewPointIn, setShowWebviewPointIn] = useState<boolean>(false);
   const [showWebviewPointOut, setShowWebviewPointOut] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [amanoGdsTrdId, setAmanoGdsTrdId] = useState<string>(''); // 아마노 거래 ID
+  const [amanoPlotId, setAmanoPlotId] = useState<string>(''); // 아마노 주차장 ID (정기권 complete용)
+  const [amanoIsSeason, setAmanoIsSeason] = useState<boolean>(false); // 정기권 여부
 
   const totalPrice = Number(ticketPrice) - Number(usePoint) - Number(useCharge) - Number(useCoupon);
 
@@ -86,6 +110,9 @@ const ReservationCheck = forwardRef((props: Props, ref) => {
     setShowWebviewPointIn(false);
     setShowWebviewPointOut(false);
     setIsLoading(false); // 로딩 상태도 초기화
+    setAmanoGdsTrdId(''); // 아마노 거래 ID 초기화
+    setAmanoPlotId(''); // 아마노 주차장 ID 초기화
+    setAmanoIsSeason(false); // 정기권 여부 초기화
   };
 
   useImperativeHandle(
@@ -96,7 +123,29 @@ const ReservationCheck = forwardRef((props: Props, ref) => {
     [],
   );
 
-  const handleConfirm = () => {
+  const navigation = useNavigation<any>();
+
+  // 아마노 에러 메시지 매핑
+  const AMANO_ERROR_MESSAGE_MAP: Record<string, string> = {
+    ERR_AKC_8002: '요청 처리 중 일시적인 문제가 발생했습니다.',
+    ERR_AKC_8003: '요청 데이터에 오류가 있습니다. 올바른 파라미터가 아닙니다.',
+    ERR_AKC_8004: '현재 선택하신 상품의 판매 가능 수량이 부족합니다. 다른 상품이나 다른 기간을 선택해 주세요.',
+    ERR_AKC_8005: '로컬 센터 서버와 일시적으로 연결할 수 없습니다. 잠시 후 다시 시도해 주세요.',
+    ERR_AKC_8101: '입차 예정 시각이 올바르지 않습니다. 현재 예약 시간을 다시 확인해 주세요.',
+    ERR_AKC_8102: '입차 예정 시각이 올바르지 않습니다. 입차 예정 시간을 다시 확인해 주세요.',
+    ERR_AKC_8104: '차량번호를 올바르게 입력해 주세요.',
+    ERR_AKC_8624: '이미 주차권이 완료된 차량입니다.',
+    // 필요한 다른 에러 코드들도 추가 가능
+  };
+
+  // 아마노 에러 중 "결제는 계속 진행"하고 싶은 코드들
+  // TODO: 실전 적용 시 주석 해제 예정
+  // const AMANO_IGNORE_ERROR_CODES = new Set<string>(['ERR_AKC_8624', 'ERR_AKC_9603']);
+
+  // 🔹 true: AS-IS (결제 후 /purchase 1번), false: TO-BE (pending → 결제 → complete 2번)
+  const AMANO_USE_AS_IS = true;
+
+  const handleConfirm = async () => {
     if (!isCheckLiAgree) {
       Alert.alert('약관을 동의해주세요.');
       return;
@@ -111,7 +160,188 @@ const ReservationCheck = forwardRef((props: Props, ref) => {
     }
 
     setIsLoading(true);
+    setAmanoGdsTrdId('');
+    setAmanoPlotId('');
+    setAmanoIsSeason(false);
 
+    // ✅ 아마노 API 연동 조건 확인 및 호출
+    const isAmanoAgency = parkingLotAgency === '아마노코리아';
+    const hasMTicketTimeStart = parkingLotMTicketTimeStart && parkingLotMTicketTimeStart.trim() !== '';
+    const amanoGdsId = ticketAmanoGdsId;
+    const amanoTicketType = ticketType;
+
+    let amanoMoid = '';
+
+    if (isAmanoAgency && hasMTicketTimeStart && amanoGdsId) {
+      const isSeason = amanoTicketType === '정기권';
+      setAmanoIsSeason(isSeason);
+      setAmanoPlotId(parkingLotMTicketTimeStart || '');
+
+      const combineDateTime = () => {
+        if (!dateHire || !timeHire) {
+          return null;
+        }
+        const base = moment(dateHire);
+        const time = moment(timeHire);
+        base.hour(time.hour()).minute(time.minute()).second(0).millisecond(0);
+        return base;
+      };
+      const combined = combineDateTime();
+      const pinResveDtm = combined ? combined.utc().format('YYYY-MM-DDTHH:mm:ss[Z]') : null;
+      const purchaseDate = moment().utc().format('YYYY-MM-DDTHH:mm:ss[Z]');
+      const pakStrDt = dateHire ? moment(dateHire).format('YYYY-MM-DD') : undefined;
+      const carNo = agCarNumber || '';
+      const carTp = carModel || '세단';
+
+      if (AMANO_USE_AS_IS) {
+        const purchaseResult = await callAmanoPurchaseAPI({
+          isSeason,
+          plotId: parkingLotMTicketTimeStart,
+          gdsId: amanoGdsId,
+          carNo,
+          carTp,
+          pinResveDtm,
+          purchaseDate,
+          pakStrDt,
+        });
+        if (!purchaseResult.ok) {
+          setIsLoading(false);
+          hide();
+          onDismiss?.();
+          return;
+        }
+        if (purchaseResult.gdsTrdId) {
+          amanoMoid = purchaseResult.gdsTrdId;
+          setAmanoGdsTrdId(purchaseResult.gdsTrdId);
+        }
+      } else {
+        /* ========== TO-BE (2단계): 구매 대기 pending 호출 ========== */
+        Spinner.show();
+
+      // 4번: 주차권 pending body에 plotId 제거 (스펙에 없음)
+      const amanoBody = isSeason
+        ? {
+            plotId: parkingLotMTicketTimeStart,
+            seasonGoods: [
+              {
+                gdsId: amanoGdsId,
+                purcPsn: carNo, // 구매자 이름을 차량번호로 사용
+                carNo: carNo,
+                carTp: carTp,
+                pakStrDt: pakStrDt,
+                purchaseDate: purchaseDate.slice(0, 10),
+              },
+            ],
+          }
+        : {
+            gdsId: amanoGdsId,
+            pinResveDtm: pinResveDtm,
+            carNo: carNo,
+            purchaseDate: purchaseDate,
+          };
+
+      // 2번: BASE_URL 상수 사용
+      const AMANO_BASE = `${BASE_URL.replace(/\/$/, '')}/api/amano`;
+      const amanoUrl = isSeason
+        ? `${AMANO_BASE}/seasonpasses/pending`
+        : `${AMANO_BASE}/parkingtickets/pending`;
+
+      try {
+        const res = await fetch(amanoUrl, {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify(amanoBody),
+        });
+
+        const raw = await res.text();
+
+        let json: any = {};
+        try {
+          json = raw ? JSON.parse(raw) : {};
+        } catch {
+          json = {};
+        }
+
+        const ok = res.ok && (json.success === undefined || json.success === true);
+        if (!ok) {
+          const errCode = (
+            json?.errCode ||
+            json?.err_code ||
+            json?.errorCode ||
+            json?.code ||
+            json?.rsltCd ||
+            ''
+          ).toString();
+          
+          // 메시지 내용으로 에러 코드 추론 (서버에서 코드를 반환하지 않는 경우)
+          const errorMessage = json?.message || json?.rsltMsg || '';
+          let inferredErrCode = errCode;
+          
+          // 메시지 내용으로 에러 코드 추론
+          if (!errCode && errorMessage) {
+            if (errorMessage.includes('이미 다른 할인이 적용되어 있어') || 
+                errorMessage.includes('중복 적용할 수 없습니다')) {
+              inferredErrCode = 'ERR_AKC_9603';
+            } else if (errorMessage.includes('이미 주차권이 완료된')) {
+              inferredErrCode = 'ERR_AKC_8624';
+            }
+          }
+          
+          // 일부 에러코드는 결제를 계속 진행 (연동만 스킵)
+          // TODO: 실전 적용 시 주석 해제 예정
+          // if (!inferredErrCode || !AMANO_IGNORE_ERROR_CODES.has(inferredErrCode)) {
+          if (true) { // 무시 코드 로직 비활성화 (실전 적용 시 주석 해제)
+            const mapped = inferredErrCode ? AMANO_ERROR_MESSAGE_MAP[inferredErrCode] : undefined;
+            Spinner.hide();
+            setIsLoading(false);
+            
+            // 팝업을 닫고 에러 메시지 표시 (팝업에 가려지지 않도록)
+            hide();
+            const msg =
+              (mapped ||
+                json?.message ||
+                json?.rsltMsg ||
+                json?.msg ||
+                json?.des ||
+                `주차권 결제 실패 (code: ${errCode || res.status})`) +
+              '\n\n(관련 문의사항이 있을시 아래 문의하기 부탁드립니다.)';
+            Alert.alert('주차권 결제 실패', msg, [
+              {text: '문의하기', onPress: () => navigation.navigate(ROUTE_KEY.ContactUs)},
+              {text: '확인'},
+            ]);
+            onDismiss?.();
+            return;
+          }
+        } else {
+          // 5번: 정기권은 seasonGoodsStatus[0].gdsTrdId, 주차권은 data.gdsTrdId
+          const gdsTrdId = isSeason
+            ? json?.data?.seasonGoodsStatus?.[0]?.gdsTrdId || ''
+            : json?.data?.gdsTrdId || '';
+          if (gdsTrdId) {
+            amanoMoid = gdsTrdId;
+            setAmanoGdsTrdId(gdsTrdId);
+          }
+        }
+        
+        // 로딩 숨김
+        Spinner.hide();
+      } catch (error: any) {
+        Spinner.hide();
+        setIsLoading(false);
+        
+        // 팝업을 닫고 에러 메시지 표시 (팝업에 가려지지 않도록)
+        hide();
+        Alert.alert(
+          '주차권 결제 오류',
+          '주차권 결제 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.',
+        );
+        onDismiss?.();
+        return;
+      }
+      } // TO-BE else 블록 종료
+    }
+
+    // 실제 결제 API 호출
     const body = {
       memberId: userToken?.id,
       memberPwd: userToken?.password,
@@ -126,6 +356,7 @@ const ReservationCheck = forwardRef((props: Props, ref) => {
       useCoupon: useCoupon,
       usePoint: usePoint,
       usePointSklent: useCharge,
+      ...(amanoMoid ? {moid: amanoMoid} : {}),
     };
 
     submitParkingReservation(body)
@@ -150,6 +381,142 @@ const ReservationCheck = forwardRef((props: Props, ref) => {
         hide();
         onDismiss?.();
       });
+  };
+
+  // 🔹 AS-IS: 결제 후 구매(purchase) API 1번 호출
+  type AmanoPurchaseParams = {
+    isSeason: boolean;
+    plotId?: string | null;
+    gdsId?: string | null;
+    carNo: string;
+    carTp?: string | null;
+    pinResveDtm?: string | null;
+    purchaseDate: string;
+    pakStrDt?: string;
+  };
+
+  const callAmanoPurchaseAPI = async ({
+    isSeason,
+    plotId,
+    gdsId,
+    carNo,
+    carTp,
+    pinResveDtm,
+    purchaseDate,
+    pakStrDt,
+  }: AmanoPurchaseParams): Promise<{ok: boolean; gdsTrdId?: string}> => {
+    const AMANO_BASE = `${BASE_URL.replace(/\/$/, '')}/api/amano`;
+    const amanoBody = isSeason
+      ? {
+          plotId,
+          seasonGoods: [
+            {
+              gdsId,
+              purcPsn: carNo,
+              carNo: carNo,
+              carTp: carTp,
+              pakStrDt: pakStrDt,
+              purchaseDate: purchaseDate.slice(0, 10),
+            },
+          ],
+        }
+      : {
+          plotId,
+          gdsId,
+          pinResveDtm: pinResveDtm,
+          carNo: carNo,
+          purchaseDate: purchaseDate,
+        };
+    const amanoUrl = isSeason
+      ? `${AMANO_BASE}/seasonpasses/purchase`
+      : `${AMANO_BASE}/parkingtickets/purchase`;
+    try {
+      const res = await fetch(amanoUrl, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(amanoBody),
+      });
+      const raw = await res.text();
+      let json: any = {};
+      try {
+        json = raw ? JSON.parse(raw) : {};
+      } catch {
+        json = {};
+      }
+      const ok = res.ok && (json.success === undefined || json.success === true);
+      if (!ok) {
+        const errCode = (
+          json?.errCode ||
+          json?.err_code ||
+          json?.errorCode ||
+          json?.code ||
+          json?.rsltCd ||
+          json?.data?.errCode ||
+          ''
+        ).toString();
+        const errMsg =
+          json?.message ||
+          json?.rsltMsg ||
+          json?.msg ||
+          raw ||
+          `주차권 결제 실패 (code: ${errCode || res.status})`;
+        const mapped = errCode ? AMANO_ERROR_MESSAGE_MAP[errCode] : undefined;
+        const displayMsg =
+          (mapped || errMsg) + '\n\n(관련 문의사항이 있을시 아래 문의하기 부탁드립니다.)';
+        Alert.alert('주차권 결제 실패', displayMsg, [
+          {text: '문의하기', onPress: () => navigation.navigate(ROUTE_KEY.ContactUs)},
+          {text: '확인'},
+        ]);
+        return {ok: false};
+      }
+      const gdsTrdId = isSeason
+        ? json?.data?.seasonGoodsStatus?.[0]?.gdsTrdId || ''
+        : json?.data?.gdsTrdId || '';
+      return {ok: true, gdsTrdId};
+    } catch (error) {
+      console.error('[Amano] AS-IS Purchase API 호출 실패:', error);
+      Alert.alert('주차권 결제 오류', '주차권 결제 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
+      return {ok: false};
+    }
+  };
+
+  // 🔹 TO-BE: 2단계 구매 프로세스 - 구매 완료(complete) API 호출
+  const callAmanoCompleteAPI = async () => {
+    if (!amanoGdsTrdId) {
+      return; // 거래 ID가 없으면 스킵
+    }
+
+    const AMANO_BASE = `${BASE_URL.replace(/\/$/, '')}/api/amano`;
+
+    try {
+      if (amanoIsSeason) {
+        // 정기권 complete API
+        const completeUrl = `${AMANO_BASE}/seasonpasses/complete`;
+        const completeBody = {
+          plotId: amanoPlotId,
+          completions: [{gdsTrdId: amanoGdsTrdId}],
+        };
+
+        await fetch(completeUrl, {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify(completeBody),
+        });
+      } else {
+        // 주차권 complete API
+        const completeUrl = `${AMANO_BASE}/parkingtickets/purchase/${encodeURIComponent(amanoGdsTrdId)}/complete`;
+
+        await fetch(completeUrl, {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({}), // 빈 body
+        });
+      }
+
+    } catch (error) {
+      console.error('[Amano] Complete API 호출 실패:', error);
+      // complete 실패해도 결제는 완료된 상태이므로 계속 진행
+    }
   };
 
   const handleModalClose = useCallback(() => {
@@ -383,10 +750,14 @@ const ReservationCheck = forwardRef((props: Props, ref) => {
               )}&TotalTicketType=${encodeURIComponent(
                 TotalTicketType,
               )}&parkId=${parkingLotId}&AutoPay=${
-                isAutoPaymentChecked ? 1 : 0 // props에서 받은 isAutoPaymentChecked 사용
-              }`,
-            }} // requirements, TotalTicketType 인코딩
-            onLoadEnd={() => {
+                isAutoPaymentChecked ? 1 : 0
+              }${amanoGdsTrdId ? `&moid=${encodeURIComponent(amanoGdsTrdId)}` : ''}`,
+            }}
+            onLoadEnd={async () => {
+              if (!AMANO_USE_AS_IS && amanoGdsTrdId) {
+                await callAmanoCompleteAPI();
+              }
+
               setTimeout(() => {
                 hide();
                 onSuccess?.(); // props의 onSuccess 호출

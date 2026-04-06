@@ -36,11 +36,7 @@ includeBuild('../node_modules/@react-native/gradle-plugin')
 include(":react-native-bootsplash")
 project(":react-native-bootsplash").projectDir = new File(rootProject.projectDir, "../node_modules/react-native-bootsplash/android")
 
-include ':@invertase_react-native-apple-authentication'
-project(':@invertase_react-native-apple-authentication').projectDir = new File(rootProject.projectDir, '../node_modules/@invertase/react-native-apple-authentication/android')
-
-include ':@notifee_react-native'
-project(':@notifee_react-native').projectDir = new File(rootProject.projectDir, '../node_modules/@notifee/react-native/android')
+// @invertase/react-native-apple-authentication, @notifee/react-native are autolinked via applyNativeModulesSettingsGradle - do not include manually
 
 // ▼▼▼▼▼▼▼▼▼▼ 이 부분들이 추가되었습니다. ▼▼▼▼▼▼▼▼▼▼
 include ':react-native-mail'

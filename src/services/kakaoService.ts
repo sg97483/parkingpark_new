@@ -71,36 +71,80 @@ export const searchAddressKakao = async (text: string) => {
     const allData = realm.objects('Parking');
     const trimmedKeyword = text.trim();
 
-    const mapLists =
+    // creditCardYN === 'A' 인 주차장은 검색 결과(Realm 기반)에서도 제외
+    const hideMarkerQuery = "(creditCardYN != 'A' OR creditCardYN == nil)";
+
+    // 0순위: keyword 매칭, 1순위: 제휴(Y)+주차장명 매칭, 2순위: 카카오 결과
+    const keywordMatches = allData
+      .filtered(`${hideMarkerQuery} AND keyword CONTAINS[c] $0`, trimmedKeyword)
+      .sorted([
+        ['ticketPartnerYN', true],
+        ['paylank', true],
+      ]);
+
+    const partnerMatches =
       trimmedKeyword == '서울역'
         ? allData
-            .filtered('ticketPartnerYN = "Y" AND garageName CONTAINS[c] $0', trimmedKeyword)
+            .filtered(
+              `${hideMarkerQuery} AND ticketPartnerYN = "Y" AND garageName CONTAINS[c] $0`,
+              trimmedKeyword,
+            )
             .sorted([['id', false]])
         : allData
-            .filtered('ticketPartnerYN = "Y" AND garageName CONTAINS[c] $0', trimmedKeyword)
+            .filtered(
+              `${hideMarkerQuery} AND ticketPartnerYN = "Y" AND garageName CONTAINS[c] $0`,
+              trimmedKeyword,
+            )
             .sorted([
               ['ticketPartnerYN', true],
               ['paylank', true],
             ]);
 
-    const parkList = [];
-    for (let i = 0; i < Math.min(mapLists.length, 10); i++) {
-      const address = `${mapLists?.[i]?.state || ''} ${mapLists?.[i]?.city || ''} ${
-        mapLists?.[i]?.addressNew || mapLists?.[i]?.addressOld || ''
+    const seen = new Set<number | string>();
+    const mapRealmToList = (source: any[]) => {
+      const list = [];
+      for (let i = 0; i < source.length; i++) {
+        const item = source[i];
+        if (seen.has(item.id)) {
+          continue;
+        }
+        seen.add(item.id);
+        const address = `${item?.state || ''} ${item?.city || ''} ${
+          item?.addressNew || item?.addressOld || ''
       }`;
-
-      parkList.push({
-        id: mapLists[i].id,
+        list.push({
+          id: item.id,
         address: {address_name: address},
         address_name: address,
-        road_address: {building_name: mapLists?.[i]?.garageName},
-        x: mapLists?.[i]?.lng,
-        y: mapLists?.[i]?.lat,
+          road_address: {building_name: item?.garageName},
+          x: item?.lng,
+          y: item?.lat,
         isParking: true,
       });
-    }
-    const data = [...parkList, ...newData];
-    // Logger('debug', data);
+        if (list.length >= 10) {
+          // 상위 10개만 우선 노출
+          break;
+        }
+      }
+      return list;
+    };
+
+    const keywordList = mapRealmToList(keywordMatches as any);
+    const partnerList = mapRealmToList(partnerMatches as any);
+
+    // Kakao 결과에서도 중복 제거
+    const kakaoList = newData.filter(item => {
+      if (seen.has(item.id)) {
+        return false;
+      }
+      seen.add(item.id);
+      return true;
+    });
+
+    const data =
+      keywordList.length > 0
+        ? [...keywordList, ...partnerList, ...kakaoList]
+        : [...partnerList, ...kakaoList];
     return data as any;
   } catch (error) {
     return [];

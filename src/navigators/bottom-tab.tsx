@@ -57,7 +57,7 @@ const AsyncPassengerHome = asyncComponent({
       requestAnimationFrame(() => {
         setTimeout(() => {
           return resolve(import('../screens/drive-me-home/passenger-home'));
-        }, 500);
+        }, 100);
       });
     }),
   LoadingComponent: () => {
@@ -71,7 +71,7 @@ const AsyncDriverHome = asyncComponent({
       requestAnimationFrame(() => {
         setTimeout(() => {
           return resolve(import('../screens/drive-me-home/driver-home'));
-        }, 500);
+        }, 100);
       });
     }),
   LoadingComponent: () => {
@@ -85,7 +85,7 @@ const AsyncParkingParkHome = asyncComponent({
       requestAnimationFrame(() => {
         setTimeout(() => {
           return resolve(import('./drawer'));
-        }, 500);
+        }, 100);
       });
     }),
   LoadingComponent: () => {
@@ -99,7 +99,7 @@ const AsyncMyProfile = asyncComponent({
       requestAnimationFrame(() => {
         setTimeout(() => {
           return resolve(import('../screens/my-profile/my-profile'));
-        }, 500);
+        }, 100);
       });
     }),
   LoadingComponent: () => {

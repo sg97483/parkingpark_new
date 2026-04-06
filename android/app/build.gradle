@@ -53,8 +53,8 @@ android {
         minSdk rootProject.ext.minSdkVersion
         targetSdk rootProject.ext.targetSdkVersion
         // 버전 정보도 기존 설정을 그대로 가져옵니다.
-        versionCode 469
-        versionName "3.4.8"
+        versionCode 479
+        versionName "3.5.8"
     }
 
     // 서명 설정은 기존 설정을 그대로 가져옵니다.
@@ -153,3 +153,22 @@ apply from: file("../../node_modules/@react-native-community/cli-platform-androi
 project.ext.vectoricons = [
     iconFontNames: [ 'MaterialCommunityIcons.ttf' ]
 ]
+
+// Gradle 8.6+ implicit dependency 해결
+afterEvaluate {
+    tasks.named("checkReleaseAarMetadata").configure {
+        dependsOn(":invertase_react-native-apple-authentication:writeReleaseAarMetadata")
+        dependsOn(":notifee_react-native:writeReleaseAarMetadata")
+    }
+    // packageReleaseResources -> generateReleaseResValues 의존성 (Gradle 8.6+ implicit dependency)
+    ["invertase_react-native-apple-authentication", "notifee_react-native"].each { projectName ->
+        def project = rootProject.findProject(":${projectName}")
+        if (project != null) {
+            def pkgTask = project.tasks.findByName('packageReleaseResources')
+            def genTask = project.tasks.findByName('generateReleaseResValues')
+            if (pkgTask != null && genTask != null) {
+                pkgTask.dependsOn(genTask)
+            }
+        }
+    }
+}

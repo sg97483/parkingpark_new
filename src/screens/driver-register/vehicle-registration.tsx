@@ -31,6 +31,7 @@ const VehicleRegistration = (props: RootStackScreenProps<'VehicleRegistration'>)
 
   const text = strings.driver_register;
   const {userID, user, userToken} = userHook();
+  const normalizeCarNumber = (value?: string | null) => `${value ?? ''}`.replace(/\s+/g, '');
   const [updateCarInfo, {isLoading}] = useUpdateCarUserMutation();
   const [updateDriverAuth] = useUpdateDriverAuthMutation();
   const [addNewCar, {isLoading: isAddingNewCar}] = useAddNewCarMutation();
@@ -46,7 +47,9 @@ const VehicleRegistration = (props: RootStackScreenProps<'VehicleRegistration'>)
   const [carCompany, setCarCompany] = useState(
     isAddNewCar ? '' : (user?.carCompany?.trim()?.length as number) > 0 ? user?.carCompany : '',
   );
-  const [carNumber, setCarNumber] = useState<string>(isAddNewCar ? '' : (user?.carNumber ?? ''));
+  const [carNumber, setCarNumber] = useState<string>(
+    isAddNewCar ? '' : normalizeCarNumber(user?.carNumber),
+  );
   const [carYear, setCarYear] = useState<string>(isAddNewCar ? '' : (user?.carYear ?? ''));
   const disabled = useMemo(
     () => !!carModel && !!carNumber && !!carYear,
@@ -60,7 +63,7 @@ const VehicleRegistration = (props: RootStackScreenProps<'VehicleRegistration'>)
       carColor: carColor,
       carModel: carModel,
       carCompany: carCompany,
-      carNumber: carNumber,
+      carNumber: normalizeCarNumber(carNumber),
       carYear: carYear,
       id: userToken?.id,
       pwd: userToken?.password,
@@ -88,7 +91,7 @@ const VehicleRegistration = (props: RootStackScreenProps<'VehicleRegistration'>)
       carColor: carColor,
       carModel: carModel,
       carCompany: carCompany,
-      carNumber: carNumber,
+      carNumber: normalizeCarNumber(carNumber),
       carYear: carYear,
       memberId: userToken?.id,
     });
@@ -125,7 +128,7 @@ const VehicleRegistration = (props: RootStackScreenProps<'VehicleRegistration'>)
         <PaddingHorizontalWrapper containerStyles={{gap: heightScale1(30)}} forDriveMe>
           <CustomInput
             title={text.number_car}
-            onChangeText={setCarNumber}
+            onChangeText={value => setCarNumber(normalizeCarNumber(value))}
             value={carNumber}
             placeholder="11가1111"
             maxLength={10}

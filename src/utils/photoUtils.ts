@@ -64,17 +64,72 @@ export const handleOpenCamera = async () => {
 
 export const handleOpenPhotoLibrary = async () => {
   try {
+    const runPicker = async () => {
+      const cameraResult = await launchImageLibrary({
+        mediaType: 'photo',
+        selectionLimit: 1,
+        quality: CAMERA_QUALITY,
+      });
+      return cameraResult;
+    };
+
+    if (IS_IOS) {
+      const perm = await request(PERMISSIONS.IOS.PHOTO_LIBRARY);
+      if (perm !== RESULTS.GRANTED) {
+        AppModal.show({
+          title: '사진 라이브라리 접근 권한이 차단되었습니다.',
+          content: '설정에서 액세스를 허용하시겠습니까?',
+          textNo: '취소',
+          textYes: '설정으로 가기',
+          isTwoButton: true,
+          yesFunc() {
+            Linking.openSettings();
+          },
+        });
+        return;
+      }
+      const cameraResult = await runPicker();
+      if (cameraResult?.assets && cameraResult?.assets?.length > 0) {
+        const asset = cameraResult?.assets[0];
+        const typeSplit = asset.type?.split('/');
+        const currentType = typeSplit ? typeSplit[1] : '';
+        const {fileName, height, width, uri} = asset;
+        const returnImage = {
+          fileName,
+          height,
+          width,
+          uri,
+          type: currentType === 'jpeg' ? TYPE_IMAGE.jpeg : TYPE_IMAGE.png,
+        } as ImageProps;
+        await new Promise(resolve => setTimeout(resolve, TIMEOUT_VALUE));
+        return returnImage;
+      }
+      return undefined;
+    }
+
     const apiLevel = DeviceInfo.getApiLevelSync();
+    if (apiLevel >= 33) {
+      const cameraResult = await runPicker();
+      if (cameraResult?.assets && cameraResult?.assets?.length > 0) {
+        const asset = cameraResult?.assets[0];
+        const typeSplit = asset.type?.split('/');
+        const currentType = typeSplit ? typeSplit[1] : '';
+        const {fileName, height, width, uri} = asset;
+        const returnImage = {
+          fileName,
+          height,
+          width,
+          uri,
+          type: currentType === 'jpeg' ? TYPE_IMAGE.jpeg : TYPE_IMAGE.png,
+        } as ImageProps;
+        await new Promise(resolve => setTimeout(resolve, TIMEOUT_VALUE));
+        return returnImage;
+      }
+      return undefined;
+    }
 
-    const cameraPermissionResult = await request(
-      IS_ANDROID && apiLevel >= 33
-        ? PERMISSIONS.ANDROID.READ_MEDIA_IMAGES
-        : IS_IOS
-          ? PERMISSIONS.IOS.PHOTO_LIBRARY
-          : PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE,
-    );
-
-    if (cameraPermissionResult !== RESULTS.GRANTED) {
+    const perm = await request(PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE);
+    if (perm !== RESULTS.GRANTED) {
       AppModal.show({
         title: '사진 라이브라리 접근 권한이 차단되었습니다.',
         content: '설정에서 액세스를 허용하시겠습니까?',
@@ -88,11 +143,7 @@ export const handleOpenPhotoLibrary = async () => {
       return;
     }
 
-    const cameraResult = await launchImageLibrary({
-      mediaType: 'photo',
-      selectionLimit: 1,
-      quality: CAMERA_QUALITY,
-    });
+    const cameraResult = await runPicker();
 
     if (cameraResult?.assets && cameraResult?.assets?.length > 0) {
       const asset = cameraResult?.assets[0];

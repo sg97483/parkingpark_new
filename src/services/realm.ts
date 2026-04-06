@@ -108,7 +108,10 @@ export const fetchParkingList = async ({
   const sinLat = Math.sin(deg2rad(center.lat));
   const sinLong = Math.sin(deg2rad(center.long));
 
-  const baseQuery = `(${cosLat} * coslat * (${cosLong} * coslng + ${sinLong} * sinlng) + ${sinLat} * sinlat) >= ${distanceKM}`;
+  // NOTE: creditCardYN === 'A' 인 주차장은 지도 마커에서 숨김 처리합니다.
+  // (DB 업데이트로 A 값이 내려오면 앱 재실행 시 바로 반영되도록, 조회 쿼리에서 공통 제외)
+  const hideMarkerQuery = "(creditCardYN != 'A' OR creditCardYN == null)";
+  const baseQuery = `(${cosLat} * coslat * (${cosLong} * coslng + ${sinLong} * sinlng) + ${sinLat} * sinlat) >= ${distanceKM} AND ${hideMarkerQuery}`;
   let filteredData: ParkingMapProps[] = [];
 
   if (Array.isArray(parkingFilter) && parkingFilter.length > 0) {
@@ -169,7 +172,9 @@ export const fetchParkingList = async ({
         const results = Array.from(data.filtered(query)); // 1. 먼저 쿼리 결과를 변수에 담습니다.
 
         // 3. 그 다음, 결과 변수를 가지고 나머지 작업을 합니다.
+        // 추가 필터링: creditCardYN === 'A' 제외 (쿼리가 제대로 작동하지 않을 경우 대비)
         filteredData = results
+          .filter(item => item.creditCardYN !== 'A' && item.creditCardYN !== 'a') // JavaScript 필터링 추가
           .map(item => ({
             ...item,
             _distance: getDistanceFromTwoLatLong(center.lat, center.long, item.lat, item.lng),
@@ -181,8 +186,16 @@ export const fetchParkingList = async ({
       }
     }
   } else {
-    const partnerList = Array.from(data.filtered(baseQuery + " AND ticketPartnerYN == 'Y'"));
-    const nonPartnerList = Array.from(data.filtered(baseQuery + " AND ticketPartnerYN != 'Y'"))
+    const partnerQuery = baseQuery + " AND ticketPartnerYN == 'Y'";
+    const nonPartnerQuery = baseQuery + " AND ticketPartnerYN != 'Y'";
+    
+    const partnerListRaw = Array.from(data.filtered(partnerQuery));
+    const nonPartnerListRaw = Array.from(data.filtered(nonPartnerQuery));
+    
+    // 추가 필터링: creditCardYN === 'A' 제외 (쿼리가 제대로 작동하지 않을 경우 대비)
+    const partnerList = partnerListRaw.filter(item => item.creditCardYN !== 'A' && item.creditCardYN !== 'a');
+    const nonPartnerList = nonPartnerListRaw
+      .filter(item => item.creditCardYN !== 'A' && item.creditCardYN !== 'a') // JavaScript 필터링 추가
       .map(item => ({
         ...item,
         _distance: getDistanceFromTwoLatLong(center.lat, center.long, item.lat, item.lng),

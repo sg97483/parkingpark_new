@@ -22,6 +22,11 @@ import {showMessage} from 'react-native-flash-message';
 
 interface Props {
   onSuccess: () => void;
+  /**
+   * 결제 취소 WebView 실행 전에 선행되어야 하는 취소 로직 (예: Amano 취소)
+   * true 를 반환하면 계속 진행, false 를 반환하면 이후 작업을 중단합니다.
+   */
+  onBeforeCancel?: () => Promise<boolean>;
 }
 
 export interface CancelPaymentRecheckRefs {
@@ -29,7 +34,7 @@ export interface CancelPaymentRecheckRefs {
 }
 
 const CancelPaymentRecheckPopup = forwardRef((props: Props, ref) => {
-  const {onSuccess} = props;
+  const {onSuccess, onBeforeCancel} = props;
   const userToken = useAppSelector(state => state?.userReducer?.userToken);
 
   const [title, setTitle] = useState<string>('');
@@ -64,9 +69,21 @@ const CancelPaymentRecheckPopup = forwardRef((props: Props, ref) => {
     [],
   );
 
-  const handleCancel = () => {
-    if (cancelAmount && historyID) {
-      setIsLoading(true);
+  const handleCancel = async () => {
+    if (!cancelAmount || !historyID) {
+      return;
+    }
+
+    setIsLoading(true);
+
+    try {
+      if (onBeforeCancel) {
+        const ok = await onBeforeCancel();
+        if (!ok) {
+          setIsLoading(false);
+          return;
+        }
+      }
 
       const body = {
         cancelAmt: cancelAmount,
@@ -75,16 +92,16 @@ const CancelPaymentRecheckPopup = forwardRef((props: Props, ref) => {
         memberPwd: userToken?.password,
       };
 
-      cancelValetParking(body)
-        .unwrap()
-        .then(res => {
-          if (res === '200') {
-            setShowWebview(true);
-          } else {
-            Alert.alert('결제취소에 실패하였습니다. 관리자에게 문의해 주세요.');
-            setIsLoading(false);
-          }
-        });
+      const res = await cancelValetParking(body).unwrap();
+      if (res === '200') {
+        setShowWebview(true);
+      } else {
+        Alert.alert('결제취소에 실패하였습니다. 관리자에게 문의해 주세요.');
+        setIsLoading(false);
+      }
+    } catch (e) {
+      Alert.alert('결제취소에 실패하였습니다. 관리자에게 문의해 주세요.');
+      setIsLoading(false);
     }
   };
 

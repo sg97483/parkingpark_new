@@ -37,6 +37,8 @@ const CarSetting = (props: RootStackScreenProps<'CarSetting'>) => {
   const [isApproved, setApproved] = useState(false);
   const [disable, setDisable] = useState(false);
 
+  const normalizeCarNumber = (value?: string | null) => `${value ?? ''}`.replace(/\s+/g, '');
+
   useEffect(() => {
     try {
       getData();
@@ -52,7 +54,7 @@ const CarSetting = (props: RootStackScreenProps<'CarSetting'>) => {
       id: userToken?.id + '',
       pwd: userToken.password,
     }).unwrap();
-    setCarNum(myProfile.carNumber);
+    setCarNum(normalizeCarNumber(myProfile.carNumber));
     setCarModal(myProfile.carModel);
     setCarColor(myProfile.carColor);
     setCarYear(myProfile.carYear);
@@ -77,7 +79,7 @@ const CarSetting = (props: RootStackScreenProps<'CarSetting'>) => {
       setAuthTxt('* 입력정보 불충분 및 기타사유로 승인이 거절되었습니다.');
     }
     setDisable(
-      !myProfile.carNumber ||
+      !normalizeCarNumber(myProfile.carNumber) ||
         !myDriver.licenseNum ||
         !myDriver.insurCompany ||
         !myDriver.style ||

@@ -78,17 +78,7 @@ const ImagePickerModal = forwardRef((props: Props, ref) => {
   };
 
   const handleChooseImage = async () => {
-    const apiLevel = DeviceInfo.getApiLevelSync();
-
-    const result = await request(
-      IS_ANDROID && apiLevel >= 33
-        ? PERMISSIONS.ANDROID.READ_MEDIA_IMAGES
-        : IS_IOS
-          ? PERMISSIONS.IOS.PHOTO_LIBRARY
-          : PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE,
-    );
-
-    if (result == RESULTS.GRANTED) {
+    const runPicker = () => {
       launchImageLibrary({mediaType: 'photo', selectionLimit: 1, quality: 0.2})
         .then(res => {
           if (res?.assets) {
@@ -96,14 +86,44 @@ const ImagePickerModal = forwardRef((props: Props, ref) => {
             onImage &&
               onImage({
                 fileName: res.assets[0]?.fileName as string,
-                height: res?.assets[0]?.height as number,
-                width: res?.assets[0]?.width as number,
-                uri: res?.assets[0]?.uri as string,
+                height: res.assets[0]?.height as number,
+                width: res.assets[0]?.width as number,
+                uri: res.assets[0]?.uri as string,
                 type: 'image/jpg',
               });
           }
         })
         .catch(error => Alert.alert(error));
+    };
+
+    if (IS_IOS) {
+      const result = await request(PERMISSIONS.IOS.PHOTO_LIBRARY);
+      if (result === RESULTS.GRANTED) {
+        runPicker();
+      } else {
+        AppModal.show({
+          title: '사진 라이브라리 접근 권한이 차단되었습니다.',
+          content: '설정에서 액세스를 허용하시겠습니까?',
+          textNo: '취소',
+          textYes: '설정으로 가기',
+          isTwoButton: true,
+          yesFunc() {
+            Linking.openSettings();
+          },
+        });
+      }
+      return;
+    }
+
+    const apiLevel = DeviceInfo.getApiLevelSync();
+    if (apiLevel >= 33) {
+      runPicker();
+      return;
+    }
+
+    const result = await request(PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE);
+    if (result === RESULTS.GRANTED) {
+      runPicker();
     } else {
       AppModal.show({
         title: '사진 라이브라리 접근 권한이 차단되었습니다.',

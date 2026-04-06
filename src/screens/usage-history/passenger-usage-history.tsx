@@ -43,6 +43,7 @@ const PassengerUsageHistory: React.FC = memo(() => {
   const navigation = useNavigation<UseRootStackNavigation>();
   const carpoolFilterRef = useRef<PassUsageFilterRefs>(null);
   const filterScrollRef = useRef<ScrollView>(null);
+  const processedItemsRef = useRef<Set<string>>(new Set());
   const passUsageFilter = useAppSelector(
     state => state?.carpoolReducer?.passengerUsageHistoryFilter,
   );
@@ -107,57 +108,106 @@ const PassengerUsageHistory: React.FC = memo(() => {
 
   const [updateEstPrice] = useLazyUpdateEstPriceQuery();
 
+  // 데이터의 실제 내용이 변경되었을 때만 실행되도록 ID 기반 해시 생성
+  const paymentHistoryHash = useMemo(
+    () => listPaymentHistory?.map(item => `${item.id}-${item.rStatusCheck}`).join('|') || '',
+    [listPaymentHistory],
+  );
+
   useEffect(() => {
     const currentDate = moment().format('YYYYMMDD');
-    const currentTime = moment().format('HH:mm').valueOf();
     const currentHour = moment().hours();
 
-    listPaymentHistory?.map(carpool => {
+    // 1. 조건에 맞는 항목만 필터링 (이미 처리된 항목 제외)
+    const itemsToUpdate = listPaymentHistory?.filter(carpool => {
+      const carpoolId = carpool?.id?.toString();
+      
+      // 이미 처리된 항목은 건너뛰기
+      if (processedItemsRef.current.has(carpoolId)) {
+        return false;
+      }
+
       const selectDay = moment(carpool?.selectDay?.slice(0, 10) as string, 'YYYY.MM.DD').format(
         'YYYYMMDD',
       );
-
-      const startTime = moment(carpool?.startTime, 'HH:mm').format('HH:mm').valueOf();
-
       const before_current_day = Number(selectDay);
       const current_day = Number(currentDate);
       const diff_days = before_current_day - current_day;
       const isOverTime = carpool?.carInOut === 'out' ? currentHour >= 20 : currentHour >= 9;
 
-      if (
+      return (
         (diff_days < 0 || (diff_days === 0 && isOverTime)) &&
         (carpool?.rStatusCheck === 'O' ||
           carpool?.rStatusCheck === 'R' ||
           carpool?.state === 'R' ||
           carpool?.state === 'O')
-      ) {
+      );
+    }) || [];
+
+    if (itemsToUpdate.length === 0) {
+      return;
+    }
+
+    // 2. 즉시 processedItemsRef에 추가 (타이밍 이슈 방지)
+    itemsToUpdate.forEach(carpool => {
+      const carpoolId = carpool?.id?.toString();
+      processedItemsRef.current.add(carpoolId);
+    });
+
+    // 3. 고유한 memberId 추출 (중복 제거)
+    const uniqueMemberIds = [
+      ...new Set(
+        itemsToUpdate
+          .map(item => item.d_memberId?.toString())
+          .filter((id): id is string => !!id),
+      ),
+    ];
+
+    // 4. 드라이버 정보 조회 및 처리
+    const processItems = async () => {
+      const driverInfoCache = new Map<string, any>();
+
+      // 각 고유 memberId당 한 번만 조회
+      for (const memberId of uniqueMemberIds) {
+        try {
+          const res = await readMyDriverInfo({memberId}).unwrap();
+          driverInfoCache.set(memberId, res);
+        } catch (error) {
+          console.error(`Failed to fetch driver info for ${memberId}:`, error);
+        }
+      }
+
+      // 모든 항목 처리
+      itemsToUpdate.forEach(carpool => {
         updateStatusCheck({id: carpool?.id?.toString(), rStatusCheck: 'E'})
           .unwrap()
-          .then(res => {});
+          .then(() => {});
+
         updateStateCheck({
           isPassengerRoute: true,
           roadInfoId: Number(carpool?.roadInfoId),
           state: 'E',
         });
-        readMyDriverInfo({
-          memberId: carpool?.d_memberId?.toString(),
-        })
-          .unwrap()
-          .then(res => {
-            let estPrice = 0;
-            if (res?.calYN === 'M') {
-              estPrice = Number(carpool?.price) - Number(carpool?.price) * 0.25;
-            } else {
-              estPrice = Number(carpool?.price) - Number(carpool?.price) * 0.2;
-            }
-            updateEstPrice({
-              id: carpool?.roadInfoId,
-              estPrice: estPrice,
-            });
+
+        // 캐시된 드라이버 정보 사용
+        const driverInfo = driverInfoCache.get(carpool?.d_memberId?.toString());
+        if (driverInfo) {
+          let estPrice = 0;
+          if (driverInfo?.calYN === 'M') {
+            estPrice = Number(carpool?.price) - Number(carpool?.price) * 0.25;
+          } else {
+            estPrice = Number(carpool?.price) - Number(carpool?.price) * 0.2;
+          }
+          updateEstPrice({
+            id: carpool?.roadInfoId,
+            estPrice: estPrice,
           });
-      }
-    });
-  }, [listPaymentHistory]);
+        }
+      });
+    };
+
+    processItems();
+  }, [paymentHistoryHash]); // listPaymentHistory 대신 paymentHistoryHash 사용
 
   useFocusEffect(
     useCallback(() => {
