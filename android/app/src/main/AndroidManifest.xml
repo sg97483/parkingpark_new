@@ -89,5 +89,9 @@
         <package android:name="com.lguplus.smartotp" />
         <package android:name="com.kt.ktauth"/>
         <package android:name="com.sktelecom.tauth"/>
+        <!-- NICE PASS(AppLink) - 이동통신 3사 PASS 패키지 -->
+        <package android:name="com.sktelecom.pass" />
+        <package android:name="com.kt.pass" />
+        <package android:name="com.lguplus.pass" />
     </queries>
 </manifest>

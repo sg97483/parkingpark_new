@@ -15,7 +15,19 @@ interface Props {
 const ParkingPayInfoTab: React.FC<Props> = memo(props => {
   const {data} = props;
 
-  return data ? (
+  if (!data) {
+    return <></>;
+  }
+
+  if (data.length === 0) {
+    return (
+      <View style={styles.container}>
+        <CustomText string="주차권 정보가 없습니다." family={FONT_FAMILY.SEMI_BOLD} />
+      </View>
+    );
+  }
+
+  return (
     <View style={styles.container}>
       {data?.map((item, index) => {
         return (
@@ -39,8 +51,6 @@ const ParkingPayInfoTab: React.FC<Props> = memo(props => {
         );
       })}
     </View>
-  ) : (
-    <></>
   );
 });
 

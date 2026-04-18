@@ -2,6 +2,7 @@ import React, {memo, useState} from 'react';
 import {Platform, StyleSheet, UIManager, View} from 'react-native';
 import ParkingInfoTabItem from '~components/parking-details/parking-info-tab-item';
 import {PADDING, PADDING_HEIGHT} from '~constants/constant';
+import {IS_ACTIVE} from '~constants/enum';
 import {ParkingProps, TicketProps} from '~constants/types';
 import {useTicketInfoQuery} from '~services/parkingServices';
 import {heightScale} from '~styles/scaling-utils';
@@ -24,12 +25,13 @@ const ParkingInfoTab: React.FC<Props> = memo(props => {
   const {data} = props;
 
   const parkingID = data?.id;
+  const isTicketInfoEnabled = data?.ticketPartnerYN === IS_ACTIVE.YES;
 
   const {data: TICKET_INFO_LIST} = useTicketInfoQuery(
     {
       id: parkingID,
     },
-    {skip: !parkingID},
+    {skip: !parkingID || !isTicketInfoEnabled},
   );
 
   const [isShowFee, setIsShowFee] = useState<boolean>(false);
@@ -62,7 +64,7 @@ const ParkingInfoTab: React.FC<Props> = memo(props => {
 
       <ParkingInfoTabItem
         title="4. 주차권정보"
-        disabled={data?.category !== '민영'}
+        disabled={!isTicketInfoEnabled}
         isSelected={isShowPayInfo}
         onPress={() => setIsShowPayInfo(!isShowPayInfo)}
       />
