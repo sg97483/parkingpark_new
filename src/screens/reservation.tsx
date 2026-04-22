@@ -22,10 +22,9 @@ import CustomText from '~components/custom-text';
 import Divider from '~components/divider';
 import FixedContainer from '~components/fixed-container';
 import HStack from '~components/h-stack';
-import {ChooseYearModalRefObject} from '~components/modal-choose-year';
-import ModalDateTimePicker from '~components/modal-date-picker';
 import ModalHelpReservation from '~components/modal-help-reservation';
-import ModalTimePicker from '~components/modal-time-picker';
+import ModalCalendarPicker, {CalendarPickerRefs} from '~components/modal-calendar-picker';
+import ModalTimeWheelPicker, {TimeWheelPickerRefs} from '~components/modal-time-wheel-picker';
 import RadioButton from '~components/radio-button';
 import ChargePromoPopup, {ChargePromoRefs} from '~components/reservation/charge-promo-popup';
 import CurationPopup, {CurationPopupRefs} from '~components/reservation/curation-popup';
@@ -50,6 +49,7 @@ import {strings} from '~constants/strings';
 import {CouponProps, TicketProps} from '~constants/types';
 import {ROUTE_KEY} from '~navigators/router';
 import {RootStackScreenProps} from '~navigators/stack';
+import {getAmanoDisplayQty, useAmanoAvailability} from '~hooks/useAmanoAvailability';
 import {useGetParkingCouponQuery} from '~services/couponServices';
 import {useTicketInfoQuery} from '~services/parkingServices';
 import {
@@ -109,9 +109,42 @@ const Reservation = (props: RootStackScreenProps<'Reservation'>) => {
     };
   }, []);
 
+  useEffect(() => {
+    // a1TicketCost가 0이면 "오늘만 예약 가능"이므로, 입차일 기본값을 오늘로 자동 선택합니다.
+    const maxDays = Number(parkingLot?.a1TicketCost ?? 0);
+    if (maxDays === 0 && !dateHire) {
+      setDateHire(new Date());
+    }
+  }, [parkingLot?.id, parkingLot?.a1TicketCost, dateHire]);
+
   const {data: parkingTickets} = useTicketInfoQuery({
     id: parkingLot?.id,
   });
+
+  const amanoPlotId = parkingLot?.MTicketTimeStart?.trim();
+  const amanoAvailabilityEnabled =
+    parkingLot?.agency === '아마노코리아' && !!amanoPlotId;
+  const amanoPakStrStddDt = moment().format('YYYY-MM-DD');
+  const amanoAvailabilityMap = useAmanoAvailability({
+    enabled: amanoAvailabilityEnabled,
+    plotId: amanoPlotId,
+    tickets: parkingTickets,
+    pakStrStddDt: amanoPakStrStddDt,
+  });
+
+  const ticketAmanoDisplayQty = (item: TicketProps) =>
+    getAmanoDisplayQty(parkingLot?.agency, item, amanoAvailabilityMap);
+
+  const isTicketSoldOutForPayment = (t: TicketProps | null) => {
+    if (!t) {
+      return true;
+    }
+    if (t.soldOutYn === 'Y' || t.ticketLimit === 0) {
+      return true;
+    }
+    const q = ticketAmanoDisplayQty(t);
+    return q !== null && q <= 0;
+  };
 
   const {data: parkingRestriction} = useRequestParkingRestrictionQuery({
     parkId: parkingLot?.id,
@@ -154,8 +187,8 @@ const Reservation = (props: RootStackScreenProps<'Reservation'>) => {
     }
   }, [payInfo, isSuccess]);
 
-  const chooseCalendarRef = useRef<ChooseYearModalRefObject>(null);
-  const chooseTimeRef = useRef<ChooseYearModalRefObject>(null);
+  const chooseCalendarRef = useRef<CalendarPickerRefs>(null);
+  const chooseTimeRef = useRef<TimeWheelPickerRefs>(null);
   const helpReservationRef = useRef<any>(null);
   const scrollviewRef = useRef<ScrollView>(null);
   const curationRef = useRef<CurationPopupRefs>(null);
@@ -458,6 +491,21 @@ const Reservation = (props: RootStackScreenProps<'Reservation'>) => {
       return;
     }
 
+    if (selectedTicket?.ticketLimit === 0) {
+      showMessage({
+        message: '해당 주차권은 매진되어 구매할 수 없습니다.',
+      });
+      return;
+    }
+
+    const amanoQty = ticketAmanoDisplayQty(selectedTicket);
+    if (amanoQty !== null && amanoQty <= 0) {
+      showMessage({
+        message: '해당 주차권은 매진되어 구매할 수 없습니다.',
+      });
+      return;
+    }
+
     if (!selectedTicket?.ticketName) {
       showMessage({
         message: '주차권을 선택해주세요',
@@ -646,21 +694,6 @@ const Reservation = (props: RootStackScreenProps<'Reservation'>) => {
 
     setIsCheckingReservation(true);
     reservationCheckRef?.current?.show();
-  };
-
-  const checkDayRestriction = (value: Date) => {
-    const isBetween =
-      parkingRestriction &&
-      parkingRestriction?.find(item =>
-        moment(value).isBetween(
-          moment(item?.start_date, 'YYYYMMDD'),
-          moment(item?.end_date, 'YYYYMMDD'),
-          'day',
-          '[]',
-        ),
-      );
-
-    return isBetween;
   };
 
   const checkTimeBig = (
@@ -855,6 +888,7 @@ const Reservation = (props: RootStackScreenProps<'Reservation'>) => {
               key={index}
               item={item}
               selectedItem={selectedTicket}
+              amanoDisplayQty={ticketAmanoDisplayQty(item)}
               onItemPress={() => {
                 setSelectedTicket(item);
               }}
@@ -1017,7 +1051,7 @@ const Reservation = (props: RootStackScreenProps<'Reservation'>) => {
             title={'적립금'}
             textMoney={`/ ${getNumberWithCommas(userPoint)}${strings?.general_text?.won}`}
             valueInput={point}
-            onChangeText={setPoint}
+            onChangeText={text => setPoint(text.replace(/[^0-9]/g, ''))}
           />
           <View style={{alignSelf: 'flex-end'}}>
             <CheckboxText
@@ -1040,7 +1074,7 @@ const Reservation = (props: RootStackScreenProps<'Reservation'>) => {
             title={'충전금'}
             textMoney={`/ ${getNumberWithCommas(userCharge)}${strings?.general_text?.won}`}
             valueInput={charge}
-            onChangeText={setCharge}
+            onChangeText={text => setCharge(text.replace(/[^0-9]/g, ''))}
           />
 
           <TouchableOpacity onPress={() => navigation.navigate(ROUTE_KEY.DepositMoney)}>
@@ -1107,7 +1141,7 @@ const Reservation = (props: RootStackScreenProps<'Reservation'>) => {
               marginBottom: heightScale(15),
             }}
             isShowIcon
-            placeholder={'2026년'}
+            placeholder={moment().format('YYYY년')}
             value={
               dateHire
                 ? moment(dateHire?.valueOf()).format(`YYYY년 M월 D일 (${getDayName(dateHire)})`)
@@ -1122,15 +1156,29 @@ const Reservation = (props: RootStackScreenProps<'Reservation'>) => {
             title={'입차일'}
           />
 
-          <CustomText
-            string={moment(
-              new Date(new Date().getTime() + Number(parkingLot?.a1TicketCost ?? 0) * 24 * 60 * 60 * 1000),
-            ).format('MM월DD일까지 예약가능')}
-            textStyle={{
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
               marginLeft: widthScale(95),
               marginBottom: heightScale(5),
-            }}
-          />
+              flexWrap: 'wrap',
+            }}>
+            {Number(parkingLot?.a1TicketCost ?? 0) === 0 ? (
+              <CustomText
+                string="(당일만 예약 가능한 주차장)"
+                color={colors.red}
+                textStyle={{marginRight: widthScale(6)}}
+              />
+            ) : null}
+            <CustomText
+              string={moment(
+                new Date(
+                  new Date().getTime() + Number(parkingLot?.a1TicketCost ?? 0) * 24 * 60 * 60 * 1000,
+                ),
+              ).format('MM월DD일까지 예약가능')}
+            />
+          </View>
 
           <TextInputChoose
             placeholder={'12시00분'}
@@ -1293,60 +1341,34 @@ const Reservation = (props: RootStackScreenProps<'Reservation'>) => {
         </View>
 
         <Button
-          text="결제하기"
+          text={isTicketSoldOutForPayment(selectedTicket) ? '매진' : '결제하기'}
           color={colors.red}
           borderColor={colors.red}
           onPress={() => handleConfirm(isAutoPaymentChecked)}
           style={styles.buttonRed}
-          disable={isCheckingReservation}
+          disable={
+            isCheckingReservation || isTicketSoldOutForPayment(selectedTicket)
+          }
         />
 
-        <ModalTimePicker
+        <ModalCalendarPicker
           ref={chooseCalendarRef}
-          onConfirm={(value: Date) => {
-            // ticketdayLimit이 undefined일 경우 빈 배열을 기본값으로 설정
-            const ticketLimitDates = selectedTicket?.ticketdayLimit
-              ? selectedTicket.ticketdayLimit
-                  .split('/')
-                  .map(date => moment(date, 'YYMMDD').toDate())
-              : [];
-
-            // 선택한 날짜가 ticketLimitDates 목록에 포함되어 있는지 확인
-            const isDateSoldOut = ticketLimitDates.some(ticketDate =>
-              moment(value).isSame(ticketDate, 'day'),
-            );
-
-            if (isDateSoldOut) {
-              showMessage({
-                message:
-                  '선택하신 주차권의 해당일은 현재 매진되었습니다. \n판매제한은 매일 갱신되며 다른날짜를 이용해주세요',
-              });
-              return;
-            }
-
-            if (checkDayRestriction(value)) {
-              showMessage({
-                message:
-                  '현재 해당일은 매진으로 구매할 수 없습니다. 판매제한은 매일 갱신되며 선택한 날짜에 \n주차권 구매가 제한될 경우 고객센터\n(010-5949-0981) 또는 카카오톡으로 문의 바랍니다.',
-              });
-              return;
-            }
-
-            if (checkDayNameGubun(value)) {
-              showMessage({
-                message:
-                  '현재 해당일은 매진으로 구매할 수 없습니다. 판매제한은 매일 갱신되며 선택한 날짜에 \n주차권 구매가 제한될 경우 고객센터\n(010-5949-0981) 또는 카카오톡으로 문의 바랍니다.',
-              });
-              return;
-            } else {
-              setDateHire(value);
-            }
-          }}
-          // a1TicketCost: 오늘부터 예약 가능한 최대 '일수' (0이면 오늘만, 1이면 오늘+내일)
+          onConfirm={(value: Date) => setDateHire(value)}
           maximumDate={Number(parkingLot?.a1TicketCost ?? 0)}
+          soldOutDateStr={selectedTicket?.ticketdayLimit}
+          disabledDayNames={payInfo?.dayNameGubun}
+          restrictedRanges={parkingRestriction}
         />
 
-        <ModalDateTimePicker ref={chooseTimeRef} onConfirm={handleCheckTimeReservation} />
+        <ModalTimeWheelPicker
+          ref={chooseTimeRef}
+          onConfirm={handleCheckTimeReservation}
+          selectedDate={dateHire}
+          initialTime={timeHire}
+          ticketStart={selectedTicket?.ticketStart}
+          ticketEnd={selectedTicket?.ticketEnd}
+          minuteInterval={10}
+        />
         <ModalHelpReservation ref={helpReservationRef} />
       </ScrollView>
 

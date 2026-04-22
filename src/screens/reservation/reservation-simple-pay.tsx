@@ -14,10 +14,11 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import WebView from 'react-native-webview';
 import CustomHeader from '~components/custom-header';
 import CustomText from '~components/custom-text';
-import DateTimePicker, {DateTimePickerRefs} from '~components/date-time-picker';
 import Divider from '~components/divider';
 import FixedContainer from '~components/fixed-container';
 import HStack from '~components/h-stack';
+import ModalCalendarPicker, {CalendarPickerRefs} from '~components/modal-calendar-picker';
+import ModalTimeWheelPicker, {TimeWheelPickerRefs} from '~components/modal-time-wheel-picker';
 import MenuItem from '~components/reservation-simple-pay/menu-item';
 import Spinner from '~components/spinner';
 import ViewTermsPopup, {
@@ -25,7 +26,7 @@ import ViewTermsPopup, {
 } from '~components/valet-parking-reservation/view-terms-popup';
 import {BASE_URL, PADDING, width} from '~constants/constant';
 import {solar} from '~constants/data';
-import {DATE_PICKER_MODE, EMIT_EVENT, FONT, FONT_FAMILY} from '~constants/enum';
+import {EMIT_EVENT, FONT, FONT_FAMILY} from '~constants/enum';
 import {strings} from '~constants/strings';
 import {UserProps} from '~constants/types';
 import {RootStackScreenProps} from '~navigators/stack';
@@ -44,6 +45,7 @@ import {getNumberWithCommas} from '~utils/numberUtils';
 
 import {useParkingDetailsQuery} from '~services/parkingServices';
 import {ROUTE_KEY} from '~navigators/router';
+import {getAmanoDisplayQty, useAmanoAvailability} from '~hooks/useAmanoAvailability';
 
 const ReservationSimplePay = memo((props: RootStackScreenProps<'ReservationSimplePay'>) => {
   const {navigation, route} = props;
@@ -75,8 +77,8 @@ const ReservationSimplePay = memo((props: RootStackScreenProps<'ReservationSimpl
   };
 
   const viewTermsRef = useRef<ViewTermsRefs>(null);
-  const dayPickerRef = useRef<DateTimePickerRefs>(null);
-  const timePickerRef = useRef<DateTimePickerRefs>(null);
+  const timePickerRef = useRef<TimeWheelPickerRefs>(null);
+  const chooseCalendarRef = useRef<CalendarPickerRefs>(null);
 
   const userInfo = useAppSelector(state => state?.userReducer?.user) as UserProps;
   const userToken = useAppSelector(state => state?.userReducer?.userToken);
@@ -92,6 +94,15 @@ const ReservationSimplePay = memo((props: RootStackScreenProps<'ReservationSimpl
   });
   const {data: parkingTicket} = useTicketInfoQuery({
     id: Number(parkId),
+  });
+  const amanoPlotIdForAvail = parkingLotData?.MTicketTimeStart?.trim();
+  const amanoAvailEnabled =
+    parkingLotData?.agency === '아마노코리아' && !!amanoPlotIdForAvail;
+  const amanoAvailabilityMap = useAmanoAvailability({
+    enabled: amanoAvailEnabled,
+    plotId: amanoPlotIdForAvail,
+    tickets: parkingTicket,
+    pakStrStddDt: moment().format('YYYY-MM-DD'),
   });
   const [submitParkingReservation] = useSubmitParkingReservationMutation();
 
@@ -114,6 +125,21 @@ const ReservationSimplePay = memo((props: RootStackScreenProps<'ReservationSimpl
   let checkRestriction: boolean = false;
 
   const selectedTicket = parkingTicket?.find(it => it?.ticketName === parkTicketName);
+
+  const simplePayAmanoDisplayQty = selectedTicket
+    ? getAmanoDisplayQty(
+        parkingLotData?.agency,
+        selectedTicket,
+        amanoAvailabilityMap,
+      )
+    : null;
+
+  const isSelectedTicketSoldOutForPay = Boolean(
+    selectedTicket &&
+      (selectedTicket.soldOutYn === 'Y' ||
+        selectedTicket.ticketLimit === 0 ||
+        (simplePayAmanoDisplayQty !== null && simplePayAmanoDisplayQty <= 0)),
+  );
 
   if (parkingRestriction) {
     checkRestriction = parkingRestriction.some(element => {
@@ -434,6 +460,12 @@ const ReservationSimplePay = memo((props: RootStackScreenProps<'ReservationSimpl
   };
 
   const handleCheckTimeReservation = (time: number) => {
+    // ticketStart/ticketEnd가 없으면(상품 정책 미제공 등) 시간 제한 없이 선택 허용
+    if (!selectedTicket?.ticketStart || !selectedTicket?.ticketEnd) {
+      setTime(time);
+      return;
+    }
+
     const selectedTimeHour = moment(time).format('HH');
     const selectedTimeMin = moment(time).format('mm');
     const tickStartHour = selectedTicket?.ticketStart?.split(':')[0];
@@ -505,6 +537,18 @@ const ReservationSimplePay = memo((props: RootStackScreenProps<'ReservationSimpl
 
     // 선택한 주차권이 매진 상태(soldOutYn === 'Y')인 경우 결제 차단
     if (selectedTicket?.soldOutYn === 'Y') {
+      showMessage({
+        message: '해당 주차권은 매진되어 구매할 수 없습니다.',
+      });
+      return;
+    }
+    if (selectedTicket?.ticketLimit === 0) {
+      showMessage({
+        message: '해당 주차권은 매진되어 구매할 수 없습니다.',
+      });
+      return;
+    }
+    if (simplePayAmanoDisplayQty !== null && simplePayAmanoDisplayQty <= 0) {
       showMessage({
         message: '해당 주차권은 매진되어 구매할 수 없습니다.',
       });
@@ -977,6 +1021,16 @@ const ReservationSimplePay = memo((props: RootStackScreenProps<'ReservationSimpl
               />
             }
           />
+          {Number(ticketAmount) > 0 && isSelectedTicketSoldOutForPay ? (
+            <View style={{marginTop: heightScale(6), marginLeft: widthScale(150)}}>
+              <CustomText
+                string="선택된 주차권 매진입니다."
+                color={colors.red}
+                family={FONT_FAMILY.BOLD}
+                size={FONT.CAPTION}
+              />
+            </View>
+          ) : null}
           <MenuItem title="차량번호:" content={<CustomText string={payInfo?.carNumber || ''} />} />
         </View>
 
@@ -986,7 +1040,7 @@ const ReservationSimplePay = memo((props: RootStackScreenProps<'ReservationSimpl
           <MenuItem
             title="입차일"
             content={
-              <TouchableOpacity onPress={() => dayPickerRef?.current?.show()}>
+              <TouchableOpacity onPress={() => chooseCalendarRef.current?.show()}>
                 <HStack>
                   <View style={styles.dateWrapper}>
                     <CustomText string={getFullDayName(day)} />
@@ -997,16 +1051,28 @@ const ReservationSimplePay = memo((props: RootStackScreenProps<'ReservationSimpl
             }
           />
 
-          <CustomText
-            string={moment(
-              new Date(new Date().getTime() + (payInfo?.a1TicketCost || 0) * 24 * 60 * 60 * 1000),
-            ).format('(MM월DD일까지 예약가능)')}
-            textStyle={{
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
               marginLeft: widthScale(150),
               marginBottom: heightScale(10),
-            }}
-            color={colors.red}
-          />
+              flexWrap: 'wrap',
+            }}>
+            {Number(payInfo?.a1TicketCost || 0) === 0 ? (
+              <CustomText
+                string="(당일만 예약 가능한 주차장)"
+                color={colors.red}
+                textStyle={{marginRight: widthScale(6)}}
+              />
+            ) : null}
+            <CustomText
+              string={moment(
+                new Date(new Date().getTime() + (payInfo?.a1TicketCost || 0) * 24 * 60 * 60 * 1000),
+              ).format('(MM월DD일까지 예약가능)')}
+              color={colors.red}
+            />
+          </View>
 
           <MenuItem
             title="입차시간"
@@ -1129,10 +1195,31 @@ const ReservationSimplePay = memo((props: RootStackScreenProps<'ReservationSimpl
 
         {/* Confirm */}
         <TouchableOpacity
-          onPress={Number(ticketAmount) === 0 ? handleViewParkingLot : handleSubmit}
-          style={styles.confirmButtonWrapper}>
+          onPress={
+            Number(ticketAmount) === 0
+              ? handleViewParkingLot
+              : isSelectedTicketSoldOutForPay
+                ? () =>
+                    showMessage({
+                      message: '해당 주차권은 매진되어 구매할 수 없습니다.',
+                    })
+                : handleSubmit
+          }
+          disabled={Number(ticketAmount) > 0 && isSelectedTicketSoldOutForPay}
+          style={[
+            styles.confirmButtonWrapper,
+            Number(ticketAmount) > 0 && isSelectedTicketSoldOutForPay
+              ? {opacity: 0.5}
+              : null,
+          ]}>
           <CustomText
-            string={Number(ticketAmount) === 0 ? '주차상품 변경으로 주차권 다시보기' : '결제하기'}
+            string={
+              Number(ticketAmount) === 0
+                ? '주차상품 변경으로 주차권 다시보기'
+                : isSelectedTicketSoldOutForPay
+                  ? '매진'
+                  : '결제하기'
+            }
             color={colors.white}
             family={FONT_FAMILY.SEMI_BOLD}
           />
@@ -1141,13 +1228,24 @@ const ReservationSimplePay = memo((props: RootStackScreenProps<'ReservationSimpl
 
       {/* Terms */}
       <ViewTermsPopup ref={viewTermsRef} />
-      {/* Day picker */}
-      <DateTimePicker ref={dayPickerRef} mode={DATE_PICKER_MODE.DATE} onSelect={setDay} />
-      {/* Time picker */}
-      <DateTimePicker
+      {/* Day picker (same as Reservation calendar) */}
+      <ModalCalendarPicker
+        ref={chooseCalendarRef}
+        onConfirm={(value: Date) => setDay(moment(value).valueOf())}
+        maximumDate={Number(payInfo?.a1TicketCost || 0)}
+        soldOutDateStr={selectedTicket?.ticketdayLimit}
+        disabledDayNames={payInfo?.dayNameGubun}
+        restrictedRanges={parkingRestriction}
+      />
+      {/* Time picker (same as Reservation wheel bottom sheet) */}
+      <ModalTimeWheelPicker
         ref={timePickerRef}
-        mode={DATE_PICKER_MODE.TIME}
-        onSelect={handleCheckTimeReservation}
+        selectedDate={new Date(day)}
+        initialTime={new Date(time)}
+        ticketStart={selectedTicket?.ticketStart}
+        ticketEnd={selectedTicket?.ticketEnd}
+        minuteInterval={10}
+        onConfirm={(d: Date) => handleCheckTimeReservation(moment(d).valueOf())}
       />
 
       {/* Set point */}

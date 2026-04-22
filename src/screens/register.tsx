@@ -1,5 +1,5 @@
 import React, {memo, useEffect, useRef, useState} from 'react';
-import {KeyboardAvoidingView, Platform, ScrollView, StyleSheet} from 'react-native';
+import {DeviceEventEmitter, KeyboardAvoidingView, Platform, ScrollView, StyleSheet} from 'react-native';
 import {showMessage} from 'react-native-flash-message';
 import {useDispatch} from 'react-redux';
 import CustomButton from '~components/commons/custom-button';
@@ -16,7 +16,7 @@ import SubscriptionPathModal, {
   SubscriptionPathModalRefs,
 } from '~components/register/subscription-path-modal';
 import {IS_IOS, PADDING1} from '~constants/constant';
-import {FONT, FONT_FAMILY} from '~constants/enum';
+import {EMIT_EVENT, FONT, FONT_FAMILY} from '~constants/enum';
 import {UserProps} from '~constants/types';
 import {ROUTE_KEY} from '~navigators/router';
 import {RootStackScreenProps} from '~navigators/stack';
@@ -62,12 +62,15 @@ const Register = (props: RootStackScreenProps<'Register'>) => {
     }
   }, [userData]);
 
-  const onPressVerifyPhoneNumber = async () => {
-    navigation.navigate(ROUTE_KEY.VerifyPhoneNumber, {
-      onReturn: response => {
-        setPhoneNumber(response);
-      },
+  useEffect(() => {
+    const sub = DeviceEventEmitter.addListener(EMIT_EVENT.VERIFY_PHONE_NUMBER_DONE, (value: string) => {
+      setPhoneNumber(value);
     });
+    return () => sub.remove();
+  }, []);
+
+  const onPressVerifyPhoneNumber = async () => {
+    navigation.navigate(ROUTE_KEY.VerifyPhoneNumber, {});
   };
 
   const onChangeValueDropdow = (item: any) => {
