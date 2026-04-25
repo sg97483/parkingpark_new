@@ -19,6 +19,7 @@ import {fontSize1} from '~styles/typography';
 
 interface CustomInputProps extends TextInputProps {
   title?: string;
+  titleRight?: string;
   subTitle?: string;
   errorText?: string;
   successText?: string;
@@ -35,6 +36,7 @@ export interface CustomInputRefs {
 const CustomInput = forwardRef((props: CustomInputProps, ref) => {
   const {
     title,
+    titleRight,
     subTitle,
     errorText,
     successText,
@@ -90,14 +92,29 @@ const CustomInput = forwardRef((props: CustomInputProps, ref) => {
   return (
     <View style={[{gap: heightScale1(10), flex: 1}, style]}>
       <View style={{gap: heightScale1(4)}}>
-        {title ? (
-          <CustomText
-            string={title}
-            family={FONT_FAMILY.MEDIUM}
-            color={colors.black}
-            lineHeight={fontSize1(20)}
-            forDriveMe
-          />
+        {title || titleRight ? (
+          <HStack
+            style={{
+              alignItems: 'center',
+              justifyContent: 'space-between',
+            }}>
+            <CustomText
+              string={title ?? ''}
+              family={FONT_FAMILY.MEDIUM}
+              color={colors.black}
+              lineHeight={fontSize1(20)}
+              forDriveMe
+            />
+            {titleRight ? (
+              <CustomText
+                string={titleRight}
+                family={FONT_FAMILY.REGULAR}
+                size={FONT.CAPTION}
+                color={colors.lineCancel}
+                lineHeight={fontSize1(18)}
+              />
+            ) : null}
+          </HStack>
         ) : null}
         {subTitle ? (
           <CustomText

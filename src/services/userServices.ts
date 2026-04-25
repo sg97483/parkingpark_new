@@ -42,6 +42,7 @@ export const userServices = createApi({
   refetchOnMountOrArgChange: true,
   refetchOnFocus: true,
   refetchOnReconnect: true,
+  tagTypes: ['User'],
   baseQuery: fetchBaseQuery({
     baseUrl: BASE_URL,
   }),
@@ -83,6 +84,7 @@ export const userServices = createApi({
           return {} as UserProps;
         }
       },
+      providesTags: ['User'],
     }),
 
     editUserInfo: builder.mutation<
@@ -193,6 +195,7 @@ export const userServices = createApi({
       transformResponse: (response: {statusCode: string}) => {
         return response.statusCode;
       },
+      invalidatesTags: ['User'],
     }),
     updateAgreement: builder.mutation<
       any,
@@ -225,6 +228,7 @@ export const userServices = createApi({
       transformResponse: (response: {statusCode: string}) => {
         return response.statusCode;
       },
+      invalidatesTags: ['User'],
     }),
     getProfileUser: builder.mutation<UserProps, Partial<{id: number}>>({
       query: ({id}) => {
@@ -260,6 +264,7 @@ export const userServices = createApi({
       transformResponse: response => {
         return response;
       },
+      invalidatesTags: ['User'],
     }),
     readUserPass: builder.query<UserProps, Partial<{id: string}>>({
       query: ({id}) => {
@@ -453,6 +458,7 @@ export const userServices = createApi({
       transformResponse: (response: {statusCode: string}) => {
         return response?.statusCode;
       },
+      invalidatesTags: ['User'],
     }),
 
     readMyDriverName: builder.mutation<
@@ -584,6 +590,7 @@ export const userServices = createApi({
       transformResponse: response => {
         return response;
       },
+      invalidatesTags: ['User'],
     }),
     getDatabaseVersion: builder.query<number, void>({
       query: () => {
@@ -997,6 +1004,7 @@ export const userServices = createApi({
       transformResponse: (response: {listCarManager: CarModel[]}) => {
         return response?.listCarManager ?? [];
       },
+      providesTags: ['User'],
     }),
     deleteMyCar: builder.mutation<string, Partial<{id: number; memberId: number}>>({
       query: ({id, memberId}) => {
@@ -1012,6 +1020,7 @@ export const userServices = createApi({
       transformResponse: (response: {statusCode: string}) => {
         return response?.statusCode ?? '';
       },
+      invalidatesTags: ['User'],
     }),
     setDefaultCard: builder.mutation<string, Partial<{id: number; memberId: number}>>({
       query: ({id, memberId}) => {
@@ -1027,6 +1036,7 @@ export const userServices = createApi({
       transformResponse: (response: {statusCode: string}) => {
         return response?.statusCode ?? '';
       },
+      invalidatesTags: ['User'],
     }),
     addNewCar: builder.mutation<
       string,
@@ -1046,6 +1056,7 @@ export const userServices = createApi({
           params: {carColor, carCompany, carModel, carNumber, carYear, memberId},
         };
       },
+      invalidatesTags: ['User'],
     }),
     checkAuthDriverAndPassenger: builder.mutation<
       {authDriver: string; authPassenger: string},

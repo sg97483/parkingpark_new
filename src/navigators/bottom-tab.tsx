@@ -13,8 +13,7 @@ import {
   onSnapshot,
 } from '@react-native-firebase/firestore';
 import {BottomTabBarProps, createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import React, {useCallback, useEffect, useMemo, useState} from 'react';
-import {asyncComponent} from 'react-async-component';
+import React, {Suspense, useCallback, useEffect, useMemo, useState} from 'react';
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {showMessage} from 'react-native-flash-message';
 import {SafeAreaView} from 'react-native-safe-area-context';
@@ -51,61 +50,33 @@ const Tab = createBottomTabNavigator();
 const auth = getAuth();
 const db = getFirestore();
 
-const AsyncPassengerHome = asyncComponent({
-  resolve: () =>
-    new Promise<any>(resolve => {
-      requestAnimationFrame(() => {
-        setTimeout(() => {
-          return resolve(import('../screens/drive-me-home/passenger-home'));
-        }, 100);
-      });
-    }),
-  LoadingComponent: () => {
-    return <LoadingComponent />;
-  },
-});
+const PassengerHome = React.lazy(() => import('../screens/drive-me-home/passenger-home'));
+const AsyncPassengerHome = () => (
+  <Suspense fallback={<LoadingComponent />}>
+    <PassengerHome />
+  </Suspense>
+);
 
-const AsyncDriverHome = asyncComponent({
-  resolve: () =>
-    new Promise<any>(resolve => {
-      requestAnimationFrame(() => {
-        setTimeout(() => {
-          return resolve(import('../screens/drive-me-home/driver-home'));
-        }, 100);
-      });
-    }),
-  LoadingComponent: () => {
-    return <LoadingComponent />;
-  },
-});
+const DriverHome = React.lazy(() => import('../screens/drive-me-home/driver-home'));
+const AsyncDriverHome = () => (
+  <Suspense fallback={<LoadingComponent />}>
+    <DriverHome />
+  </Suspense>
+);
 
-const AsyncParkingParkHome = asyncComponent({
-  resolve: () =>
-    new Promise<any>(resolve => {
-      requestAnimationFrame(() => {
-        setTimeout(() => {
-          return resolve(import('./drawer'));
-        }, 100);
-      });
-    }),
-  LoadingComponent: () => {
-    return <LoadingComponent />;
-  },
-});
+const ParkingParkHome = React.lazy(() => import('./drawer'));
+const AsyncParkingParkHome = () => (
+  <Suspense fallback={<LoadingComponent />}>
+    <ParkingParkHome />
+  </Suspense>
+);
 
-const AsyncMyProfile = asyncComponent({
-  resolve: () =>
-    new Promise<any>(resolve => {
-      requestAnimationFrame(() => {
-        setTimeout(() => {
-          return resolve(import('../screens/my-profile/my-profile'));
-        }, 100);
-      });
-    }),
-  LoadingComponent: () => {
-    return <LoadingComponent />;
-  },
-});
+const MyProfile = React.lazy(() => import('../screens/my-profile/my-profile'));
+const AsyncMyProfile = () => (
+  <Suspense fallback={<LoadingComponent />}>
+    <MyProfile />
+  </Suspense>
+);
 
 // MyBottomTab에 readMyDriver 함수도 prop으로 전달합니다.
 interface CustomBottomTabProps extends BottomTabBarProps {
@@ -697,7 +668,7 @@ const BottomTab = (props: RootStackScreenProps<'ParkingParkHome'>) => {
   }, [selectedTab]);
 
   useEffect(() => {
-    if (userInfo) {
+    if (userInfo && userInfo?.email) {
       signInWithEmailAndPassword(auth, userInfo?.email, '123456')
         .then(async value => {
           const uid = value?.user?.uid;

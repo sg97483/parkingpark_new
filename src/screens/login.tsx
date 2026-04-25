@@ -16,7 +16,7 @@ import CustomHeader from '~components/custom-header';
 import CustomText from '~components/custom-text';
 import FixedContainer from '~components/fixed-container';
 import HStack from '~components/h-stack';
-import {IS_ANDROID, IS_IOS, NAVER_KEY, PADDING1} from '~constants/constant';
+import {IS_ANDROID, IS_IOS, PADDING1} from '~constants/constant';
 import {FONT_FAMILY} from '~constants/enum';
 import {strings} from '~constants/strings';
 import {SNSUserProfile} from '~constants/types';
@@ -83,7 +83,7 @@ const Login = memo((props: RootStackScreenProps<'Login'>) => {
 
   const handleLoginByNaver = useCallback(async () => {
     try {
-      NaverLogin.login(NAVER_KEY)
+      NaverLogin.login()
         .then(async ({failureResponse, successResponse}) => {
           if (successResponse?.accessToken) {
             const profileUser = await NaverLogin.getProfile(successResponse?.accessToken);
@@ -246,7 +246,9 @@ const Login = memo((props: RootStackScreenProps<'Login'>) => {
             }),
           );
 
-          console.log('FCM Token to be updated:', FCMToken); // 💡 이 코드를 추가
+          // NOTE: Redux state(FCMToken)는 dispatch 직후 즉시 갱신되지 않을 수 있어
+          // 실제 서버에 보낼 토큰 값(fcmTokenValue)을 로그로 남깁니다.
+          console.log('FCM Token to be updated:', fcmTokenValue);
 
           if (res?.id && fcmTokenValue) {
             await updateUserFCMToken({

@@ -1,10 +1,18 @@
 import {getMessaging} from '@react-native-firebase/messaging';
 import {uniqBy} from 'lodash';
 import React, {memo, useEffect, useState} from 'react';
-import {Alert, BackHandler, Linking, Platform, StatusBar, StyleSheet, View} from 'react-native';
+import {
+  Alert,
+  BackHandler,
+  Image,
+  Linking,
+  Platform,
+  StatusBar,
+  StyleSheet,
+  View,
+} from 'react-native';
 import DeviceInfo from 'react-native-device-info';
 import RNFS from 'react-native-fs';
-import Video from 'react-native-video';
 import RNBootSplash from 'react-native-bootsplash';
 import CustomText from '~components/custom-text';
 import FixedContainer from '~components/fixed-container';
@@ -19,7 +27,8 @@ import {cacheUserCordinate} from '~reducers/coordinateReducer';
 import {cacheDatabaseVersion} from '~reducers/termAndContionReducer';
 import {cacheFCMToken} from '~reducers/userReducer';
 import API from '~services/api';
-import {getRealm} from '~services/realm';
+import Realm from 'realm';
+import {FirebaseUserSchema, ParkingSchema} from '~schemas/parking-schema';
 import {
   useLazyGetDbMetaQuery,
   useLazyGetDbPagedQuery,
@@ -52,10 +61,6 @@ const Splash = memo((props: RootStackScreenProps<'Splash'>) => {
   const ENABLE_PAGED_DB_SYNC = true;
   const DB_PAGE_SIZE = 10000;
 
-  const VIDEO_URL =
-    Platform.OS === 'android'
-      ? 'https://cafe.wisemobile.kr/imobile/splash_3.mp4'
-      : 'http://cafe.wisemobile.kr/imobile/splash_3.mp4';
   const [syncProgress, setSyncProgress] = useState(0);
   const [syncDownloaded, setSyncDownloaded] = useState(0);
   const [syncTotal, setSyncTotal] = useState(0);
@@ -281,7 +286,9 @@ const Splash = memo((props: RootStackScreenProps<'Splash'>) => {
         : RNFS.TemporaryDirectoryPath + '/image_term.png';
       await RNFS.writeFile(path, '', 'utf8');
 
-      const realm = await getRealm();
+      const realm = await Realm.open({
+        schema: [ParkingSchema, FirebaseUserSchema],
+      });
       const data = realm.objects('Parking');
 
       if (!databaseVersion) {
@@ -335,19 +342,62 @@ const Splash = memo((props: RootStackScreenProps<'Splash'>) => {
     }, 2000);
   };
 
-  // 🚩 [수정] 모든 초기화 로직을 이 useEffect 하나에서 순차적으로 관리합니다.
+  // 위치 권한 재시도 함수 (실수로 거부했을 때 한 번 더 안내 후 재요청)
+  // - requestLocationPermisstion 자체가 idempotent (이미 granted면 즉시 resolve)
+  // - useEffect가 deps 변경으로 재실행되어도 재호출되지만 프롬프트가 중복으로 뜨지는 않음
+  const ensureLocationPermission = async (attempt = 0): Promise<boolean> => {
+    try {
+      await requestLocationPermisstion();
+      return true;
+    } catch (_err) {
+      if (attempt === 0) {
+        return new Promise<boolean>(resolve => {
+          Alert.alert(
+            '위치 권한이 필요합니다',
+            '파킹박은 현재 위치를 기반으로 주변 주차장을 찾아줍니다.\n위치 권한을 허용해 주세요.',
+            [
+              {
+                text: '허용하기',
+                onPress: async () => {
+                  const granted = await ensureLocationPermission(attempt + 1);
+                  resolve(granted);
+                },
+              },
+            ],
+            {cancelable: false},
+          );
+        });
+      }
+      return false;
+    }
+  };
+
+  // 🚩 [이전 버전과 동일한 단일 useEffect 구조] 아래 한 가지만 추가되었습니다.
+  //   - 위치 권한 거부 시 한 번 더 자동 재요청 (ensureLocationPermission)
+  //
+  // 이전엔 가드(hasRequestedPermissionsRef)를 써서 권한을 1회만 실행하도록 했으나,
+  // deps 변경으로 useEffect가 재실행될 때 가드만 true면 권한 블록을 스킵하고
+  // 바로 DB 로딩 → 네비게이션이 되어버려, 첫 번째 실행에서 사용자가 알림 프롬프트에
+  // 응답하는 동안 "위치 프롬프트가 뜨지도 못한 채 화면 전환"되는 레이스가 생겼습니다.
+  // 이전 버전처럼 권한 함수들을 매 재실행마다 호출해도, 이미 granted면 즉시 반환되어
+  // idempotent 하게 동작하므로 안전합니다.
   useEffect(() => {
     const initApp = async () => {
       try {
-        // --- 1. 권한 요청 및 초기 설정 (순서 보장) ---
-        await requestLocationPermisstion();
-        const location = await getMyLocation();
-        if (location) {
-          // 위치 정보를 성공적으로 가져왔을 때만 dispatch
-          dispatch(cacheUserCordinate(location));
+        // --- 1. 위치 권한 (재시도 포함) ---
+        const locationGranted = await ensureLocationPermission();
+        if (locationGranted) {
+          try {
+            const location = await getMyLocation();
+            if (location) {
+              dispatch(cacheUserCordinate(location));
+            }
+          } catch (geoError) {
+            console.log('[Splash] getMyLocation failed:', geoError);
+          }
         }
 
-        // 🚩 [수정] 알림 권한 부분만 별도의 try...catch로 감싸, 거부되어도 앱이 멈추지 않게 합니다.
+        // --- 2. 알림 권한 & FCM 토큰 ---
         try {
           if (!myFCMToken && !DeviceInfo.isEmulatorSync()) {
             await requestNotificationPermissions();
@@ -360,14 +410,13 @@ const Splash = memo((props: RootStackScreenProps<'Splash'>) => {
             }
           }
         } catch (permissionError) {
-          // 사용자가 알림을 거부하면, 오류가 아니므로 로그만 남기고 넘어갑니다.
           console.log('[Splash] Notification permission was denied or failed:', permissionError);
         }
 
-        // --- 2. 버전/데이터 확인 전 스플래시 숨기기 ---
+        // --- 3. 버전/데이터 확인 전 스플래시 숨기기 ---
         RNBootSplash.hide();
 
-        // --- 3. 버전 체크 및 데이터 로딩 ---
+        // --- 4. 버전 체크 및 데이터 로딩 ---
         if (!databaseVersion || !versionInfo) {
           return;
         }
@@ -390,6 +439,7 @@ const Splash = memo((props: RootStackScreenProps<'Splash'>) => {
     };
 
     initApp();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [databaseVersion, versionInfo, myFCMToken, userID]);
 
   // 💡 FCM 토큰 갱신 리스너만 담당하는 새로운 useEffect 훅 추가
@@ -409,14 +459,10 @@ const Splash = memo((props: RootStackScreenProps<'Splash'>) => {
   return (
     <FixedContainer edges={['left', 'right']} style={styles.container}>
       <StatusBar translucent backgroundColor={colors.transparent} />
-      <Video
-        source={{uri: VIDEO_URL}}
-        style={styles.backgroundVideo}
-        resizeMode="cover"
-        repeat={true}
-        onError={(e: any) => {
-          console.log('[VIDEO ERROR]', e);
-        }}
+      <Image
+        source={require('~icons/icon_app_transparent.png')}
+        style={styles.logo}
+        resizeMode="contain"
       />
       {isSyncingDb ? (
         <View style={styles.syncOverlay}>
@@ -452,12 +498,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  backgroundVideo: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    bottom: 0,
-    right: 0,
+  logo: {
+    width: 150,
+    height: 150,
   },
   syncOverlay: {
     position: 'absolute',

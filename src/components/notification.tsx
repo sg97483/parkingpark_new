@@ -11,6 +11,21 @@ import {NotiBodyModel} from '~services/notiServices';
 import {useAppDispatch, useAppSelector} from '~store/storeHooks';
 import {displayNotification} from '~utils/notifeeUtil';
 
+function tryParseJson<T = any>(value: unknown): T | undefined {
+  if (typeof value !== 'string') {
+    return undefined;
+  }
+  const trimmed = value.trim();
+  if (!trimmed) {
+    return undefined;
+  }
+  try {
+    return JSON.parse(trimmed) as T;
+  } catch {
+    return undefined;
+  }
+}
+
 const Notification = () => {
   const [channelID, setChannelID] = useState<string>('');
   const idChatRoom = useAppSelector(state => state.chatReducer.idChatRoom);
@@ -20,7 +35,7 @@ const Notification = () => {
   const dispatch = useAppDispatch();
 
   const handleNavOnNotification = (notiData: NotiBodyModel) => {
-    const formatedChatRoomData = notiData?.chatRoomData && JSON.parse(notiData?.chatRoomData);
+    const formatedChatRoomData = tryParseJson(notiData?.chatRoomData);
 
     if (formatedChatRoomData) {
       if (currentScreen === ROUTE_KEY.ChatDetail) {
@@ -34,7 +49,7 @@ const Notification = () => {
       }
 
       navigation.navigate(ROUTE_KEY.ChatDetail, {
-        currentChatRoomInfo: JSON.parse(notiData?.chatRoomData || ''),
+        currentChatRoomInfo: formatedChatRoomData,
       });
 
       dispatch(updateNotificationData(undefined));
@@ -44,8 +59,13 @@ const Notification = () => {
 
     if (notiData?.type === AUTO_MESSAGE_TYPE.CARPOOL_RUNNING) {
       if (typeof notiData?.carpool === 'string') {
+        const parsed = tryParseJson(notiData?.carpool);
+        if (!parsed) {
+          dispatch(updateNotificationData(undefined));
+          return;
+        }
         navigation.navigate(ROUTE_KEY.Running, {
-          item: JSON.parse(notiData?.carpool),
+          item: parsed,
         });
         dispatch(updateNotificationData(undefined));
         return;
@@ -87,7 +107,7 @@ const Notification = () => {
     const unsubscribe = getMessaging().onMessage(message => {
       let chat_room_info_current: any = '';
       if (typeof message?.data?.chatRoomData === 'string') {
-        chat_room_info_current = JSON.parse(message.data.chatRoomData);
+        chat_room_info_current = tryParseJson(message.data.chatRoomData) ?? '';
       } else if (typeof message?.data?.chatRoomData === 'object') {
         chat_room_info_current = message.data.chatRoomData;
       } else {
@@ -96,7 +116,7 @@ const Notification = () => {
 
       let type: any = '';
       if (typeof message?.data?.type === 'string') {
-        type = JSON.parse(message.data.type);
+        type = tryParseJson(message.data.type) ?? '';
       } else if (typeof message?.data?.type === 'object') {
         type = message.data.type;
       } else {
@@ -144,10 +164,8 @@ const Notification = () => {
   }, [idChatRoom, channelID]);
 
   useEffect(() => {
-    getMessaging().setBackgroundMessageHandler(async message => {
-      console.log('Message handled in the background!');
-    });
-
+    // NOTE: setBackgroundMessageHandler 는 index.js 최상단에서 등록합니다.
+    // 여기서는 포그라운드/tap-to-open 관련 핸들러만 등록합니다.
     getMessaging().onNotificationOpenedApp(message => {
       const notiData = message?.data as NotiBodyModel;
       dispatch(updateNotificationData(notiData));

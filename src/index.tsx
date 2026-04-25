@@ -9,6 +9,7 @@ import React, {useEffect} from 'react';
 import {DeviceEventEmitter, Linking, StatusBar} from 'react-native';
 import FlashMessage from 'react-native-flash-message';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
+import {configureReanimatedLogger, ReanimatedLogLevel} from 'react-native-reanimated';
 import {Provider as ReactNativePaperProvider} from 'react-native-paper';
 import {MenuProvider} from 'react-native-popup-menu';
 import {SafeAreaProvider, initialWindowMetrics} from 'react-native-safe-area-context';
@@ -28,6 +29,13 @@ import {heightScale1, widthScale1} from '~styles/scaling-utils';
 import {fontSize1} from '~styles/typography';
 import {sleep} from './utils';
 import Notification from '~components/notification';
+
+if (__DEV__) {
+  configureReanimatedLogger({
+    level: ReanimatedLogLevel.warn,
+    strict: false,
+  });
+}
 
 const App = () => {
   const navigationRef = React.useRef<NavigationContainerRef<RootStackScreensParams>>(null);
@@ -104,14 +112,21 @@ const App = () => {
     },
   };
 
-  NetInfo.addEventListener(state => {
-    const offline = !(state.isConnected && state.isInternetReachable);
-    if (offline) {
-      NoInternetModal.show();
-    } else {
-      NoInternetModal.hide();
-    }
-  });
+  useEffect(() => {
+    // NOTE: 이전엔 App 렌더 함수 본문에 addEventListener를 두어 매 리렌더마다 리스너가 쌓였습니다.
+    // useEffect + unsubscribe 로 앱 전체 생애주기 동안 딱 1번만 등록되도록 수정합니다.
+    const unsubscribe = NetInfo.addEventListener(state => {
+      const offline = !(state.isConnected && state.isInternetReachable);
+      if (offline) {
+        NoInternetModal.show();
+      } else {
+        NoInternetModal.hide();
+      }
+    });
+    return () => {
+      unsubscribe();
+    };
+  }, []);
 
   useEffect(() => {
     if (IS_ANDROID) {

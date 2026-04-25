@@ -1,6 +1,6 @@
 import {useFocusEffect} from '@react-navigation/native';
 import {FlashList} from '@shopify/flash-list';
-import React, {useCallback, useMemo} from 'react';
+import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {DeviceEventEmitter, StyleSheet} from 'react-native';
 import {showMessage} from 'react-native-flash-message';
 import AppModal from '~components/app-modal';
@@ -33,6 +33,8 @@ const VehicleManagement = (props: RootStackScreenProps<'VehicleManagement'>) => 
     memberId: userID as number,
   });
 
+  const [pendingDefaultCarNumber, setPendingDefaultCarNumber] = useState<string>('');
+
   const listCar = useMemo(() => {
     return [
       ...(data?.filter(item => item?.mainCarYN === 'Y') ?? []),
@@ -51,6 +53,22 @@ const VehicleManagement = (props: RootStackScreenProps<'VehicleManagement'>) => 
       }
     }, [isUninitialized]),
   );
+
+  useEffect(() => {
+    const sub = DeviceEventEmitter.addListener(
+      EMIT_EVENT.PROMPT_SET_DEFAULT_CAR,
+      (payload?: {carNumber?: string}) => {
+        const carNumber = payload?.carNumber?.trim() ?? '';
+        if (!carNumber) return;
+        setPendingDefaultCarNumber(carNumber);
+        refetch();
+      },
+    );
+
+    return () => {
+      sub.remove();
+    };
+  }, [refetch]);
 
   const onSelectItem = useCallback(
     (item: CarModel) => () => {
@@ -82,6 +100,23 @@ const VehicleManagement = (props: RootStackScreenProps<'VehicleManagement'>) => 
     },
     [setDefaultCar, refetch, userToken],
   );
+
+  useEffect(() => {
+    if (!pendingDefaultCarNumber || !data || data.length === 0) return;
+
+    const target = data.find(
+      it => (it?.carNumber ?? '').replace(/\s+/g, '') === pendingDefaultCarNumber.replace(/\s+/g, ''),
+    );
+    if (!target) return;
+    if (target?.mainCarYN === 'Y') {
+      setPendingDefaultCarNumber('');
+      return;
+    }
+
+    // 동일 팝업 로직 재사용
+    onSelectItem(target)();
+    setPendingDefaultCarNumber('');
+  }, [data, onSelectItem, pendingDefaultCarNumber]);
 
   const handleDeleteCar = useCallback(
     (item: CarModel) => {
