@@ -1,3 +1,4 @@
+import {getMessaging} from '@react-native-firebase/messaging';
 import React, {memo, useEffect, useRef, useState} from 'react';
 import {DeviceEventEmitter, KeyboardAvoidingView, Platform, ScrollView, StyleSheet} from 'react-native';
 import {showMessage} from 'react-native-flash-message';
@@ -20,7 +21,8 @@ import {EMIT_EVENT, FONT, FONT_FAMILY} from '~constants/enum';
 import {UserProps} from '~constants/types';
 import {ROUTE_KEY} from '~navigators/router';
 import {RootStackScreenProps} from '~navigators/stack';
-import {cacheUserToken} from '~reducers/userReducer';
+import {cacheFCMToken, cacheUserInfo, cacheUserToken} from '~reducers/userReducer';
+import {useUpdateUserFCMTokenMutation} from '~services/userServices';
 import API from '~services/api';
 import {colors} from '~styles/colors';
 import {heightScale1, widthScale1} from '~styles/scaling-utils';
@@ -34,6 +36,7 @@ const Register = (props: RootStackScreenProps<'Register'>) => {
   const subPathModal = useRef<SubscriptionPathModalRefs>(null);
 
   const dispatch = useDispatch();
+  const [updateUserFCMToken] = useUpdateUserFCMTokenMutation();
   const [email, setEmail] = useState<string>('');
   const [nickname, setNickName] = useState<string>('');
   const [agree, setAgree] = useState<boolean>(false);
@@ -137,6 +140,16 @@ const Register = (props: RootStackScreenProps<'Register'>) => {
   };
 
   const submit = async () => {
+    let fcmTokenValue = '';
+    try {
+      fcmTokenValue = await getMessaging().getToken();
+      if (fcmTokenValue) {
+        dispatch(cacheFCMToken(fcmTokenValue));
+      }
+    } catch (error) {
+      console.log('FCM Token retrieval failed:', error);
+    }
+
     const formData = new FormData();
     formData.append('recomCode', randomRecomCode());
     formData.append('email', email);
@@ -144,42 +157,55 @@ const Register = (props: RootStackScreenProps<'Register'>) => {
     formData.append('jointext', refernce);
     formData.append('phonetext', phoneNumber);
     formData.append('pwd', encrypt(password));
-    formData.append('deviceToken', null);
+    formData.append('deviceToken', fcmTokenValue || null);
     formData.append('socialLoginType', loginType);
 
-    const res = await API.post('sMember/create', formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-    });
-    console.log('🚀 ~ file: register.tsx:158 ~ submit ~ res:', res?.data);
-    if (res.data.statusCode == '503') {
-      showMessage({
-        message: '이미 사용중인 이름(닉네임)입니다. 이름이 중복일시 닉네임으로 입력바랍니다',
+    try {
+      const res = await API.post('sMember/create', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
       });
-      return;
-    }
-    if (res.data.statusCode == '504') {
-      showMessage({
-        message: '이미 가입된 이메일 주소 입니다',
-      });
-      return;
-    }
-    if (res.data.statusCode === '200') {
-      showMessage({
-        message: '회원가입이 완료 되었습니다.\n적립금 1,000원이 적립되었습니다',
-      });
-      const data: UserProps = res.data?.listMember;
-      dispatch(
-        cacheUserToken({
-          id: data?.id,
-          password: encrypt(password),
-          adminYN: data?.adminYN,
-          adminValetParkingId: data?.adminValetParkingId,
-          parkingLotId: data?.parkingLotId,
-        }),
-      );
-      navigation.goBack();
+      console.log('🚀 ~ file: register.tsx:158 ~ submit ~ res:', res?.data);
+      if (res.data.statusCode == '503') {
+        showMessage({
+          message: '이미 사용중인 이름(닉네임)입니다. 이름이 중복일시 닉네임으로 입력바랍니다',
+        });
+        return;
+      }
+      if (res.data.statusCode == '504') {
+        showMessage({
+          message: '이미 가입된 이메일 주소 입니다',
+        });
+        return;
+      }
+      if (res.data.statusCode === '200') {
+        showMessage({
+          message: '회원가입이 완료 되었습니다.\n적립금 1,000원이 적립되었습니다',
+        });
+        const data: UserProps = res.data?.listMember?.[0];
+        dispatch(cacheUserInfo(data));
+        dispatch(
+          cacheUserToken({
+            id: data?.id,
+            password: encrypt(password),
+            adminYN: data?.adminYN,
+            adminValetParkingId: data?.adminValetParkingId,
+            parkingLotId: data?.parkingLotId,
+          }),
+        );
+        console.log('FCM Token to be updated:', fcmTokenValue);
+        if (data?.id && fcmTokenValue) {
+          await updateUserFCMToken({
+            memberId: data?.id as any,
+            fcmToken: fcmTokenValue,
+          });
+        }
+        navigation.pop(2);
+      }
+    } catch (error) {
+      console.log('🚀 ~ register submit error:', error);
+      showMessage({message: '오류가 발생했습니다. 다시 시도해 주세요.'});
     }
   };
 
