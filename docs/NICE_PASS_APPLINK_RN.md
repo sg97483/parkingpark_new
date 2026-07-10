@@ -115,5 +115,5 @@ NICE가 요청한 회신 항목:
 ## 참고 정보(현재 운영 값)
 - 호출 페이지(표준창 진입): `https://cafe.wisemobile.kr/imobile/check/check_pnum_main_android_t.php`
 - 성공 return URL: `https://cafe.wisemobile.kr/imobile/check/check_pnum_success_android_t.php`
-- SITECODE: `BP871`
+- SITECODE: 서버 PHP 환경변수로 관리 (소스코드·GitHub 저장 금지)
 

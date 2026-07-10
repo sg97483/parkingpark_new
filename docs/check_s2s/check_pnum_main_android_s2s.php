@@ -53,12 +53,15 @@ set_exception_handler(function ($e) use ($DEBUG) {
 });
 
 /**
- * PHP 5.3.3 운영 환경 요청에 따라 하드코딩합니다.
- * - 보안상 권장되지 않습니다. 가능하면 서버 환경변수/시크릿으로 분리하세요.
- * - Client Secret 값은 반드시 실제 값으로 교체해야 합니다.
+ * NICE 연동키는 서버 환경변수로만 주입하세요. (소스코드/GitHub 저장 금지)
+ * - NICE_CLIENT_ID
+ * - NICE_CLIENT_SECRET
  */
-$clientId = 'NI773c028b-b26c-4597-ab6d-65529eb92e6e';
-$clientSecret = 'M2ExMDZmZGUtNjMxNi00Y2Y1LTk5MTYtOWI5MTdmZGExMGM3ODJGMkRBQkU0QjIyMUM1ODdGMzZGNDIy';
+$clientId = getenv('NICE_CLIENT_ID');
+$clientSecret = getenv('NICE_CLIENT_SECRET');
+if (!$clientId || !$clientSecret) {
+  debug_out("Missing NICE credentials. Set NICE_CLIENT_ID and NICE_CLIENT_SECRET on the server.");
+}
 
 // return/close URL은 실제 서버 경로에 맞춰 고정 (옵션 A: 딥링크 미사용)
 $returnUrl = 'https://cafe.wisemobile.kr/imobile/check_s2s/check_pnum_return_android_s2s.php';

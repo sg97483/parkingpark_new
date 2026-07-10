@@ -20,8 +20,8 @@ NICE 휴대폰 본인인증을 **기존 “성공 URL 로딩 → WebView injectJ
 
 ## 1) 키/배경 정보
 
-- **Client ID**: `NI773c028b-b26c-4597-ab6d-65529eb92e6e`
-- **Client Secret**: 메일로 전달된 값 사용 (**서버 환경변수/시크릿에만 저장**)
+- **Client ID / Client Secret**: NICE에서 발급받은 값을 **서버 환경변수/시크릿에만 저장** (소스코드·GitHub 저장 금지)
+  - 예: `NICE_CLIENT_ID`, `NICE_CLIENT_SECRET`
 - NICE 공식 가이드: `https://auth-guide.niceid.co.kr/`
 - NICE S2S API (v1.0)
   - `POST https://auth.niceid.co.kr/ido/intc/v1.0/auth/token`
